@@ -14,103 +14,81 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
-const components: { title: string; href: string; description: string }[] = [
-    {
-        title: "Modelo de lenguaje",
-        href: "*",
-        description:
-            "Usamos *"
-    },
-    {
-        title: "OCR",
-        href: "*",
-        description:
-            "La trascripción de imágen a texto con *",
-    },
-    {
-        title: "Front-end",
-        href: "*",
-        description:
-            "Next.js como tecnología de presentación",
-    },
-    {
-        title: "Back-end",
-        href: "*",
-        description: "Fast-API como tecnología de *",
-    },
-    {
-        title: "Arquitectura",
-        href: "*",
-        description:
-            "Arquitectura en microservicios",
-    },
-    {
-        title: "Base de datos",
-        href: "*",
-        description:
-            "MongoDB como base de datos",
-    },
+const components = [
+    { title: "Modelo de lenguaje", href: "*", description: "Usamos *" },
+    { title: "OCR", href: "*", description: "La trascripción de imagen a texto con *" },
+    { title: "Front-end", href: "*", description: "Next.js como tecnología de presentación" },
+    { title: "Back-end", href: "*", description: "Fast-API como tecnología de *" },
+    { title: "Arquitectura", href: "*", description: "Arquitectura en microservicios" },
+    { title: "Base de datos", href: "*", description: "MongoDB como base de datos" },
 ]
 
 export default function NavBar() {
     return (
-        <NavigationMenu className="border=1">
-            <NavigationMenuList>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>Inicio</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                            <li className="row-span-3">
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        href="/"
-                                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                    >
-                                        <div className="mb-2 mt-4 text-lg font-medium">
-                                            Motivación
-                                        </div>
-                                        <p className="text-sm leading-tight text-muted-foreground">
-                                            Aplicación para la detección y denuncia de delitos de odio, enfocada para ser un referente en la lucha antirracista
-                                            LaLiga.
-                                        </p>
-                                    </Link>
-                                </NavigationMenuLink>
-
-                            </li>
-                            <ListItem href="/*" title="Introducción">
-                                Re-usable components built using Radix UI and Tailwind CSS.
-                            </ListItem>
-                            <ListItem href="/*" title="Uso">
-                                How to install dependencies and structure your app.
-                            </ListItem>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>¿Cómo funciona?</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                            {components.map((component) => (
-                                <ListItem
-                                    key={component.title}
-                                    title={component.title}
-                                    href={component.href}
-                                >
-                                    {component.description}
+        <div className="bg-white flex items-center justify-between p-4">
+            {/* Navigation Menu */}
+            <NavigationMenu className="flex-grow">
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger>Inicio</NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                                <li className="row-span-3">
+                                    <NavigationMenuLink asChild>
+                                        <Link
+                                            href="/"
+                                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                                        >
+                                            <div className="mb-2 mt-4 text-lg font-medium">
+                                                Motivación
+                                            </div>
+                                            <p className="text-sm leading-tight text-muted-foreground">
+                                                Aplicación para la detección y denuncia de delitos de odio, enfocada para ser un referente en la lucha antirracista LaLiga.
+                                            </p>
+                                        </Link>
+                                    </NavigationMenuLink>
+                                </li>
+                                <ListItem href="/*" title="Introducción">
+                                    App **/
                                 </ListItem>
-                            ))}
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <Link href="/docs" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                            Documentation
-                        </NavigationMenuLink>
-                    </Link>
-                </NavigationMenuItem>
-            </NavigationMenuList>
-        </NavigationMenu>
+                                <ListItem href="/*" title="Uso">
+                                    Uso sin ánimo de lucro
+                                </ListItem>
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger>¿Cómo funciona?</NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                                {components.map((component) => (
+                                    <ListItem
+                                        key={component.title}
+                                        title={component.title}
+                                        href={component.href}
+                                    >
+                                        {component.description}
+                                    </ListItem>
+                                ))}
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link href="/docs" legacyBehavior passHref>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                Documentación
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
+
+            <Link href="/login">
+            <button className="ml-auto px-4 py-2 rounded-md hover:bg-gray-100">
+                    Inicia Sesión
+                </button>
+            </Link>
+        </div>
     )
 }
 
