@@ -1,21 +1,22 @@
-# Usa una imagen de Python slim como base, que es ligera
-FROM python:3.9-slim
+# Usa una imagen base de Python
+FROM python:3.10-slim
 
-# Actualiza los paquetes e instala Tesseract OCR y el paquete de idioma en español
+# Instala Tesseract y demás dependencias del sistema necesarias
 RUN apt-get update && \
-    apt-get install -y tesseract-ocr tesseract-ocr-spa libglib2.0-0 && \
-    apt-get clean
+    apt-get install -y tesseract-ocr && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instala las dependencias de Python necesarias para OCR
-RUN pip install pytesseract pillow
+# Establece el directorio de trabajo en /app
+WORKDIR /app
 
-# Copia el código Python y la imagen de prueba en el contenedor
-WORKDIR /src
-COPY main.py .
-COPY test.png .
+# Copia los archivos de tu proyecto a la imagen
+COPY . .
 
-# Configura la variable de entorno correcta para los archivos de idioma
-ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/tessdata/
+# Instala las dependencias de Python necesarias
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Ejecuta el script cuando se inicie el contenedor
-CMD ["python", "main.py"]
+# Exponer el puerto que usará Flask (5000 por defecto)
+EXPOSE 5000
+
+# Ejecuta la aplicación
+CMD ["python", "app.py"]
