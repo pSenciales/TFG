@@ -13,7 +13,6 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { SizeIcon } from "@radix-ui/react-icons"
 
 const components = [
     { title: "Modelo de lenguaje", href: "*", description: "Usamos *" },

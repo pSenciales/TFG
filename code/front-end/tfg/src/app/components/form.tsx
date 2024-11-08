@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-const axios = require("axios");
+import axios from "axios" // Cambiamos require por import
 
 export default function Form() {
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
@@ -27,19 +27,14 @@ export default function Form() {
         formData.append("image", selectedImage)
 
         try {
-
             const response = await axios.post("https://tfg-ocr.onrender.com/ocr", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
             });
 
-
-
-            if (!response.ok) throw new Error("Error al enviar la imagen.")
-
-            const data = await response.json()
-            setResponseMessage(`Respuesta del servidor: ${data.message}`)
+            // Aquí no necesitas hacer response.ok ni response.json, axios ya maneja esto
+            setResponseMessage(`Respuesta del servidor: ${response.data.message || response.data.text}`)
         } catch (error) {
             setResponseMessage(`Error: ${(error as Error).message}`)
         }
