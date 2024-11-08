@@ -1,9 +1,14 @@
 import NavBar from "./components/navbar";
-
+import Form from "./components/form";
 export default function Landing() {
   return (
-    <NavBar>
+    <div>
+      <NavBar>
 
-    </NavBar>
+      </NavBar>
+      <Form>
+
+      </Form>
+    </div>
   );
 }

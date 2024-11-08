@@ -13,6 +13,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import { SizeIcon } from "@radix-ui/react-icons"
 
 const components = [
     { title: "Modelo de lenguaje", href: "*", description: "Usamos *" },
@@ -24,11 +25,37 @@ const components = [
 ]
 
 export default function NavBar() {
+    const [isOpen, setIsOpen] = React.useState(false);
+
     return (
         <div className="bg-white flex items-center justify-between p-4">
-            {/* Navigation Menu */}
-            <NavigationMenu className="flex-grow">
-                <NavigationMenuList>
+            <Link href="/" className="text-xl font-bold">FairPlay 360</Link>
+
+            {/* Botón de menú para dispositivos móviles */}
+            <button 
+                className="block md:hidden text-gray-600 focus:outline-none"
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                {/* Icono de hamburguesa */}
+                <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                    ></path>
+                </svg>
+            </button>
+
+            {/* Menú de navegación */}
+            <NavigationMenu className={`flex-grow ${isOpen ? 'block' : 'hidden'} md:flex`}>
+                <NavigationMenuList className="flex flex-col md:flex-row md:space-x-4">
                     <NavigationMenuItem>
                         <NavigationMenuTrigger>Inicio</NavigationMenuTrigger>
                         <NavigationMenuContent>
@@ -49,7 +76,7 @@ export default function NavBar() {
                                     </NavigationMenuLink>
                                 </li>
                                 <ListItem href="/*" title="Introducción">
-                                    App **/
+                                    App **/ 
                                 </ListItem>
                                 <ListItem href="/*" title="Uso">
                                     Uso sin ánimo de lucro
@@ -60,7 +87,7 @@ export default function NavBar() {
                     <NavigationMenuItem>
                         <NavigationMenuTrigger>¿Cómo funciona?</NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                                 {components.map((component) => (
                                     <ListItem
                                         key={component.title}
@@ -74,7 +101,7 @@ export default function NavBar() {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/docs" legacyBehavior passHref>
+                        <Link href="/docs" passHref legacyBehavior>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                                 Documentación
                             </NavigationMenuLink>
@@ -83,8 +110,9 @@ export default function NavBar() {
                 </NavigationMenuList>
             </NavigationMenu>
 
+            {/* Botón de "Inicia Sesión" */}
             <Link href="/login">
-            <button className="ml-auto px-4 py-2 rounded-md hover:bg-gray-100">
+                <button className="ml-auto px-4 py-2 rounded-md hover:bg-gray-100 hidden md:block" style={{ fontSize: "80%" }}>
                     Inicia Sesión
                 </button>
             </Link>
