@@ -27,7 +27,7 @@ export default function Form() {
         formData.append("image", selectedImage)
 
         try {
-            const response = await axios.post("https://tfg-ocr.onrender.com/ocr", formData, {
+            const response = await axios.post("https://hate-speech--s14y1rp.internal.jollystone-6e36ddb6.westeurope.azurecontainerapps.io/ocr", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
