@@ -17,7 +17,7 @@ export default function FormHateDetect() {
         try {
             setResponseMessage("Loading...")
             const response = await axios.post(
-                "https://DeepSeek-HateDetection.eastus2.models.ai.azure.com/v1/chat/completions",
+                "https://DeepSeek-HateDetect.eastus2.models.ai.azure.com/v1/chat/completions",
                 {
                     messages: [
                         { role: "system", content: "You are an AI assistant that analyzes text. Determine if a message is offensive and return just 'Hate Speech' or 'Not Hate Speech'." },
@@ -27,7 +27,7 @@ export default function FormHateDetect() {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer WYPCKe0vfVsOCDXP4ggsgTX55kdguNc9`,
+                        Authorization: `Bearer 6CJlpweZ092S3WOnzhnGNS9OmmqQJX8L`,
                     }
                 }
             );
