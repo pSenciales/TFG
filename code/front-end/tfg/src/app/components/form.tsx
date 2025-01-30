@@ -27,6 +27,7 @@ export default function Form() {
         formData.append("image", selectedImage)
 
         try {
+            setResponseMessage("Loading...")
             const response = await axios.post("https://tfg-ocr.onrender.com/ocr", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
