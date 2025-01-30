@@ -3,6 +3,9 @@
 import React, { useState } from "react"
 import axios from "axios"
 
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
 export default function FormHateDetect() {
     const [responseMessage, setResponseMessage] = useState<string>("")
     const [mensaje, setMensaje] = useState<string>("")
@@ -14,25 +17,9 @@ export default function FormHateDetect() {
         const context = contexto ? `context: ${contexto}` : ""
         try {
             setResponseMessage("Loading...")
-            const response = await axios.post("https://DeepSeek-HateDetection.eastus2.models.ai.azure.com/v1/chat/completions",
-                {
-                    "messages": [
-                        { "role": "system", "content": "You are an AI assistant that analyzes text. Determine if a message is offensive and return just 'Hate Speech' or 'Not Hate Speech'." },
-                        { "role": "user", "content": `Can you analyze this message for offensive content? '${mensaje}' ${context}` }
-                    ]
-                }
-                , {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer WYPCKe0vfVsOCDXP4ggsgTX55kdguNc9"
-                    }
-                }
-            );
-            let responseMessage = response.data.choices[0].message.content || response.data.text
-            //Formateamos la respuesta para que no muestre el <think>...</think>
-            responseMessage = responseMessage.replace(/<think>.*<\/think>\s*\n*/, '');
+            const response = await axios.post("/api/hate-detection", { mensaje, context });
 
-            // Aquí no necesitas hacer response.ok ni response.json, axios ya maneja esto
+            const responseMessage = response.data.result || response.data.text
             setResponseMessage(`Respuesta del servidor: ${responseMessage}`)
         } catch (error) {
             setResponseMessage(`Error: ${(error as Error).message}`)
@@ -43,16 +30,17 @@ export default function FormHateDetect() {
         <div className="mt-5 p-4 bg-white rounded-md shadow-md max-w-md mx-auto">
             <h2 className="text-xl font-semibold mb-4">Comprobar mensaje</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <input
+                
+                <Input
                     type="text"
                     onChange={(e) => setMensaje(e.target.value)}
-                    className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    placeholder="Mensaje"
                     required
                 />
-                <input
+                <Input
                     type="text"
                     onChange={(e) => setContexto(e.target.value)}
-                    className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    placeholder="Contexto"
                 />
                 <button
                     type="submit"
