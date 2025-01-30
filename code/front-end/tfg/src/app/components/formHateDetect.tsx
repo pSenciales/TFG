@@ -11,7 +11,7 @@ export default function FormHateDetect() {
     // Función para manejar el envío del formulario
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
-        let context = contexto ? `context: ${contexto}` : ""
+        const context = contexto ? `context: ${contexto}` : ""
         try {
             setResponseMessage("Loading...")
             const response = await axios.post("https://DeepSeek-HateDetection.eastus2.models.ai.azure.com/v1/chat/completions",
@@ -33,7 +33,7 @@ export default function FormHateDetect() {
             responseMessage = responseMessage.replace(/<think>.*<\/think>\s*\n*/, '');
 
             // Aquí no necesitas hacer response.ok ni response.json, axios ya maneja esto
-            setResponseMessage(`Respuesta del servidor: ${response.data.choices[0].message.content || response.data.text}`)
+            setResponseMessage(`Respuesta del servidor: ${responseMessage}`)
         } catch (error) {
             setResponseMessage(`Error: ${(error as Error).message}`)
         }
