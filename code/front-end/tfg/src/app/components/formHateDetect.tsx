@@ -4,7 +4,6 @@ import React, { useState } from "react"
 import axios from "axios"
 
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
 export default function FormHateDetect() {
     const [responseMessage, setResponseMessage] = useState<string>("")

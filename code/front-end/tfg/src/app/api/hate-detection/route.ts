@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         console.log("✅ Respuesta final:", result);
         return NextResponse.json({ result }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error: string | any) {
         console.error("❌ Error en la API:", error.response?.data || error.message);
         return NextResponse.json({ error: error.response?.data || error.message }, { status: 500 });
     }
