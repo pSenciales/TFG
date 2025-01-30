@@ -16,9 +16,28 @@ export default function FormHateDetect() {
         const context = contexto ? `context: ${contexto}` : ""
         try {
             setResponseMessage("Loading...")
-            const response = await axios.post("/api/hate-detection", { mensaje, context });
+            const response = await axios.post(
+                "https://DeepSeek-HateDetection.eastus2.models.ai.azure.com/v1/chat/completions",
+                {
+                    messages: [
+                        { role: "system", content: "You are an AI assistant that analyzes text. Determine if a message is offensive and return just 'Hate Speech' or 'Not Hate Speech'." },
+                        { role: "user", content: `Can you analyze this message for offensive content? '${mensaje}' ${context}` }
+                    ]
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer WYPCKe0vfVsOCDXP4ggsgTX55kdguNc9`,
+                    }
+                }
+            );
+    
+            let result = response.data.choices[0].message.content;
+    
+            // 🔹 Filtrar el contenido, eliminando <think>...</think>
+            result = result.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 
-            const responseMessage = response.data.result || response.data.text
+            const responseMessage = result || ""
             setResponseMessage(`Respuesta del servidor: ${responseMessage}`)
         } catch (error) {
             setResponseMessage(`Error: ${(error as Error).message}`)
