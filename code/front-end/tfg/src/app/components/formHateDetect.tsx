@@ -16,28 +16,8 @@ export default function FormHateDetect() {
         const context = contexto ? `context: ${contexto}` : ""
         try {
             setResponseMessage("Loading...")
-            const response = await axios.post(
-                "https://DeepSeek-HateDetect.eastus2.models.ai.azure.com/v1/chat/completions",
-                {
-                    messages: [
-                        { role: "system", content: "You are an AI assistant that analyzes text. Determine if a message is offensive and return just 'Hate Speech' or 'Not Hate Speech'." },
-                        { role: "user", content: `Can you analyze this message for offensive content? '${mensaje}' ${context}` }
-                    ]
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer 6CJlpweZ092S3WOnzhnGNS9OmmqQJX8L`,
-                    }
-                }
-            );
-    
-            let result = response.data.choices[0].message.content;
-    
-            // 🔹 Filtrar el contenido, eliminando <think>...</think>
-            result = result.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
-
-            const responseMessage = result || ""
+            const response = await axios.post("parcial-back-seven.vercel.app/detect", { message: mensaje, context: context })
+            const responseMessage = response.result || ""
             setResponseMessage(`Respuesta del servidor: ${responseMessage}`)
         } catch (error) {
             setResponseMessage(`Error: ${(error as Error).message}`)
