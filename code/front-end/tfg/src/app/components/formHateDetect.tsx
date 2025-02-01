@@ -17,7 +17,7 @@ export default function FormHateDetect() {
         try {
             setResponseMessage("Loading...")
             const response = await axios.post("parcial-back-seven.vercel.app/detect", { message: mensaje, context: context })
-            const responseMessage = response.result || ""
+            const responseMessage = response.data.result || ""
             setResponseMessage(`Respuesta del servidor: ${responseMessage}`)
         } catch (error) {
             setResponseMessage(`Error: ${(error as Error).message}`)
