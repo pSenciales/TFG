@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
             {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer WYPCKe0vfVsOCDXP4ggsgTX55kdguNc9`,
+                    Authorization: `Bearer `,
                 }
             }
         );
