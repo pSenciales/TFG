@@ -1,14 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import axios from "axios";
 
 const HF_KEY = process.env.NEXT_PUBLIC_HF_API_KEY;
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
-        /*
-        const body = await req.json();
-        console.log("📩 Recibido:", body);
-        */
 
         const response = await axios.post(
             "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base",

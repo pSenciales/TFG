@@ -3,8 +3,11 @@ import axios from "axios";
 
 const HF_KEY = process.env.NEXT_PUBLIC_HF_API_KEY;
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     try {
+
+        const body = await req.json();
+        console.log("Peticion recibida:", body);
         const response = await axios.post(
             "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1",
             {
@@ -12,7 +15,7 @@ export async function GET(req: NextRequest) {
             },
             {
                 headers: {
-                    "Authorization": `Bearer ${HF_KEY}`,
+                    "Authorization": `Bearer ${HF_KEY} `,
                     "Content-Type": "application/json"
                 }
             }
