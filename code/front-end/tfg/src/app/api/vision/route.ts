@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-const HF_KEY = process.env.NEXT_PUBLIC_HF_API_KEY;
+const HF_KEY = process.env.HF_API_KEY;
 
 export async function GET() {
     try {
