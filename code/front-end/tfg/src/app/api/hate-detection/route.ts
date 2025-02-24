@@ -21,12 +21,12 @@ export async function POST(req: NextRequest) {
             }
         );
 
-        let result = response.data;
+        const result = response.data;
         console.log("✅ Respuesta final:", result);
         return NextResponse.json({ result }, { status: 200 });
 
     } catch (error) {
-        console.log("❌ Error en la petición:", (error as any).response);
-        return NextResponse.json({ error: "Error en la API: " + (error as any).message }, { status: 500 });
+        console.log("Error en la petición:", error);
+        return NextResponse.json({ error: "Error en la API: " + error}, { status: 500 });
     }
 }
