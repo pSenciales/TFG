@@ -1,5 +1,4 @@
 from datetime import datetime, UTC
-
 from mongoengine import Document, StringField, DateTimeField
 
 class Log(Document):

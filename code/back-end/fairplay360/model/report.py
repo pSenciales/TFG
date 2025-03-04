@@ -26,5 +26,6 @@ class Report(Document):
     is_hate = BooleanField(required=True, default=False)
     created_at = DateTimeField(default=lambda: datetime.now(UTC))
     user_id = StringField(required=True)
-    files = ListField(EmbeddedDocumentField(File), default=[])
+    images = ListField(EmbeddedDocumentField(File), default=[])
+    pdf = ListField(EmbeddedDocumentField(File), default=[])
     resolutions = ListField(EmbeddedDocumentField(Resolution), default=[])

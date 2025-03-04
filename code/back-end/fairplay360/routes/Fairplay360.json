@@ -1,0 +1,162 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "version": "1.0.0",
+    "description": "API for managing users, reports, logs, and blacklist."
+  },
+  "servers": [
+    {
+      "url":"http://127.0.0.1:5000"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Get all users",
+        "responses": {
+          "200": { "description": "List of users" }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["name", "email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created successfully" },
+          "409": { "description": "Email already in use" }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "delete": {
+        "summary": "Delete a user",
+        "parameters": [{ "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "User deleted successfully" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a user",
+        "parameters": [{ "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User updated successfully" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/reports": {
+      "get": { "summary": "Get all reports", "responses": { "200": { "description": "List of reports" } } },
+      "post": {
+        "summary": "Create a report",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": { "type": "string" },
+                  "is_hate": { "type": "boolean" },
+                  "user_id": { "type": "string" }
+                },
+                "required": ["content", "is_hate", "user_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Report created successfully" }
+        }
+      }
+    },
+    "/reports/{report_id}": {
+      "delete": {
+        "summary": "Delete a report",
+        "parameters": [{ "name": "report_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Report deleted successfully" },
+          "404": { "description": "Report not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a report",
+        "parameters": [{ "name": "report_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "resolutions": { "type": "array", "items": { "type": "string" } },
+                  "state": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Report updated successfully" }
+        }
+      }
+    },
+    "/blacklist": {
+      "get": { "summary": "Get all blacklist emails", "responses": { "200": { "description": "List of blacklist entries" } } },
+      "post": {
+        "summary": "Add an email to blacklist",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "email": { "type": "string" } },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Blacklist created successfully" } }
+      }
+    },
+    "/blacklist/{email}": {
+      "delete": {
+        "summary": "Remove an email from blacklist",
+        "parameters": [{ "name": "email", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Blacklist deleted successfully" },
+          "404": { "description": "Blacklist not found" }
+        }
+      }
+    }
+  }
+}

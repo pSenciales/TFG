@@ -1,16 +1,18 @@
 from flask import Blueprint, request, jsonify
-from model import Report
+from model import Report, User
 
 report_bp = Blueprint('report_routes', __name__, url_prefix='/reports')
 
 
 @report_bp.route('/', methods=['GET'])
+@report_bp.route('', methods=['GET'])
 def get_reports():
-    reports = Report.objects()
+    reports = Report.objects().to_json()
     return jsonify(reports), 200
 
 
 @report_bp.route('/', methods=['POST'])
+@report_bp.route('', methods=['POST'])
 def create_report():
     data = request.get_json()
 
@@ -26,7 +28,7 @@ def create_report():
     )
     report.save()
 
-    return jsonify({"message": "Report created successfully", "report": report.to_json()}), 201
+    return jsonify({"message": "Report created successfully"}), 201
 
 
 @report_bp.route('/<report_id>', methods=['DELETE'])
@@ -57,3 +59,14 @@ def update_report(report_id):
 
     report.save()
     return jsonify({"message": "Report updated successfully"}), 200
+
+@report_bp.route('/user/<user_id>', methods=["GET"])
+def get_user_reports(user_id):
+    user = User.objects(id=user_id).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    reports = Report.objects(user_id=user_id).order_by('-created_at')
+
+    return jsonify(reports), 200
+

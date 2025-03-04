@@ -4,11 +4,13 @@ from model import User, Report
 user_bp = Blueprint('user_routes', __name__, url_prefix='/users')
 
 @user_bp.route('/', methods=['GET'])
+@user_bp.route('', methods=['GET'])
 def get_users():
-    users = User.objects()
+    users = User.objects().to_json()
     return jsonify(users), 200
 
 @user_bp.route('/', methods=['POST'])
+@user_bp.route('', methods=['POST'])
 def create_user():
     data = request.get_json()
 
@@ -25,7 +27,7 @@ def create_user():
     user.set_password(data['password'])
     user.save()
 
-    return jsonify({"message": "User created successfully", "user": user.to_json()}), 201
+    return jsonify({"message": "User created successfully"}), 201
 
 @user_bp.route('/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
