@@ -1,6 +1,7 @@
 
 from flask import Blueprint, request, jsonify
 from model import Log, User
+from routes.utils import *
 
 log_bp = Blueprint('log_routes', __name__, url_prefix='/logs')
 
@@ -17,33 +18,35 @@ def get_logs():
 def create_log():
     data = request.get_json()
 
-    if not all(key in data for key in ['action', 'user_id']):
-        return jsonify({"error": "Missing required fields"}), 400
+    if missing := missing_fields(["action", "user_id"], data):
+        return missing
 
     log = Log(
         action=data.get['action'] ,
         user_id=data['user_id']
     )
+
     log.save()
 
-    return jsonify({"message":"Log created successfully"}), 201
+    return success("Log created", 201)
 
 
 @log_bp.route('/<log_id>', methods=['DELETE'])
 def delete_log(log_id):
     log = Log.objects(id=log_id).first()
 
-    if not log:
-        return jsonify({"error": "Report not found"}), 404
+    if not_found := element_not_found(log, "Log not found"):
+        return not_found
 
     log.delete()
-    return jsonify({"message": "Report deleted successfully"}), 200
+    return success("Log deleted", 200)
 
 @log_bp.route('/user/<user_id>', methods=['GET'])
 def get_user_logs(user_id):
     user = User.objects(id=user_id).first()
-    if not user:
-        return jsonify({"error": "User not found"}), 404
+
+    if not_found := element_not_found(user, "user not found"):
+        return not_found
 
     logs = Log.objects(user_id=user.id)
     return jsonify(logs), 200

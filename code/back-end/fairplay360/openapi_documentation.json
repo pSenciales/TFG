@@ -129,6 +129,15 @@
         }
       }
     },
+    "/reports/user/{user_id}":{
+      "get": {
+        "summary": "Get all reports from user",
+        "parameters": [{ "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200":{"description": "List of reports"}
+        }
+      }
+    },
     "/blacklist": {
       "get": { "summary": "Get all blacklist emails", "responses": { "200": { "description": "List of blacklist entries" } } },
       "post": {

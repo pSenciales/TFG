@@ -1,6 +1,8 @@
 
 from flask import Blueprint, request, jsonify
 from model import Blacklist
+from routes.utils import *
+from routes.utils import success, missing_fields, element_not_found
 
 blacklist_bp = Blueprint('blacklist_routes', __name__, url_prefix='/blacklist')
 
@@ -17,33 +19,33 @@ def get_reports():
 def create_blacklist():
     data = request.get_json()
 
-    if not "email" in data:
-        return jsonify({"error": "Missing required field"}), 400
+    if missing := missing_fields(["email"], data):
+        return missing
 
     blacklist = Blacklist(
         email=data["email"],
     )
     blacklist.save()
 
-    return jsonify({"message": "Blacklist created successfully"}), 201
+    return success("Blacklist created", 201)
 
 
 @blacklist_bp.route('/<email>', methods=['DELETE'])
 def delete_blacklist(email):
     blacklist = Blacklist.objects(email=email).first()
 
-    if not blacklist:
-        return jsonify({"error": "Blacklist not found"}), 404
+    if not_found := element_not_found(blacklist, "Blacklist not found"):
+        return not_found
 
     blacklist.delete()
-    return jsonify({"message": "Blacklist deleted successfully"}), 200
+    return success("Blacklist deleted", 200)
 
 @blacklist_bp.route('/<email>', methods=['GET'])
 def get_one(email):
     blacklist = Blacklist.objects(email=email).first()
 
-    if not blacklist:
-        return jsonify({"error": "Blacklist not found"}), 404
+    if not_found := element_not_found(blacklist, "Blacklist not found"):
+        return not_found
 
     return jsonify(blacklist), 200
 

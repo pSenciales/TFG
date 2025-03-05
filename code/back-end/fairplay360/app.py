@@ -14,5 +14,7 @@ app.register_blueprint(log_bp)
 app.register_blueprint(blacklist_bp)
 
 
+app.route("/login", methods=['GET', 'POST'])
+
 if __name__ == "__main__":
     app.run()

@@ -1,5 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
+
 from model import Report, User
+from routes.utils import *
 
 report_bp = Blueprint('report_routes', __name__, url_prefix='/reports')
 
@@ -16,8 +18,8 @@ def get_reports():
 def create_report():
     data = request.get_json()
 
-    if not all(key in data for key in ['content', 'is_hate', 'user_id']):
-        return jsonify({"error": "Missing required fields"}), 400
+    if missing := missing_fields(["content", "source", "is_hate", "files", "user_id"], data):
+        return missing
 
     report = Report(
         content=data['content'],
@@ -28,26 +30,26 @@ def create_report():
     )
     report.save()
 
-    return jsonify({"message": "Report created successfully"}), 201
+    return success("Report created", 201)
 
 
 @report_bp.route('/<report_id>', methods=['DELETE'])
 def delete_report(report_id):
     report = Report.objects(id=report_id).first()
 
-    if not report:
-        return jsonify({"error": "Report not found"}), 404
+    if not_found := element_not_found(report, "Report not found"):
+        return not_found
 
     report.delete()
-    return jsonify({"message": "Report deleted successfully"}), 200
+    return success("Report deleted", 200)
 
 
 @report_bp.route('/<report_id>', methods=['PUT'])
 def update_report(report_id):
     report = Report.objects(id=report_id).first()
 
-    if not report:
-        return jsonify({"error": "Report not found"}), 404
+    if not_found := element_not_found(report, "Report not found"):
+        return not_found
 
     data = request.get_json()
 
@@ -58,15 +60,15 @@ def update_report(report_id):
         report.state = data['state']
 
     report.save()
-    return jsonify({"message": "Report updated successfully"}), 200
+    return success("Report updated", 200)
 
 @report_bp.route('/user/<user_id>', methods=["GET"])
 def get_user_reports(user_id):
     user = User.objects(id=user_id).first()
-    if not user:
-        return jsonify({"error": "User not found"}), 404
 
-    reports = Report.objects(user_id=user_id).order_by('-created_at')
+    if not_found := element_not_found(user, "User not found"):
+        return not_found
 
+    reports = Report.objects(user_id=user_id).order_by('-created_at').to_json()
     return jsonify(reports), 200
 
