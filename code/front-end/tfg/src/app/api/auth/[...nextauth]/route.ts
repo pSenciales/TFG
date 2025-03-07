@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
           });
       
           return res.data;
-        } catch (error: any) {
+        } catch (error: Error | any) {
           throw new Error(error.response?.data?.error || "Error en la autenticación");
         }
       },
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
       session.user.id = token.sub as string;
       return session;
     },
-    async jwt({ token, user }: { token: JWT; user?: any }) {
+    async jwt({ token, user }: { token: JWT; user?: Session["user"] }) {
       if (user) {
         token.id = user.id;
       }
