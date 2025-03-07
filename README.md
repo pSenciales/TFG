@@ -19,4 +19,7 @@ Viene motivada, primero por mi interés en hacer una web que implemente LLMs y f
 A día de hoy está hecho:
 * Microservicio encargado del OCR utilizando pytesseract (Alojado en Render, latencia de hasta 50s por plan gratuito)
 * Vista de prueba para probar este OCR (https://fairplay360.vercel.app) y también algún componente de https://ui.shadcn.com/
-* Servicio en Azure con deepseek, no implementado por temas de latencias y timeout de Vercel 
+* Servicio en Azure con deepseek, no implementado por temas de latencias y timeout de Vercel
+
+* API en flask para trabajar con Mongo haciendo uso de MongoEngine.
+* Login con servicios externos como Google y Github utilizando NextAuth.
