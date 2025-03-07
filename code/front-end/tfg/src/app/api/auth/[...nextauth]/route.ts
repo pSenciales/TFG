@@ -34,8 +34,12 @@ export const authOptions: NextAuthOptions = {
           });
       
           return res.data;
-        } catch (error: Error | any) {
-          throw new Error(error.response?.data?.error || "Error en la autenticación");
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            throw new Error(error.message);
+          } else {
+            throw new Error("Error en la autenticación");
+          }
         }
       },
     }),
