@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useSession, signOut } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -24,6 +25,7 @@ const components = [
 ]
 
 export default function NavBar() {
+    const { data: session } = useSession();
     const [isOpen, setIsOpen] = React.useState(false);
 
     return (
@@ -108,13 +110,18 @@ export default function NavBar() {
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
-
-            {/* Botón de "Inicia Sesión" */}
-            <Link href="/login">
+            
+            {!session ? (<Link href="/login">
                 <button className="ml-auto px-4 py-2 rounded-md hover:bg-gray-100 hidden md:block" style={{ fontSize: "80%" }}>
                     Inicia Sesión
                 </button>
-            </Link>
+            </Link> ) : (
+                <button onClick={() => signOut()} className="ml-auto px-4 py-2 rounded-md hover:bg-gray-100 hidden md:block" style={{ fontSize: "80%" }}>
+                    Cerrar Sesión
+                </button>
+            )}
+
+            
         </div>
     )
 }

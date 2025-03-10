@@ -26,12 +26,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const res = await axios.post("http://127.0.0.1:5000/login", {
+          const {data} = await axios.post("http://127.0.0.1:5000/login", {
             email: credentials.email,
             password: credentials.password,
           });
-
-          return res.data;
+          return data;
+          
         } catch (error: unknown) {
           if (error instanceof Error) {
             throw new Error(error.message);
@@ -43,15 +43,19 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, user}) {
+      console.log("USUARIO: " + JSON.stringify(user));
       if (account) {
         token.accessToken = account.access_token;
+      }
+      if (!token.accessToken && user) {
+        token.accessToken = user.access_token;
       }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.sub as string;
-      session.accessToken = token.accessToken as string;
+      session.accessToken = token.accessToken as string
       return session;
     },
   }
