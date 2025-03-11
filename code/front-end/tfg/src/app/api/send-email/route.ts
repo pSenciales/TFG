@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-function compileTemplate(templateName: string, params: Record<string, any>) {
+function compileTemplate(templateName: string, params: Record<string, unknown>) {
     const templateSource = templates[templateName];
     const template = handlerbars.compile(templateSource);
     return template(params);
