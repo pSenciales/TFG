@@ -44,14 +44,17 @@ export async function sendMail(to: string, subject: string, html: string) {
 
 export function generateOTP(to: string) {
     const otp = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false });
-    const token = jwt.sign({ otp, to}, process.env.JWT_SECRET, { expiresIn: "10m" });
+    const token = jwt.sign({ otp, to}, process.env.JWT_SECRET as string, { expiresIn: "10m" });
     return {token, otp};
 
 }
 
 export function verifyOTP(token: string, otp: string, to: string) {
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+        if (typeof decoded !== "object") {
+            throw new Error("Invalid token");
+        } 
         return decoded.otp === otp && decoded.to === to;
     } catch (error) {
         return error instanceof jwt.TokenExpiredError ? "Token expired" : "Invalid token";

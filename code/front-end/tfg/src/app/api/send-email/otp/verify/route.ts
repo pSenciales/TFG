@@ -10,9 +10,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Faltan datos" }, { status: 400 });
         }
 
-        const verify = verifyOTP(token, otp, mail);
-        if (verify!==true) {
-            return NextResponse.json({ message: verify }, { status: 400 });
+        if (verifyOTP(token, otp, mail)!==true) {
+            return NextResponse.json({ message: "Código inválido o caducado"  }, { status: 400 });
         }
         return NextResponse.json({ message: "Código verificado"}, { status: 200 });
 
