@@ -1,10 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
 import axios from "axios";
-
+import verifyAcessToken  from "@/app/api/middleware";
+import { authOptions } from "@/lib/auth";
 const HF_KEY = process.env.HF_API_KEY;
 
 export async function GET() {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || Date.parse(session.expires) < Date.now()) {
+            return NextResponse.redirect("/login");
+        }
+        console.log("\n"+JSON.stringify(session)+"\n");
+        const accessToken = session.accessToken as string;
+        const provider = session.provider as string;
+
+        const verification = await verifyAcessToken(provider, accessToken);
 
         const response = await axios.post(
             "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base",
@@ -19,7 +30,8 @@ export async function GET() {
         );
         const result = await response.data;
         console.log(result);
-        console.log("✅ Respuesta final:", result);
+        console.log("\nRespuesta final:\n", result);
+        console.log("\n"+verification+"\n");
         return NextResponse.json({ result }, { status: 200 });
 
     } catch (error: unknown) {

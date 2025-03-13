@@ -53,5 +53,17 @@ def login():
         "access_token": access_token,
     }), 200
 
+@app.route('/verify', methods=['GET'])
+def verify():
+    access_token = request.args.get("accessToken")
+
+    user = User.objects(access_token__access_token=access_token).first().to_json
+    if not user:
+        return jsonify({"error": "invalid_token"}), 404
+
+    return jsonify(user), 200
+
+
+
 if __name__ == "__main__":
     app.run()
