@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 async function verifyGoogle(accessToken: string){
     const {data} = await axios.post(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);

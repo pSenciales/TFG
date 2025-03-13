@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import welcomeTemplate from "@/lib/mail/templates/welcome";
 import otpTemplate from "@/lib/mail/templates/otp";
 import statusTemplate from "@/lib/mail/templates/status";
-const otpGenerator = require("otp-generator");
+import otpGenerator from "otp-generator";
 import jwt from "jsonwebtoken";
 
 const templates: Record<string, string> = {

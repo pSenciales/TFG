@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import axios from "axios";
 import verifyAcessToken  from "@/app/api/middleware";
