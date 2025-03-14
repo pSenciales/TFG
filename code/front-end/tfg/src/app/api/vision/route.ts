@@ -7,7 +7,7 @@ const HF_KEY = process.env.HF_API_KEY;
 
 export async function GET() {
     try {
-        const session = await getServerSession(authOptions);
+        /*const session = await getServerSession(authOptions);
         if (!session || Date.parse(session.expires) < Date.now()) {
             return NextResponse.redirect("/login");
         }
@@ -16,7 +16,7 @@ export async function GET() {
         const provider = session.provider as string;
 
         const verification = await verifyAcessToken(provider, accessToken);
-
+*/
         const response = await axios.post(
             "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base",
             {image: "https://pbs.twimg.com/media/GkfPNYBXAAAIaAi?format=jpg&name=small"},
@@ -31,7 +31,6 @@ export async function GET() {
         const result = await response.data;
         console.log(result);
         console.log("\nRespuesta final:\n", result);
-        console.log("\n"+verification+"\n");
         return NextResponse.json({ result }, { status: 200 });
 
     } catch (error: unknown) {
