@@ -16,7 +16,9 @@ export async function GET() {
         const provider = session.provider as string;
 
         const verification = await verifyAcessToken(provider, accessToken);
-
+        if (!verification) {
+            return NextResponse.redirect("/login");
+        }
         const response = await axios.post(
             "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base",
             {image: "https://pbs.twimg.com/media/GkfPNYBXAAAIaAi?format=jpg&name=small"},
