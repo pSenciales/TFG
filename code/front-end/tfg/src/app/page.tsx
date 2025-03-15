@@ -110,7 +110,7 @@ export default function Home() {
               <ul className="mt-2">
                 <li>- Upload a picture</li>
                 <li>- Upload text</li>
-                <li>- Or even an X's post</li>
+                <li>- Or even an X&apos;s post</li>
               </ul>
             </Step>
             <Step>
