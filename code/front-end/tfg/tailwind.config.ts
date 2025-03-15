@@ -10,10 +10,9 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
-			"light-blue":"#ddf1ff",
-			"light-gray":"#dddddd",
-			"silver":"#c0c0c0",
-			
+  			'light-blue': '#ddf1ff',
+  			'light-gray': '#dddddd',
+  			silver: '#c0c0c0',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -59,6 +58,33 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			'shiny-text': 'shiny-text 8s infinite',
+  			meteor: 'meteor 5s linear infinite'
+  		},
+  		keyframes: {
+  			'shiny-text': {
+  				'0%, 90%, 100%': {
+  					'background-position': 'calc(-100% - var(--shiny-width)) 0'
+  				},
+  				'30%, 60%': {
+  					'background-position': 'calc(100% + var(--shiny-width)) 0'
+  				}
+  			},
+  			meteor: {
+  				'0%': {
+  					transform: 'rotate(var(--angle)) translateX(0)',
+  					opacity: '1'
+  				},
+  				'70%': {
+  					opacity: '1'
+  				},
+  				'100%': {
+  					transform: 'rotate(var(--angle)) translateX(-500px)',
+  					opacity: '0'
+  				}
+  			}
   		}
   	}
   },
