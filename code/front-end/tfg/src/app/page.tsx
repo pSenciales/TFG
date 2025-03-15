@@ -1,9 +1,6 @@
 "use client";
 import SplitText from '@/components/bits/SplitText';
-import { Button } from '@/components/ui/button';
-
 import ScrollFloat from '@/components/bits/ScrollFloat';
-
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { Particles } from '@/components/magicui/particles';
 import { AnimatedShinyText } from '@/components/magicui/animated-shiny-text';
@@ -116,15 +113,12 @@ export default function Home() {
                 <li>- Or even an X's post</li>
               </ul>
             </Step>
-
             <Step>
               <h1 className="text-xl">(Optionally) You can add some context so the result is more accurate</h1>
             </Step>
-
             <Step>
               <h1 className="text-xl">Just analyze and wait for the results!</h1>
             </Step>
-
             <Step>
               <h1 className="text-xl">You just have made your first report</h1>
               <p>Thank you for your help!</p>
