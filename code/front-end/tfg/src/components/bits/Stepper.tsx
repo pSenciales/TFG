@@ -88,7 +88,7 @@ export default function Stepper({
       {...rest}
     >
       <div
-        className={`mx-auto w-full max-w-md rounded-4xl shadow-xl ${stepCircleContainerClassName}`}
+        className={`mx-auto w-full max-w-5xl rounded-4xl shadow-xl ${stepCircleContainerClassName}`}
         style={{ border: "1px solid #222" }}
       >
         <div
@@ -154,13 +154,14 @@ export default function Stepper({
                   {backButtonText}
                 </button>
               )}
+              {!isLastStep && (
               <button
                 onClick={isLastStep ? handleComplete : handleNext}
                 className="duration-350 flex items-center justify-center rounded-full bg-green-500 py-1.5 px-3.5 font-medium tracking-tight text-white transition hover:bg-green-600 active:bg-green-700"
                 {...nextButtonProps}
               >
-                {isLastStep ? "Complete" : nextButtonText}
-              </button>
+                {nextButtonText}
+              </button>)}
             </div>
           </div>
         )}
@@ -263,7 +264,7 @@ interface StepProps {
 }
 
 export function Step({ children }: StepProps) {
-  return <div className="px-8">{children}</div>;
+  return <div className="px-8 text-xl">{children}</div>;
 }
 
 interface StepIndicatorProps {

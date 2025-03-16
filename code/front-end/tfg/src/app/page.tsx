@@ -83,44 +83,45 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div id="EJEMPLO" className='flex-col justify-center items-center m-0 relative'>
-        <div id="EJEMPLO2" className='mt-20 text-center text-7xl'>
+      <div className='flex-col justify-center items-center m-0 relative'>
+        <div className='mt-40 text-center text-7xl'>
           <ScrollFloat
             animationDuration={0.5}
             ease='back.inOut(2)'
             scrollStart='center bottom+=50%'
             scrollEnd='bottom bottom-=40%'
             stagger={0.03}
+            textClassName='text-7xl font-bold'
           >
-            How to report:
+            Steps to follow:
           </ScrollFloat>
+
         </div>
         <div className='flex justify-center items-center'>
           <Stepper
             initialStep={1}
-            stepCircleContainerClassName="justify-center items-center space-x-4 max-w-7xl w-full rounded-xl ml[50%]"
-            stepContainerClassName=""
+            stepCircleContainerClassName="justify-center items-center rounded-xl mt-20"
             contentClassName="h-full"
             backButtonText="Previous"
             nextButtonText="Next"
-            nextButtonProps={{ className: "bg-black rounded-xl text-white w-[25%]" }}
+            nextButtonProps={{ className: "bg-black rounded-xl text-white w-[10%] h-[75%]" }}
           >
             <Step>
-              <h1 className="text-xl">Upload the content you want to analyze:</h1>
-              <ul className="mt-2">
+              <h1 className="text-2xl font-semibold">Upload the content you want to analyze:</h1>
+              <ul className="my-2">
                 <li>- Upload a picture</li>
                 <li>- Upload text</li>
                 <li>- Or even an X&apos;s post</li>
               </ul>
             </Step>
             <Step>
-              <h1 className="text-xl">(Optionally) You can add some context so the result is more accurate</h1>
+                <h1 className="text-2xl font-semibold">(Optionally) You can add some context so the result is more accurate</h1>
             </Step>
             <Step>
-              <h1 className="text-xl">Just analyze and wait for the results!</h1>
+              <h1 className="text-2xl font-semibold">Just analyze and wait for the results!</h1>
             </Step>
             <Step>
-              <h1 className="text-xl">You just have made your first report</h1>
+              <h1 className="text-2xl font-semibold">You just have made your first report</h1>
               <p>Thank you for your help!</p>
             </Step>
           </Stepper>

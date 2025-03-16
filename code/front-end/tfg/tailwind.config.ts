@@ -13,6 +13,7 @@ const config: Config = {
   			'light-blue': '#ddf1ff',
   			'light-gray': '#dddddd',
   			silver: '#c0c0c0',
+			blue: "#4015ff",
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
