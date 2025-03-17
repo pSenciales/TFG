@@ -65,5 +65,13 @@ def verify():
 
 
 
+@app.route('/emails', methods=['GET'])
+def get_emails():
+    users = User.objects().to_json()
+    return jsonify(users), 200
+
+
+
+
 if __name__ == "__main__":
     app.run()

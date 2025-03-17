@@ -8,7 +8,7 @@ const subject = "Código de verificación de correo electrónico";
 
 export async function POST(req: NextRequest) {
     try {
-        const { to, name } = await req.json();
+        const { to } = await req.json();
 
         if (!templateName) {
             return NextResponse.json({ message: "Template no encontrado" }, { status: 400 });
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
 
         const { token, otp } = generateOTP(to);
-        const html = compileTemplate(templateName, { name, otp });
+        const html = compileTemplate(templateName, { otp, name:to });
         await sendMail(to, subject, html);
 
         return NextResponse.json({ message: "Correo enviado", token }, { status: 200 });

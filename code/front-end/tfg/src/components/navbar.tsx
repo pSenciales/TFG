@@ -82,7 +82,7 @@ export default function NavBar() {
                 ) : (
                     <div className="flex justify-end items-center space-x-4 w-full mr-10">
                     <Button variant="outline" onClick={() => window.location.href = '/login'}>Log In</Button>
-                    <Button>Sign up</Button>    
+                    <Button onClick={()=>window.location.href = '/signup'}>Sign up</Button>    
                     </div>
                 )}
             </div>

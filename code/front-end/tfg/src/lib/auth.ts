@@ -60,6 +60,9 @@ export const authOptions: NextAuthOptions = {
       session.provider = token.provider as string;
       return session;
     },
+    async redirect({baseUrl}){
+      return baseUrl
+    }
   }
   ,
   secret: process.env.NEXTAUTH_SECRET,

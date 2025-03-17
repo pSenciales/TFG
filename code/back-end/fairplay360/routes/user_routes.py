@@ -63,3 +63,10 @@ def update_user(user_id):
 
     user.save()
     return success("User updated", 200)
+
+@user_bp.route('/email/<user_email>', methods=['GET'])
+def get_user_by_email(user_email):
+    user = User.objects(email=user_email).first()
+    if not_found := element_not_found(user, "User not found"):
+        return not_found
+    return success("User found", 200)

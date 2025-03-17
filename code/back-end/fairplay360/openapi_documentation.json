@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url":"http://127.0.0.1:5000"
+      "url": "http://127.0.0.1:5000"
     }
   ],
   "paths": {
@@ -15,7 +15,9 @@
       "get": {
         "summary": "Get all users",
         "responses": {
-          "200": { "description": "List of users" }
+          "200": {
+            "description": "List of users"
+          }
         }
       },
       "post": {
@@ -45,7 +47,9 @@
     "/users/{user_id}": {
       "delete": {
         "summary": "Delete a user",
-        "parameters": [{ "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "responses": {
           "200": { "description": "User deleted successfully" },
           "404": { "description": "User not found" }
@@ -53,7 +57,9 @@
       },
       "put": {
         "summary": "Update a user",
-        "parameters": [{ "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -74,8 +80,65 @@
         }
       }
     },
+    "/users/email/{user_email}": {
+      "get": {
+        "summary": "Get user by email",
+        "parameters": [
+          { "name": "user_email", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email parameter is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": { "type": "null" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/reports": {
-      "get": { "summary": "Get all reports", "responses": { "200": { "description": "List of reports" } } },
+      "get": {
+        "summary": "Get all reports",
+        "responses": {
+          "200": { "description": "List of reports" }
+        }
+      },
       "post": {
         "summary": "Create a report",
         "requestBody": {
@@ -102,7 +165,9 @@
     "/reports/{report_id}": {
       "delete": {
         "summary": "Delete a report",
-        "parameters": [{ "name": "report_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "report_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "responses": {
           "200": { "description": "Report deleted successfully" },
           "404": { "description": "Report not found" }
@@ -110,7 +175,9 @@
       },
       "put": {
         "summary": "Update a report",
-        "parameters": [{ "name": "report_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "report_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -129,17 +196,24 @@
         }
       }
     },
-    "/reports/user/{user_id}":{
+    "/reports/user/{user_id}": {
       "get": {
         "summary": "Get all reports from user",
-        "parameters": [{ "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "user_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "responses": {
-          "200":{"description": "List of reports"}
+          "200": { "description": "List of reports" }
         }
       }
     },
     "/blacklist": {
-      "get": { "summary": "Get all blacklist emails", "responses": { "200": { "description": "List of blacklist entries" } } },
+      "get": {
+        "summary": "Get all blacklist emails",
+        "responses": {
+          "200": { "description": "List of blacklist entries" }
+        }
+      },
       "post": {
         "summary": "Add an email to blacklist",
         "requestBody": {
@@ -154,13 +228,17 @@
             }
           }
         },
-        "responses": { "201": { "description": "Blacklist created successfully" } }
+        "responses": {
+          "201": { "description": "Blacklist created successfully" }
+        }
       }
     },
     "/blacklist/{email}": {
       "delete": {
         "summary": "Remove an email from blacklist",
-        "parameters": [{ "name": "email", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "email", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "responses": {
           "200": { "description": "Blacklist deleted successfully" },
           "404": { "description": "Blacklist not found" }
