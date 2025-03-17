@@ -113,11 +113,11 @@ export default function Register() {
                 setError("");
                 setStep(4);
             }
-        } catch (err: any) {
-            if (err.response && err.response.status === 400) {
-                setError("El código introducido es incorrecto. Por favor, intenta nuevamente.");
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response && err.response.status === 400) {
+                setError("The code entered is incorrect. Please try again.");
             } else {
-                setError("Ocurrió un error. Inténtalo de nuevo más tarde.");
+                setError("An error occurred. Please try again later.");
             }
         }
     };
@@ -305,7 +305,7 @@ export default function Register() {
                                 <Button onClick={async () => await handleVerify()}>Verify</Button>
                             </div>
                         )}
-                        
+
 
 
                         {step === 4 && (

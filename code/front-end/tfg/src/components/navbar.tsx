@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
-
+import Image from 'next/image'
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -34,7 +34,7 @@ export default function NavBar() {
             <div className="display flex items-center max-w-7xl w-full space-x-10 px-3 py-2 mx-5">
 
                 <Link href="/" className="text-xl font-bold flex items-center space-x-2">
-                    <img src="/logo-no-bg.png" alt="logo" className="h-10 w-10" />
+                    <Image src="/logo-no-bg.png" alt="logo" className="h-10 w-10" />
                     Fairplay360
                 </Link>
                 
