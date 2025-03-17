@@ -15,12 +15,13 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MagicCard } from "@/components/magicui/magic-card";
 import Divider from "@mui/material/Divider";
 import { signIn } from "next-auth/react";
+import Image from 'next/image'
 
 export default function Register() {
     const FLASK_URL = process.env.NEXT_PUBLIC_FLASK_API_URL;
@@ -187,7 +188,7 @@ export default function Register() {
                                         onClick={() => signIn("google")}
                                         className="flex items-center justify-center gap-2 text-lg"
                                     >
-                                        <img src="/google-icon.svg" alt="Google Logo" width="24" height="24" />
+                                        <Image src="/google-icon.svg" alt="Google Logo" width="24" height="24" />
                                         Sign up with Google
                                     </Button>
                                     <Button
@@ -195,7 +196,7 @@ export default function Register() {
                                         onClick={() => signIn("github")}
                                         className="flex items-center justify-center gap-2 text-lg mt-5"
                                     >
-                                        <img src="/github-mark.svg" alt="GitHub Logo" width="24" height="24" />
+                                        <Image src="/github-mark.svg" alt="GitHub Logo" width="24" height="24" />
                                         Sign up with GitHub
                                     </Button>
                                     <Divider className="my-10">OR</Divider>
@@ -203,7 +204,7 @@ export default function Register() {
                                         className="flex items-center justify-center gap-2 text-lg"
                                         onClick={() => setStep(2)}
                                     >
-                                        <img src="/email.png" alt="Email logo" width="24" height="24" />
+                                        <Image src="/email.png" alt="Email logo" width="24" height="24" />
                                         Sign up with email
                                     </Button>
                                 </div>
@@ -212,7 +213,7 @@ export default function Register() {
                         {step === 2 && (
                             <div>
                                 <Button variant="ghost" className="pl-0 mb-5 text-md" onClick={() => setStep(1)}>
-                                    <img src="/left-arrow.svg" width="20" height="20" /> All sign up options
+                                    <Image alt="mail icon" src="/left-arrow.svg" width="20" height="20" /> All sign up options
                                 </Button>
                                 <div className="grid gap-5">
                                     <div>
