@@ -67,6 +67,6 @@ def update_user(user_id):
 @user_bp.route('/email/<user_email>', methods=['GET'])
 def get_user_by_email(user_email):
     user = User.objects(email=user_email).first()
-    if not_found := element_not_found(user, f"User not found: ${user_email}"):
-        return not_found
+    if not user:
+        return success("User not found", 200)
     return success("User found", 200)
