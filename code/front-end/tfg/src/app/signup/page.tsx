@@ -74,11 +74,10 @@ export default function Register() {
         setDisabled(true)
         setLoading(true);
         try {
-            const response = await axios.get(`${FLASK_URL}/users/email/${email}`, {
-                validateStatus: (status) => status === 200 || status === 404,
-            });
-
-            if (response.status === 200) {
+            const response = await axios.get(`${FLASK_URL}/users/email/${email}`);
+            console.log(response.data);
+            if (response.data.success === "User found") {
+                
                 toast.warning("Email already in use", {
                     description: `${email} is already registered, try to log in here`,
                     action: {
@@ -88,7 +87,7 @@ export default function Register() {
                         },
                     },
                 });
-            } else if (response.status === 404) {
+            } else if (response.data.success === "User not found") {
                 await handleSendEmail();
                 setStep(3);
             }

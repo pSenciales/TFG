@@ -4,6 +4,9 @@ import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 
+const FLASK_API_URL = process.env.NEXT_PUBLIC_FLASK_API_URL
+
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -26,7 +29,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const {data} = await axios.post("http://127.0.0.1:5000/login", {
+          const {data} = await axios.post(`${FLASK_API_URL}/login`, {
             email: credentials.email,
             password: credentials.password,
           });
