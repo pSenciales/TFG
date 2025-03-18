@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 
-from model import Report, User
-from routes.utils import *
+from api.model import Report, User
+from api.routes.utils import *
 
 report_bp = Blueprint('report_routes', __name__, url_prefix='/reports')
 

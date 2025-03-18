@@ -1,119 +1,186 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { useSession, signOut } from "next-auth/react"
-import Image from 'next/image'
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 
-const components = [
-    { title: "Modelo de lenguaje", href: "*", description: "Usamos *" },
-    { title: "OCR", href: "*", description: "La trascripción de imagen a texto con *" },
-    { title: "Front-end", href: "*", description: "Next.js como tecnología de presentación" },
-    { title: "Back-end", href: "*", description: "Fast-API como tecnología de *" },
-    { title: "Arquitectura", href: "*", description: "Arquitectura en microservicios" },
-    { title: "Base de datos", href: "*", description: "MongoDB como base de datos" },
-]
+// Sub-elementos para el menú de "Documentación"
+const docComponents = [
+  { title: "Modelo de lenguaje", href: "*", description: "Usamos *" },
+  { title: "OCR", href: "*", description: "La trascripción de imagen a texto con *" },
+  { title: "Front-end", href: "*", description: "Next.js como tecnología de presentación" },
+  { title: "Back-end", href: "*", description: "Fast-API como tecnología de *" },
+  { title: "Arquitectura", href: "*", description: "Arquitectura en microservicios" },
+  { title: "Base de datos", href: "*", description: "MongoDB como base de datos" },
+];
 
 export default function NavBar() {
-    const { data: session } = useSession();
+  const { data: session } = useSession();
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [docOpen, setDocOpen] = React.useState(false);
 
-    return (
-        <div className="bg-white flex  shadow-md sticky top-0 z-50 w-full">
-            <div className="display flex items-center max-w-7xl w-full space-x-10 px-3 py-2 mx-5">
-
-                <Link href="/" className="text-xl font-bold flex items-center space-x-2">
-                    <Image src="/logo-no-bg.png" alt="logo" className="h-10 w-10" />
-                    Fairplay360
-                </Link>
-                
-                {/* Menú de navegación */}
-                <NavigationMenu>
-                    <NavigationMenuList className="flex flex-col md:flex-row md:space-x-4">
-                    <NavigationMenuItem>
-                            <Link href="/docs" passHref legacyBehavior>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    Denuncia
-                                </NavigationMenuLink>
-                            </Link>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuTrigger>Documentación</NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                                    {components.map((component) => (
-                                        <ListItem
-                                            key={component.title}
-                                            title={component.title}
-                                            href={component.href}
-                                        >
-                                            {component.description}
-                                        </ListItem>
-                                    ))}
-                                </ul>
-                            </NavigationMenuContent>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <Link href="/docs" passHref legacyBehavior>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    Contacto
-                                </NavigationMenuLink>
-                            </Link>
-                        </NavigationMenuItem>
-                    </NavigationMenuList>
-                </NavigationMenu>
-
-            </div>
-
-            <div className="flex justify-end items-center space-x-4 w-full mr-10">
-                {session ? (
-                    <Button onClick={() => signOut()}>Log Out</Button>
-                ) : (
-                    <div className="flex justify-end items-center space-x-4 w-full mr-10">
-                    <Button variant="outline" onClick={() => window.location.href = '/login'}>Log In</Button>
-                    <Button onClick={()=>window.location.href = '/signup'}>Sign up</Button>    
-                    </div>
-                )}
-            </div>
-
-
+  return (
+    <nav className="bg-white shadow-md sticky top-0 z-50 w-full">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-3 py-2">
+        {/* Logo y hamburguesa */}
+        <div className="flex items-center space-x-4">
+          <Link href="/" className="flex items-center space-x-2">
+            <Image src="/logo-no-bg.png" alt="logo" width={40} height={40} />
+            <span className="font-bold text-sm md:text-xl">Fairplay360</span>
+          </Link>
+          {/* Boton hamburguesa para móviles */}
+          <button
+            className="md:hidden p-2 rounded hover:bg-gray-100"
+            onClick={() => setMenuOpen((prev) => !prev)}
+          >
+            {menuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
         </div>
-    )
+
+        {/* Navegación para desktop */}
+        <div className="hidden md:flex items-center space-x-4">
+          <NavigationMenu>
+            <NavigationMenuList className="flex space-x-4">
+              {/* Denuncia: enlace simple */}
+              <NavigationMenuItem>
+                <Link href="/denuncia" className={navigationMenuTriggerStyle()}>
+                  Denuncia
+                </Link>
+              </NavigationMenuItem>
+              {/* Documentación: menú desplegable */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Documentación</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {docComponents.map((component) => (
+                      <ListItem key={component.title} title={component.title} href={component.href}>
+                        {component.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              {/* Contacto: enlace simple */}
+              <NavigationMenuItem>
+                <Link href="/docs" className={navigationMenuTriggerStyle()}>
+                  Contacto
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
+        {/* Botones de sesión */}
+        <div className="flex items-center space-x-4">
+          {session ? (
+            <Button onClick={() => signOut()}>Log Out</Button>
+          ) : (
+            <>
+              <Button variant="outline" onClick={() => (window.location.href = "/login")}>
+                Log In
+              </Button>
+              <Button onClick={() => (window.location.href = "/signup")}>Sign up</Button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Menu para el movil */}
+      {menuOpen && (
+        <div className="md:hidden bg-white shadow-md">
+          <ul className="flex flex-col space-y-2 p-4">
+            <li>
+              <Link
+                href="/denuncia"
+                onClick={() => setMenuOpen(false)}
+                className="block p-2 hover:bg-gray-100 rounded"
+              >
+                Denuncia
+              </Link>
+            </li>
+            {/* Desplegable documentacion */}
+            <li>
+              <button
+                onClick={() => setDocOpen((prev) => !prev)}
+                className="w-full text-left block p-2 hover:bg-gray-100 rounded"
+              >
+                Documentación
+              </button>
+              {docOpen && (
+                <ul className="pl-4 mt-1 space-y-1">
+                  {docComponents.map((component) => (
+                    <li key={component.title}>
+                      <Link
+                        href={component.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="block p-2 hover:bg-gray-100 rounded"
+                      >
+                        {component.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+            {/* Contacto */}
+            <li>
+              <Link
+                href="/docs"
+                onClick={() => setMenuOpen(false)}
+                className="block p-2 hover:bg-gray-100 rounded"
+              >
+                Contacto
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
+    </nav>
+  );
 }
 
 const ListItem = React.forwardRef<
-    React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
-    return (
-        <li>
-            <NavigationMenuLink asChild>
-                <a
-                    ref={ref}
-                    className={cn(
-                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                        className
-                    )}
-                    {...props}
-                >
-                    <div className="text-sm font-medium leading-none">{title}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        {children}
-                    </p>
-                </a>
-            </NavigationMenuLink>
-        </li>
-    )
-})
-ListItem.displayName = "ListItem"
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";

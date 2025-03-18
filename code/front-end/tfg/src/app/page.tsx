@@ -7,7 +7,7 @@ import { AnimatedShinyText } from '@/components/magicui/animated-shiny-text';
 import RotatingText from '@/components/bits/RotatingText';
 import { WarpBackground } from '@/components/magicui/warp-background';
 import Stepper, { Step } from '@/components/bits/Stepper';
-
+import Image from 'next/image'
 export default function Home() {
   return (
     <div className='flex-col justify-center items-center'>
@@ -15,7 +15,7 @@ export default function Home() {
         <div className="col-span-5 row-span-2 flex items-center justify-center">
           <div className="relative flex justify-center items-center w-[80%] max-w-10xl h-[100%] max-h-2xl flex items-center justify-center border border-silver bg-gradient-to-r from-light-gray to-light-blue rounded-t-xl rounded-b-none">
             <div className="flex flex-col items-center justify-center absolute text-shadow-md">
-              <img src="/logo-no-bg.png" alt="logo" className="size-[30%] mx-auto" />
+              <Image src="/logo-no-bg.png" alt="logo" className="size-[30%] mx-auto" width={150} height={150}/>
               <h1 className="text-5xl font-bold text-black">Introducing Fairplay360</h1>
               <p className="text-lg font-bold text-black">A platform to report and document human rights violations</p>
               <SplitText text='AI powered' delay={200} className="text-md font-bold text-black" />

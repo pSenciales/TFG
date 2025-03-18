@@ -1,8 +1,8 @@
 
-from flask import Blueprint, request, jsonify
-from model import Blacklist
-from routes.utils import *
-from routes.utils import success, missing_fields, element_not_found
+from flask import Blueprint, request
+from api.model import Blacklist
+from api.routes.utils import *
+from api.routes.utils import success, missing_fields, element_not_found
 
 blacklist_bp = Blueprint('blacklist_routes', __name__, url_prefix='/blacklist')
 

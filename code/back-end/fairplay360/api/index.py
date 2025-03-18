@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 import bcrypt
 from datetime import datetime, timezone
 from flask_cors import CORS
-from db import connectDB
+from api.db import connectDB
 from model import User, Token
 from routes import (user_bp, log_bp, report_bp, blacklist_bp)
 
