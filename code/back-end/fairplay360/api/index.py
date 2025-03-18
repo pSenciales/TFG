@@ -4,8 +4,8 @@ import bcrypt
 from datetime import datetime, timezone
 from flask_cors import CORS
 from api.db import connectDB
-from model import User, Token
-from routes import (user_bp, log_bp, report_bp, blacklist_bp)
+from .model import User, Token
+from .routes import (user_bp, log_bp, report_bp, blacklist_bp)
 
 connectDB()
 app = Flask(__name__)
