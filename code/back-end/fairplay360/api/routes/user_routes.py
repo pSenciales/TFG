@@ -15,20 +15,22 @@ def get_users():
 def create_user():
     data = request.get_json()
 
-    if missing := missing_fields(['name', 'email', 'password'], data):
+    if missing := missing_fields(['name', 'email', 'password', 'captchaJWT', 'captchaToken'], data):
         return missing
 
-    if User.objects(email=data['email']).first():
-        return jsonify({"error": "Email already in use"}), 409
+    try:
+        if verify_captcha(data['captchaJWT'], data['captchaToken']):
+            if User.objects(email=data['email']).first():
+                return jsonify({"error": "Email already in use"}), 409
 
-    user = User(
-        name=data['name'],
-        email=data['email']
-    )
-    user.set_password(data['password'])
-    user.save()
+            user = User(name=data['name'], email=data['email'])
+            user.set_password(data['password'])
+            user.save()
 
-    return success("User created", 201)
+            return success("User created", 201)
+    except Exception as e:
+        return jsonify({"error": "Bad request "+ e}), 400
+
 
 @user_bp.route('/<user_id>', methods=['DELETE'])
 def delete_user(user_id):

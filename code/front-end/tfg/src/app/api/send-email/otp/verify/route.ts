@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyOTP } from "@/lib/mail/utils";
 
-
 export async function POST(req: NextRequest) {
     try {
         const { token, mail, otp } = await req.json();

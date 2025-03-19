@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,8 @@ import { MagicCard } from "@/components/magicui/magic-card";
 import Divider from "@mui/material/Divider";
 import { signIn } from "next-auth/react";
 import Image from 'next/image'
+
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Register() {
     const FLASK_URL = process.env.NEXT_PUBLIC_FLASK_API_URL;
@@ -52,6 +54,12 @@ export default function Register() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
+    const [isVerified, setIsVerified] = useState(false);
+    const [captchaToken, setCaptchaToken] = useState("");
+    const [captchaJWT, setCaptchaJWT] = useState("");
+
+
     useEffect(() => {
         if (counter === 0) {
             setDisabled(false);
@@ -63,21 +71,22 @@ export default function Register() {
         return () => clearInterval(timer);
     }, [counter]);
 
-    const handleSendEmail = async () => {
-        const { data } = await axios.post("/api/send-email/otp/send", { to: email });
+    const handleSendEmail = async (captchaTokenGenerated: string | null, captchaJWT: string | null) => {
+        const { data } = await axios.post("/api/send-email/otp/send", { to: email, captchaRecibed: captchaTokenGenerated, captchaJWT: captchaJWT});
         setOtpToken(data.token);
+        if(data.captchaJWT) setCaptchaJWT(data.captchaJWT);
         setCounter(60);
         setDisabled(true);
     };
 
-    const handleContinue = async () => {
+    const handleContinue = async (captchaTokenGenerated: string | null) => {
         setDisabled(true)
         setLoading(true);
         try {
             const response = await axios.get(`${FLASK_URL}/users/email/${email}`);
             console.log(response.data);
             if (response.data.success === "User found") {
-                
+
                 toast.warning("Email already in use", {
                     description: `${email} is already registered, try to log in here`,
                     action: {
@@ -87,8 +96,13 @@ export default function Register() {
                         },
                     },
                 });
+                setIsVerified(false);
+                setCaptchaToken("");
+                if (recaptchaRef.current) {
+                    recaptchaRef.current.reset();
+                }
             } else if (response.data.success === "User not found") {
-                await handleSendEmail();
+                await handleSendEmail(captchaTokenGenerated, null);
                 setStep(3);
             }
         } catch (error: unknown) {
@@ -106,7 +120,7 @@ export default function Register() {
             const { status } = await axios.post("/api/send-email/otp/verify", {
                 token: otpToken,
                 mail: email,
-                otp: otp,
+                otp: otp
             });
             if (status === 200) {
                 setError("");
@@ -114,7 +128,8 @@ export default function Register() {
             }
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response && err.response.status === 400) {
-                setError("The code entered is incorrect. Please try again.");
+                console.log(err.response);
+                setError("The code entered is incorrect or expired.");
             } else {
                 setError("An error occurred. Please try again later.");
             }
@@ -165,12 +180,22 @@ export default function Register() {
 
 
     const handleCreateAccount = async () => {
-        await axios.post(`${FLASK_URL}/users`, { name, password, email });
+        await axios.post(`${FLASK_URL}/users`, { name, password, email, captchaJWT, captchaToken});
         signIn("credentials", {
             email: email,
             password: password
         })
     }
+
+    const handleChange = (token: string | null) => {
+        setIsVerified(true);
+        setCaptchaToken(token || "");
+    };
+
+    function handleExpired() {
+        setIsVerified(false);
+    }
+
 
     return (
         <div className="h-full">
@@ -201,7 +226,7 @@ export default function Register() {
                                     <Divider className="my-10">OR</Divider>
                                     <Button
                                         className="flex items-center justify-center gap-2 text-lg"
-                                        onClick={() => setStep(2)}
+                                        onClick={() => { setStep(2); console.log(process.env.NEXT_PUBLIC_RECAPTCHA) }}
                                     >
                                         <Image src="/email.png" alt="Email logo" width="24" height="24" />
                                         Sign up with email
@@ -233,14 +258,18 @@ export default function Register() {
                                         <Label>Repeat password</Label>
                                         <Input type="password" placeholder="password" onChange={(e) => setRepeatPassword(e.target.value)} />
                                     </div>
-
+                                    <ReCAPTCHA
+                                        className="mx-auto"
+                                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA || ""}
+                                        ref={recaptchaRef}
+                                        onChange={handleChange}
+                                        onExpired={handleExpired}
+                                    />
                                     {email === repeatEmail && password === repeatPassword ? (
                                         <Button
                                             className="mt-5"
-                                            onClick={async () => {
-                                                await handleContinue();
-                                            }}
-                                            disabled={loading || disabledEmail || disabledPw}
+                                            disabled={loading || disabledEmail || disabledPw || !isVerified}
+                                            onClick={() => handleContinue(captchaToken)}
                                         >
                                             {loading ? (
                                                 <span className="flex items-center">
@@ -355,8 +384,8 @@ export default function Register() {
                                 <Button
                                     variant="ghost"
                                     className="w-min ml-0 text-blue"
-                                    onClick={handleSendEmail}
                                     disabled={disabled}
+                                    onClick={async ()=>  await handleSendEmail(captchaToken, captchaJWT)}
                                 >
                                     Resend code? {disabled && `(${counter}s)`}
                                 </Button>

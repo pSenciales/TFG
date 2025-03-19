@@ -1,4 +1,6 @@
 from flask import jsonify
+import os
+import jwt
 
 # Verify if there are missing fields in the request
 def missing_fields(required_fields, data):
@@ -19,3 +21,16 @@ def element_not_found(element, message):
 #Returns success message
 def success(message, code):
     return jsonify({"success": message}), code
+
+#Verify captcha token
+
+def verify_captcha(captcha_jwt: str, captcha_recibed: str):
+    try:
+        decoded = jwt.decode(captcha_jwt, os.environ["JWT_SECRET"])
+        if not isinstance(decoded, dict):
+            raise ValueError("Invalid token")
+        return decoded.get("captcha") == captcha_recibed
+    except jwt.ExpiredSignatureError:
+        return "Token expired"
+    except jwt.InvalidTokenError:
+        return "Invalid token"

@@ -49,6 +49,7 @@ const otpTemplate = `
         <h1>Hola, {{name}}. Completa tu registro.</h1>
         <p>Usa el siguiente código para completar tu registro. No compartas este código con nadie.</p>
         <div class="otp">{{otp}}</div>
+        <p>Este código solo tiene 2 minutos de validez.</p>
         <p class="footer">Si no solicitaste este código, ignora este correo.</p>
     </div>
 </body>
