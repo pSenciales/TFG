@@ -26,7 +26,7 @@ def success(message, code):
 
 def verify_captcha(captcha_jwt: str, captcha_recibed: str):
     try:
-        decoded = jwt.decode(captcha_jwt, os.environ["JWT_SECRET"])
+        decoded = jwt.decode(captcha_jwt, os.environ["JWT_SECRET"], algorithms=["HS256"])
         if not isinstance(decoded, dict):
             raise ValueError("Invalid token")
         return decoded.get("captcha") == captcha_recibed
