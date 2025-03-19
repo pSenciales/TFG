@@ -3,7 +3,7 @@
 import { useLogin } from "@/hooks/useLogin"
 import Step1 from "@/components/login/Step1"
 import Step2 from "@/components/login/Step2"
-import RegisterFooter from "@/components/signup/RegisterFooter"
+import LoginFooter from "@/components/login/LoginFooter"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { MagicCard } from "@/components/magicui/magic-card";
 
@@ -13,6 +13,8 @@ export default function Login() {
         password,
         step,
         errorLogin,
+        disabled,
+        loading,
         setStep,
         setEmail,
         setPassword,
@@ -42,10 +44,13 @@ export default function Login() {
                             password = {password}
                             handleLogin={handleLogin}
                             errorLogin = {errorLogin}
+                            disabled = {disabled}
+                            loading = {loading}
                             />
                         )}
                     </CardContent>
                     <CardFooter className="grid">
+                        <LoginFooter/>
                     </CardFooter>
                 </MagicCard>
             </Card>

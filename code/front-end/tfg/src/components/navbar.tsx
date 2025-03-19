@@ -1,11 +1,19 @@
 "use client";
 
-import * as React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,6 +23,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
 
 // Sub-elementos para el menú de "Documentación"
 const docComponents = [
@@ -26,11 +40,18 @@ const docComponents = [
   { title: "Base de datos", href: "*", description: "MongoDB como base de datos" },
 ];
 
+
+function getInitials(name: string): string {
+  const words = name.split(" ").filter(Boolean);
+  return words.slice(0, 2).map(word => word[0]).join("").toUpperCase();
+}
+
+
 export default function NavBar() {
   const { data: session } = useSession();
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const [docOpen, setDocOpen] = React.useState(false);
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [docOpen, setDocOpen] = useState(false);
+  console.log(session)
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 w-full">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-3 py-2">
@@ -38,7 +59,7 @@ export default function NavBar() {
         <div className="flex items-center space-x-4">
           <Link href="/" className="flex items-center space-x-2">
             <Image src="/logo-no-bg.png" alt="logo" width={40} height={40} />
-            <span className="font-bold text-sm md:text-xl">Fairplay360</span>
+            <span className="font-bold text-md md:text-xl">Fairplay360</span>
           </Link>
           {/* Boton hamburguesa para móviles */}
           <button
@@ -93,7 +114,37 @@ export default function NavBar() {
         {/* Botones de sesión */}
         <div className="flex items-center space-x-4">
           {session ? (
-            <Button onClick={() => signOut()}>Log Out</Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="w-10 h-10 cursor-pointer hover:opacity-80 transition-all border border-silver">
+                  {session.user?.image ? (
+                    <AvatarImage
+                      src={session.user.image}
+                      alt={session.user.name || "User Avatar"}
+                    />
+                  ) : (
+                    <AvatarFallback className="bg-black text-white">
+                      {session.user?.name ? getInitials(session.user.name) : "NA"}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                 <DropdownMenuItem>
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={()=> signOut()}>
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
           ) : (
             <>
               <Button variant="outline" onClick={() => (window.location.href = "/login")}>

@@ -28,14 +28,14 @@ export default function Step1({
       <Button
         variant="outline"
         onClick={() => signIn("github")}
-        className="flex items-center justify-center gap-2 text-lg mt-5"
+        className="flex items-center justify-center gap-2 text-lg my-5"
       >
         <Image src="/github-mark.svg" alt="GitHub Logo" width="24" height="24" />
         Log in with GitHub
       </Button>
-      <Divider className="my-10">OR</Divider>
+      <Divider>OR</Divider>
       <Button
-        className="flex items-center justify-center gap-2 text-lg"
+        className="flex items-center justify-center gap-2 text-lg mt-5"
         onClick={() => {
           // Limpia los campos y pasa al paso 2 (formulario de registro con email)
           setEmail("");
