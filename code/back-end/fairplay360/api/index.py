@@ -57,18 +57,11 @@ def login():
 def verify():
     access_token = request.args.get("accessToken")
 
-    user = User.objects(access_token__access_token=access_token).first().to_json
+    user = User.objects(access_token__access_token=access_token).first().to_json()
     if not user:
         return jsonify({"error": "invalid_token"}), 404
 
     return jsonify(user), 200
-
-
-
-@app.route('/emails', methods=['GET'])
-def get_emails():
-    users = User.objects().to_json()
-    return jsonify(users), 200
 
 @app.after_request
 def after_request(response):
