@@ -51,6 +51,7 @@ export default function NavBar() {
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [docOpen, setDocOpen] = useState(false);
+  console.log(session);
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 w-full">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-3 py-2">

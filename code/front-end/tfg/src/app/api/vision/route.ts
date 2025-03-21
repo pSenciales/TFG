@@ -1,26 +1,28 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import axios from "axios";
 import verifyAcessToken  from "@/app/api/middleware";
 import { authOptions } from "@/lib/auth";
+import { getToken } from "next-auth/jwt"
 const HF_KEY = process.env.HF_API_KEY;
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
-        if (!session || Date.parse(session.expires) < Date.now()) {
+        const token = await getToken({req})
+        if (!session || !token || Date.parse(session.expires) < Date.now()) {
             return NextResponse.redirect("/login");
         }
-        console.log("\n"+JSON.stringify(session)+"\n");
-        const accessToken = session.accessToken as string;
-        const provider = session.provider as string;
+        console.log("\n"+JSON.stringify(token)+"\n");
+        const accessToken = token.accessToken as string;
+        const provider = token.provider as string;
 
         const verification = await verifyAcessToken(provider, accessToken);
         if (!verification) {
             return NextResponse.redirect("/login");
         }
         const response = await axios.post(
-            "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base",
+            "https://router.huggingface.co/hf-inference/models/Salesforce/blip-image-captioning-base",
             {image: "https://pbs.twimg.com/media/GkfPNYBXAAAIaAi?format=jpg&name=small"},
             {
                 headers: {
@@ -30,6 +32,7 @@ export async function GET() {
             }
             
         );
+        console.log("\n\nLLEGA AQUI\n\n")
         const result = await response.data;
         console.log(result);
         console.log("\nRespuesta final:\n", result);
@@ -41,5 +44,6 @@ export async function GET() {
         } else {
             console.error('Unexpected error', error);
         }
+        return NextResponse.json({error:error}, {status:500})
     }
 }
