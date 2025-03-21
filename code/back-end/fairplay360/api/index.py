@@ -62,7 +62,7 @@ def verify():
 
 @app.before_request
 def check_access_token():
-    if request.endpoint == "verify" or (request.endpoint == "users" and request.method == "POST"):
+    if request.endpoint == "/login" or (request.endpoint == "/users" and request.method == "POST") or request.endpoint.startswith("/users/email"):
         return
 
     auth_header = request.headers.get("Authorization")
