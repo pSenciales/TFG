@@ -3,7 +3,10 @@ from flask import Flask, request, jsonify
 import bcrypt
 from datetime import datetime, timezone
 from flask_cors import CORS
+
+from api.middleware import verify_access_token, verify_credentials
 from api.db import connectDB
+from api.routes.utils import success
 from .model import User, Token
 from .routes import (user_bp, log_bp, report_bp, blacklist_bp)
 
@@ -55,13 +58,27 @@ def login():
 
 @app.route('/verify', methods=['GET'])
 def verify():
-    access_token = request.args.get("accessToken")
+    return jsonify({"message": "success"}), 200
 
-    user = User.objects(access_token__access_token=access_token).first().to_json()
-    if not user:
-        return jsonify({"error": "invalid_token"}), 404
+@app.before_request
+def check_access_token():
+    # Supongamos que el token se envía en el header Authorization en formato "Bearer <token>"
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return jsonify({"error": "Access token missing"}), 401
 
-    return jsonify(user), 200
+    try:
+        scheme, token = auth_header.split(" ")
+        if scheme.lower() != "bearer":
+            raise ValueError("Invalid scheme")
+    except ValueError:
+        return jsonify({"error": "Invalid authorization header format"}), 401
+
+    provider = request.headers.get("X-Provider", "credentials")
+
+    if not verify_access_token(provider, token):
+        return jsonify({"error": "Invalid or expired token"}), 401
+
 
 @app.after_request
 def after_request(response):

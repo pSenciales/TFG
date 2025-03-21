@@ -7,8 +7,10 @@ user_bp = Blueprint('user_routes', __name__, url_prefix='/users')
 @user_bp.route('/', methods=['GET'])
 @user_bp.route('', methods=['GET'])
 def get_users():
-    users = User.objects().to_json()
-    return jsonify(users), 200
+    users = User.objects()
+    if not users:
+        return jsonify({}), 200
+    return jsonify(users.to_json()), 200
 
 @user_bp.route('/', methods=['POST'])
 @user_bp.route('', methods=['POST'])

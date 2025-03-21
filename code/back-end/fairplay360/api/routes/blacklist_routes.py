@@ -10,8 +10,10 @@ blacklist_bp = Blueprint('blacklist_routes', __name__, url_prefix='/blacklist')
 @blacklist_bp.route('/', methods=['GET'])
 @blacklist_bp.route('', methods=['GET'])
 def get_reports():
-    blacklist = Blacklist.objects().to_json()
-    return jsonify(blacklist), 200
+    blacklist = Blacklist.objects()
+    if not blacklist:
+        return jsonify({}), 200
+    return jsonify(blacklist.to_json()), 200
 
 
 @blacklist_bp.route('/', methods=['POST'])

@@ -9,8 +9,10 @@ log_bp = Blueprint('log_routes', __name__, url_prefix='/logs')
 @log_bp.route('/', methods=['GET'])
 @log_bp.route('', methods=['GET'])
 def get_logs():
-    logs = Log.objects().to_json()
-    return jsonify(logs), 200
+    logs = Log.objects()
+    if not logs:
+        return jsonify({}), 200
+    return jsonify(logs.to_json()), 200
 
 
 @log_bp.route('/', methods=['POST'])
@@ -49,5 +51,7 @@ def get_user_logs(user_id):
         return not_found
 
     logs = Log.objects(user_id=user.id)
-    return jsonify(logs), 200
+    if not logs:
+        return jsonify({}), 200
+    return jsonify(logs.to_json()), 200
 
