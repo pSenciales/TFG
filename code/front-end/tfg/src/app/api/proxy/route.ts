@@ -7,7 +7,7 @@ import { getToken } from "next-auth/jwt"
 
 export async function POST(req: NextRequest) {
     try {
-        const {url, method, body, accessTokenTest} = await req.json();
+        const {url, method, body} = await req.json();
         const session = await getServerSession(authOptions);
         const token = await getToken({req})
         if (!session || !token || Date.parse(session.expires) < Date.now()) {
@@ -17,12 +17,12 @@ export async function POST(req: NextRequest) {
         const accessToken = token.accessToken as string;
         const provider = token.provider as string;
 
-        const verification = await verifyAcessToken("credentials", accessTokenTest);
+        const verification = await verifyAcessToken(provider, accessToken);
         if (!verification) {
             return NextResponse.redirect("/login");
         }
         
-        const headers = { Authorization: `Bearer ${accessTokenTest}`, "Content-Type": "application/json"}
+        const headers = { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json"}
         let response;
         switch (method.toLowerCase()){
             case "get": response = await axios.get(url, {headers: headers}); break;

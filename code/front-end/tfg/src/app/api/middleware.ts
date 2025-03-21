@@ -15,8 +15,13 @@ async function verifyGithub(accessToken: string){
 }
 
 async function verifyCredentials(accessToken: string){
-    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/verify?accessToken=${accessToken}`,);
-    return JSON.parse(data).email ? "success" : "error";
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Provider": "credentials"
+    }
+
+    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/verify`, {headers: headers});
+    return data.message === "success" ? "success" : "error";
 }
 
 
