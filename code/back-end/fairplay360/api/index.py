@@ -62,7 +62,9 @@ def verify():
 
 @app.before_request
 def check_access_token():
-    # Supongamos que el token se envía en el header Authorization en formato "Bearer <token>"
+    if request.endpoint == "verify" or (request.endpoint == "users" and request.method == "POST"):
+        return
+
     auth_header = request.headers.get("Authorization")
     if not auth_header:
         return jsonify({"error": "Access token missing"}), 401
