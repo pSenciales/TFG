@@ -162,11 +162,11 @@ export default function NavBar() {
           <ul className="flex flex-col space-y-2 p-4">
             <li>
               <Link
-                href="/denuncia"
+                href="/report"
                 onClick={() => setMenuOpen(false)}
                 className="block p-2 hover:bg-gray-100 rounded"
               >
-                Denuncia
+                Report
               </Link>
             </li>
             {/* Desplegable documentacion */}
@@ -196,7 +196,7 @@ export default function NavBar() {
             {/* Contacto */}
             <li>
               <Link
-                href="/docs"
+                href="/contact"
                 onClick={() => setMenuOpen(false)}
                 className="block p-2 hover:bg-gray-100 rounded"
               >

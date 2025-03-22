@@ -34,10 +34,10 @@ export const Tabs = ({
   };
 
   return (
-    <>
+    <div className="mx-2">
       <div
         className={cn(
-          "flex flex-row items-center justify-start [perspective:1000px] relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full",
+          "flex flex-row items-center justify-start [perspective:1000px] relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full ",
           containerClassName
         )}
       >
@@ -72,7 +72,7 @@ export const Tabs = ({
         </div>
       </div>
       <FadeInDiv active={active} className={cn("mt-2", contentClassName)} />
-    </>
+    </div>
   );
 };
 

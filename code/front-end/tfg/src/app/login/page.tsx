@@ -27,6 +27,7 @@ export default function Login() {
                 <h1 className="text-center text-3xl font-bold mt-20">Log In to Fairplay360</h1>
             </FadeIn>
             <FadeIn key={step} duration={0.5}>
+                <div className="mx-2">
                 <Card className="max-w-xl mx-auto mt-10">
                     <MagicCard gradientColor="#D9D9D955">
                         <CardHeader />
@@ -57,6 +58,7 @@ export default function Login() {
                         </CardFooter>
                     </MagicCard>
                 </Card>
+                </div>
             </FadeIn>
         </div>
     );

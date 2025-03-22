@@ -21,7 +21,7 @@ export default function Home() {
       {/* Layout para pantallas pequeñas (mobile) */}
       <div className="block md:hidden w-full px-4 mt-10">
         {/* Sección Superior (versión mobile) */}
-        <div className="relative border border-silver bg-gradient-to-r from-light-gray to-light-blue rounded-xl overflow-hidden flex flex-col items-center justify-center">
+        <div className="relative border-t border-x border-silver  bg-gradient-to-r from-light-gray to-light-blue rounded-t-xl overflow-hidden flex flex-col items-center justify-center">
           <Particles
             className="absolute inset-0 z-0"
             quantity={300}
@@ -55,7 +55,7 @@ export default function Home() {
         {/* Sección Inferior (versión mobile) */}
         <div className="flex flex-col">
           {/* Bloque RotatingText */}
-          <div className="bg-white border border-silver rounded-xl shadow-lg p-4">
+          <div className="bg-white border border-silver">
             <WarpBackground
               className="w-full h-full bg-white rounded-xl flex items-center justify-center"
               beamDuration={20}
@@ -80,7 +80,7 @@ export default function Home() {
           </div>
 
           {/* Bloque Call to Action */}
-          <div className="bg-white border border-silver rounded-xl shadow-lg p-4 flex flex-col items-center">
+          <div className="bg-white border-b border-x border-silver rounded-b-xl shadow-lg p-4 flex flex-col items-center">
             <p className="text-sm text-gray-600 text-center">
               Fairplay360 aims to combat hate speech through AI-driven moderation.
               We seek to create a safer digital space for fans, players, and organizations.

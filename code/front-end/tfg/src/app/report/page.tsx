@@ -161,7 +161,7 @@ export default function Report() {
   return (
     <FadeIn duration={0.5}>
 
-      <div className="w-full grid place-items-center no-visible-scrollbar">
+      <div className="w-full grid place-items-center">
         <h1 className="text-3xl font-bold mt-20 text-center">
           Create a report from this different media
         </h1>
