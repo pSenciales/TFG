@@ -84,13 +84,13 @@ export default function NavBar() {
             <NavigationMenuList className="flex space-x-4">
               {/* Denuncia: enlace simple */}
               <NavigationMenuItem>
-                <Link href="/denuncia" className={navigationMenuTriggerStyle()}>
-                  Denuncia
+                <Link href="/report" className={navigationMenuTriggerStyle()}>
+                  Report
                 </Link>
               </NavigationMenuItem>
               {/* Documentación: menú desplegable */}
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Documentación</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Docs</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {docComponents.map((component) => (
@@ -103,7 +103,7 @@ export default function NavBar() {
               </NavigationMenuItem>
               {/* Contacto: enlace simple */}
               <NavigationMenuItem>
-                <Link href="/docs" className={navigationMenuTriggerStyle()}>
+                <Link href="/contact" className={navigationMenuTriggerStyle()}>
                   Contacto
                 </Link>
               </NavigationMenuItem>

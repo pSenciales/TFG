@@ -63,6 +63,17 @@ body {
   }
 }
 
+/* Oculta la scrollbar en todos los elementos */
+* {
+  scrollbar-width: none;         
+  -ms-overflow-style: none;       
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+
 @layer base {
   * {
     @apply border-border;
