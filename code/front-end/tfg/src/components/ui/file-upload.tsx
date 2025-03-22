@@ -46,10 +46,12 @@ export const FileUpload = ({
       return;
     }
     setFiles(acceptedFiles);
-    onChange && onChange(acceptedFiles);
-    // Limpiar error si había alguno
+    if (onChange) {
+      onChange(acceptedFiles);
+    }
     setErrorMsg(null);
   };
+  
 
   const handleClick = () => {
     fileInputRef.current?.click();
