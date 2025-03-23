@@ -4,11 +4,28 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+
 type Tab = {
   title: string;
   value: string;
   content?: string | React.ReactNode;
 };
+
+type TabsProps = {
+  tabs: Tab[];
+  containerClassName?: string;
+  activeTabClassName?: string;
+  tabClassName?: string;
+  contentClassName?: string;
+  setDisableContextText: (disableContext: boolean) => void;
+  setDisableContextImage: (disableContext: boolean) => void;
+  setDisableContextPost: (disableContext: boolean) => void;
+  setView: (view: string) => void;
+  setContext: (context: string) => void;
+  setContent: (content: string) => void;
+  setUrl: (url: string) => void;
+  setSource: (url: string) => void;
+}
 
 export const Tabs = ({
   tabs: propTabs,
@@ -16,20 +33,34 @@ export const Tabs = ({
   activeTabClassName,
   tabClassName,
   contentClassName,
-}: {
-  tabs: Tab[];
-  containerClassName?: string;
-  activeTabClassName?: string;
-  tabClassName?: string;
-  contentClassName?: string;
-}) => {
-  // Guarda el tab activo y la lista de tabs
+  setDisableContextText,
+  setDisableContextImage,
+  setDisableContextPost,
+  setView,
+  setContext,
+  setContent,
+  setUrl,
+  setSource
+}: TabsProps) => {
   const [active, setActive] = useState<Tab>(propTabs[0]);
 
   const moveSelectedTabToTop = (idx: number) => {
     const newTabs = [...propTabs];
     const selectedTab = newTabs.splice(idx, 1);
     newTabs.unshift(selectedTab[0]);
+    setContent("");
+    setContext("");
+    setUrl("");
+    setSource("")
+    setView(newTabs[0].value);
+    
+    switch (idx) {
+      case 0: setDisableContextPost(true); setDisableContextImage(true); break;
+      case 1: setDisableContextPost(true); setDisableContextText(true); break;
+      case 2: setDisableContextImage(true); setDisableContextText(true); break;
+    }
+
+
     setActive(newTabs[0]);
   };
 
