@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
+import {Button} from "@/components/ui/button";
 
 const mainVariant = {
   initial: {
@@ -106,7 +107,8 @@ export const FileUpload = ({
                     "shadow-sm"
                   )}
                 >
-                  <div className="flex justify-between w-full items-center gap-4">
+                  <div className="flex justify-between w-full items-center relative">
+                    <div className="flex items-center w-full">
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -123,6 +125,8 @@ export const FileUpload = ({
                     >
                       {(file.size / (1024 * 1024)).toFixed(2)} MB
                     </motion.p>
+                    </div>
+                    <motion.button onClick={() => setFiles([])}><Button variant={"ghost"} className="text-red-500 p-0 absolute top-0 right-5  size-min">X</Button></motion.button>
                   </div>
                   <div className="flex text-sm md:flex-row flex-col items-start md:items-center w-full mt-2 justify-between text-neutral-600 dark:text-neutral-400">
                     <motion.p

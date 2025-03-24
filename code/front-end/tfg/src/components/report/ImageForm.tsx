@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MagicCard } from "@/components/magicui/magic-card";
 
 import { useReport } from "@/hooks/useReport";
+import axios from "axios";
 
 export default function ImageForm() {
 
@@ -23,6 +24,23 @@ export default function ImageForm() {
         console.log(files);
     };
     console.log(files);
+
+    const handleOCR = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!files) return;
+    
+        const formData = new FormData();
+        formData.append("file", files[0]);
+    
+        try {
+          const response = await axios.post("/api/ocr", formData);
+          const data = await response.data;
+          alert(data.result.description);
+        } catch (error) {
+          console.error("Error al subir la imagen:", error);
+        }
+      };
+
     return (
         <Card className="max-w-7xl">
             <MagicCard gradientColor="#D9D9D955">
@@ -54,7 +72,7 @@ export default function ImageForm() {
                     <p className="text-sm text-muted-foreground">
                         This text will be added as context to the report
                     </p>
-                    <Button className="mt-10">Analize</Button>
+                    <Button className="mt-10" onClick={handleOCR}>Analize</Button>
                 </CardContent>
                 <CardFooter className="grid">
                 </CardFooter>

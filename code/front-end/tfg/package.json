@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@google-cloud/vision": "^5.1.0",
     "@mui/material": "^6.4.7",
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-checkbox": "^1.1.4",
@@ -24,6 +25,7 @@
     "@tabler/icons-react": "^3.31.0",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
+    "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.5.0",
     "gsap": "^3.12.7",
@@ -44,6 +46,7 @@
     "react-google-recaptcha": "^3.1.0",
     "react-icons": "^5.5.0",
     "sonner": "^2.0.1",
+    "streamifier": "^0.1.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },
@@ -55,6 +58,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-google-recaptcha": "^2.1.9",
+    "@types/streamifier": "^0.1.2",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
     "postcss": "^8",
