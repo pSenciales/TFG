@@ -126,7 +126,7 @@ export const FileUpload = ({
                       {(file.size / (1024 * 1024)).toFixed(2)} MB
                     </motion.p>
                     </div>
-                    <motion.button onClick={() => setFiles([])}><Button variant={"ghost"} className="text-red-500 p-0 absolute top-0 right-5  size-min">X</Button></motion.button>
+                    <motion.button onClick={() => setFiles([])} className="text-red-500 p-0 absolute top-0 right-5  size-min">X</motion.button>
                   </div>
                   <div className="flex text-sm md:flex-row flex-col items-start md:items-center w-full mt-2 justify-between text-neutral-600 dark:text-neutral-400">
                     <motion.p

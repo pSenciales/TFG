@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import axios from "axios";
-import verifyAcessToken  from "@/app/api/middleware";
+import verifySession  from "@/app/api/middleware";
 import { authOptions } from "@/lib/auth";
 import { getToken } from "next-auth/jwt"
 
@@ -10,19 +10,13 @@ export async function POST(req: NextRequest) {
         const {url, method, body} = await req.json();
         const session = await getServerSession(authOptions);
         const token = await getToken({req})
-        if (!session || !token || Date.parse(session.expires) < Date.now()) {
-            return NextResponse.redirect("/login");
-        }
         
-        const accessToken = token.accessToken as string;
-        const provider = token.provider as string;
-
-        const verification = await verifyAcessToken(provider, accessToken);
+        const verification = verifySession(session, token);
         if (!verification) {
             return NextResponse.redirect("/login");
         }
         
-        const headers = { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json"}
+        const headers = { Authorization: `Bearer ${token?.accessToken}`, "Content-Type": "application/json"}
         let response;
         switch (method.toLowerCase()){
             case "get": response = await axios.get(url, {headers: headers}); break;

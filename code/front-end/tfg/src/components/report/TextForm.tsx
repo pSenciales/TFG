@@ -11,15 +11,38 @@ import { MagicCard } from "@/components/magicui/magic-card";
 
 import { useReport } from "@/hooks/useReport";
 
+import axios from "axios";
 
 export default function TextForm() {
     const {
         disableContextText,
         setDisableContextText,
         setContent,
+        content,
         setContext,
-        setSource
+        context,
+        setSource,
+        source
     } = useReport();
+
+    const handleAnalizeText = async (e: React.FormEvent) => {
+        e.preventDefault();
+    
+        const formData = new FormData();
+        formData.append("source", source);
+        formData.append("context", context);
+        formData.append("content", content);
+        formData.append("type", "text");
+    
+        try {
+          const response = await axios.post("/api/ocr", formData);
+          const data = response.data;
+          alert(data.result.description);
+        } catch (error) {
+          console.error("Error al subir la imagen:", error);
+        }
+      };
+
 
     return (
         <Card className="max-w-7xl">
@@ -64,7 +87,7 @@ export default function TextForm() {
                     <p className="text-sm text-muted-foreground">
                         This text will be added as context to the report
                     </p>
-                    <Button className="mt-10">Analize</Button>
+                    <Button className="mt-10" onClick={handleAnalizeText}>Analize</Button>
                 </CardContent>
                 <CardFooter className="grid">
                 </CardFooter>

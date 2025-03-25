@@ -1,12 +1,14 @@
+import { Session } from 'next-auth';
+import { JWT as JWTType } from 'next-auth/jwt';
 import axios from 'axios';
 
-async function verifyGoogle(accessToken: string){
-    const {data} = await axios.post(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);
+async function verifyGoogle(accessToken: string) {
+    const { data } = await axios.post(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);
     return data.email ? "success" : "error";
-} 
+}
 
-async function verifyGithub(accessToken: string){
-    const {data} = await axios.get(`https://api.github.com/user`, {
+async function verifyGithub(accessToken: string) {
+    const { data } = await axios.get(`https://api.github.com/user`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
@@ -14,21 +16,21 @@ async function verifyGithub(accessToken: string){
     return data.login ? "success" : "error";
 }
 
-async function verifyCredentials(accessToken: string){
+async function verifyCredentials(accessToken: string) {
     const headers = {
         Authorization: `Bearer ${accessToken}`,
         "X-Provider": "credentials"
     }
 
-    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/verify`, {headers: headers});
-    return data.message === "success" ? "success" : "error";
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/verify`, { headers: headers });
+    console.log(data);
+    return data.success === "success" ? "success" : "error";
 }
 
 
+async function verifyAcessToken(provider: string, accessToken: string) {
 
-export default async function verifyAcessToken(provider: string, accessToken: string){
-
-    switch(provider){
+    switch (provider) {
         case "google":
             return await verifyGoogle(accessToken);
         case "github":
@@ -38,4 +40,20 @@ export default async function verifyAcessToken(provider: string, accessToken: st
         default:
             return "error";
     }
+}
+
+
+export default async function verifySession(session: Session | null, token: JWTType | null) {
+    if (!session || !token || Date.parse(session.expires) < Date.now()) {
+        console.error("Invalid session");
+        return false;
+    }
+
+    const verification = await verifyAcessToken(session.provider, token.accessToken as string);
+    if (verification !== "success") {
+        console.error("Invalid access token");
+        return false;
+    }
+
+    return true;
 }

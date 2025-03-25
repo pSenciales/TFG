@@ -10,14 +10,34 @@ import { MagicCard } from "@/components/magicui/magic-card";
 
 import { useReport } from "@/hooks/useReport";
 
+import axios from "axios";
 
 export default function PostForm() {
     const {
         disableContextPost,
         setDisableContextPost,
         setUrl,
-        setContext
+        url,
+        setContext,
+        context
       } = useReport();
+    
+      const handleAnalizePost = async (e: React.FormEvent) => {
+        e.preventDefault();
+    
+        const formData = new FormData();
+        formData.append("url", url);
+        formData.append("context", context);
+        formData.append("type", "post");
+    
+        try {
+          const response = await axios.post("/api/ocr", formData);
+          const data = response.data;
+          alert(data.result.description);
+        } catch (error) {
+          console.error("Error al subir la imagen:", error);
+        }
+      };
 
     return (
         <Card className="max-w-7xl">
@@ -25,7 +45,7 @@ export default function PostForm() {
           <CardHeader />
           <CardContent>
             <Label >URL</Label>
-            <Textarea placeholder="Write your report here" onChange={(e) => setUrl(e.target.value)} />
+            <Textarea placeholder="Write your report here" onChange={(e) => setUrl(e.target.value)} required/>
             <p className="text-sm text-muted-foreground">
               This text will be analyzed and a added to the report, if the post has images, the first one will be used as context
             </p>
@@ -52,7 +72,7 @@ export default function PostForm() {
             <p className="text-sm text-muted-foreground">
               This text will be added as context to the report
             </p>
-            <Button className="mt-10">Analize</Button>
+            <Button className="mt-10" onClick={()=> handleAnalizePost}>Analize</Button>
           </CardContent>
           <CardFooter className="grid">
           </CardFooter>
