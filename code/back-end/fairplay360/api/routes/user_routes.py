@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from api.model import User, Report
-from api.routes.utils import *
+from api.utils import *
 
 user_bp = Blueprint('user_routes', __name__, url_prefix='/users')
 

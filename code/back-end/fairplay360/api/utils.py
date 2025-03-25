@@ -1,6 +1,11 @@
-from flask import jsonify
 import os
+
 import jwt
+from flask import jsonify
+from scrapfly import ScrapflyClient, ScrapeConfig, ScrapeApiResponse
+
+SCRAPFLY_API_KEY = os.getenv('SCRAPFLY_API_KEY')
+
 
 # Verify if there are missing fields in the request
 def missing_fields(required_fields, data):
@@ -34,3 +39,18 @@ def verify_captcha(captcha_jwt: str, captcha_recibed: str):
         return "Token expired"
     except jwt.InvalidTokenError:
         return "Invalid token"
+
+#Web scrap
+def web_scrap(url: str):
+    scrapfly = ScrapflyClient(key=SCRAPFLY_API_KEY)
+    result: ScrapeApiResponse = scrapfly.scrape(ScrapeConfig(
+        tags=[
+            "player", "project:default"
+        ],
+        format="clean_html",
+        asp=True,
+        render_js=True,
+        url=url
+    ))
+    print(result.content)
+    return result.content

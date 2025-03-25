@@ -1,7 +1,7 @@
 
 from flask import Blueprint, request
 from api.model import Log, User
-from api.routes.utils import *
+from api.utils import *
 
 log_bp = Blueprint('log_routes', __name__, url_prefix='/logs')
 

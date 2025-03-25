@@ -1,7 +1,4 @@
 import requests
-import os
-
-from flask import jsonify
 
 from api.model import User
 
