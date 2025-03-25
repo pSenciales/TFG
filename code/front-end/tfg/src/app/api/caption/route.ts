@@ -14,10 +14,8 @@ export async function GET(req: NextRequest) {
             return NextResponse.redirect("/login");
         }
         console.log("\n"+JSON.stringify(token)+"\n");
-        const accessToken = token.accessToken as string;
-        const provider = token.provider as string;
 
-        const verification = await verifyAcessToken(provider, accessToken);
+        const verification = await verifyAcessToken(session, token);
         if (!verification) {
             return NextResponse.redirect("/login");
         }
