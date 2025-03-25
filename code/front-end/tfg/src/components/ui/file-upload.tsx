@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
-import {Button} from "@/components/ui/button";
 
 const mainVariant = {
   initial: {

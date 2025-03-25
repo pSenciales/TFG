@@ -17,8 +17,8 @@ export async function handleAnalizeImage(formData: FormData): Promise<NextRespon
     if (!language || (language !== "en" && language !== "es")) {
         return NextResponse.json({ error: "Invalid language" }, { status: 400 });
     } else {
-        const context = formData.get('context');
-        const text = result.description;
+       // const context = formData.get('context');
+       // const text = result.description;
         //TODO: Implementar la llamada a la API de OpenAI o DeepSeek
         
         return NextResponse.json({ result: result }, { status: 200 });
@@ -27,16 +27,16 @@ export async function handleAnalizeImage(formData: FormData): Promise<NextRespon
 
 
 export async function handleAnalizeText(formData: FormData): Promise<NextResponse> {
-    const text = formData.get('text');
-    const context = formData.get('context');
+  //  const text = formData.get('text');
+  //  const context = formData.get('context');
 
     return NextResponse.json({ result: {} }, { status: 200 });
 
 }
 
 export async function handleAnalizePost(formData: FormData): Promise<NextResponse> {
-    const text = formData.get('text');
-    const context = formData.get('context');
+  //  const text = formData.get('text');
+  //  const context = formData.get('context');
 
     return NextResponse.json({ result: {} }, { status: 200 });
 
