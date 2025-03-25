@@ -27,16 +27,17 @@ export async function handleAnalizeImage(formData: FormData): Promise<NextRespon
 
 
 export async function handleAnalizeText(formData: FormData): Promise<NextResponse> {
-  //  const text = formData.get('text');
-  //  const context = formData.get('context');
-
+    //  const text = formData.get('text');
+    //  const context = formData.get('context');
+    formData.get('text');
     return NextResponse.json({ result: {} }, { status: 200 });
 
 }
 
 export async function handleAnalizePost(formData: FormData): Promise<NextResponse> {
-  //  const text = formData.get('text');
-  //  const context = formData.get('context');
+    //  const text = formData.get('text');
+    //  const context = formData.get('context');
+    formData.get('text');
 
     return NextResponse.json({ result: {} }, { status: 200 });
 
