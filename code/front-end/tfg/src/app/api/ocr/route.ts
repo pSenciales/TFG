@@ -18,11 +18,11 @@ export async function POST(req: NextRequest) {
 
         const formData = await req.formData();
         const type = formData.get('type');
-        
+        console.log("\n\nENTRAMOS EN EL ROUTE\n\n");
         switch (type) {
-            case 'image': return handleAnalizeImage(formData);
-            case 'text': return handleAnalizeText(formData);
-            case 'post': return handleAnalizePost(formData);
+            case 'image': return await handleAnalizeImage(formData);
+            case 'text': return await handleAnalizeText(formData);
+            case 'post': return await handleAnalizePost(formData);
             default: return NextResponse.json({ error: "Invalid type of report" }, { status: 400 });
         }
        

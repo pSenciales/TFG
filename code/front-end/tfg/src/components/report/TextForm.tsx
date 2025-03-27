@@ -1,5 +1,3 @@
-
-
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox"
 
@@ -37,9 +35,9 @@ export default function TextForm() {
         try {
           const response = await axios.post("/api/ocr", formData);
           const data = response.data;
-          alert(data.result.description);
+          alert("The text is: "+data.content+"\nReasoning: "+data.reasoning);
         } catch (error) {
-          console.error("Error al subir la imagen:", error);
+          console.error("Error al analizar el texto:", error);
         }
       };
 
@@ -50,14 +48,14 @@ export default function TextForm() {
                 <CardHeader />
                 <CardContent>
                     <div>
-                        <Label >Content</Label>
+                        <Label >Content<span className="text-red-500">&#42;</span></Label>
                         <Textarea placeholder="Write your report here" onChange={(e) => setContent(e.target.value)} />
                         <p className="text-sm text-muted-foreground">
                             This text will be analyzed and a added to the report
                         </p>
                     </div>
                     <div className="mt-5">
-                        <Label >Source</Label>
+                        <Label >Source<span className="text-red-500">&#42;</span></Label>
                         <Input placeholder="Write the original source here" onChange={(e) => setSource(e.target.value)} />
                         <p className="text-sm text-muted-foreground">
                             This is the original source of the content, for example an URL

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { uploadImageBuffer, ocr } from "@/lib/image/utils";
+import analizeHateSpeech from "@/lib/analizeHateSpeech";
 
 export async function handleAnalizeImage(formData: FormData): Promise<NextResponse> {
     const file = formData.get('file');
@@ -17,28 +18,31 @@ export async function handleAnalizeImage(formData: FormData): Promise<NextRespon
     if (!language || (language !== "en" && language !== "es")) {
         return NextResponse.json({ error: "Invalid language" }, { status: 400 });
     } else {
-       // const context = formData.get('context');
-       // const text = result.description;
+        const context = formData.get('context');
+        const text = result.description;
         //TODO: Implementar la llamada a la API de OpenAI o DeepSeek
-        
+
+
+
         return NextResponse.json({ result: result }, { status: 200 });
     }
 }
 
 
 export async function handleAnalizeText(formData: FormData): Promise<NextResponse> {
-    //  const text = formData.get('text');
-    //  const context = formData.get('context');
-    formData.get('text');
-    return NextResponse.json({ result: {} }, { status: 200 });
+    const content = formData.get('content') as string || "";
+    const context = formData.get('context') as string || "";
+    console.log("\n\nENTRAMOS EN EL HANDLEANALIZETEXT\n\n");
+    const analize = await analizeHateSpeech(content, context, "en");
+    return NextResponse.json(analize, { status: 200 });
 
 }
 
 export async function handleAnalizePost(formData: FormData): Promise<NextResponse> {
-    //  const text = formData.get('text');
-    //  const context = formData.get('context');
-    formData.get('text');
+    const url = formData.get('text');
+    const context = formData.get('context');
 
     return NextResponse.json({ result: {} }, { status: 200 });
 
 }
+

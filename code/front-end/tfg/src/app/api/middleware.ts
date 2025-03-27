@@ -23,7 +23,6 @@ async function verifyCredentials(accessToken: string) {
     }
 
     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/verify`, { headers: headers });
-    console.log(data);
     return data.success === "success" ? "success" : "error";
 }
 
