@@ -1,10 +1,10 @@
 import cloudinary from "cloudinary";
 import streamifier from "streamifier";
 import vision from "@google-cloud/vision";
+import { getGCPCredentials } from '@/lib/getGCPCredentials'; // ajusta la ruta si hace falta
 
-const clientGoogle = new vision.v1.ImageAnnotatorClient({
-  key: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-});
+
+const clientGoogle = new vision.v1.ImageAnnotatorClient(getGCPCredentials());
 
 
 cloudinary.v2.config({
