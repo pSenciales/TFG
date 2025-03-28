@@ -24,27 +24,27 @@ export default function PostForm() {
     
       const handleAnalizePost = async (e: React.FormEvent) => {
         e.preventDefault();
-    
         const formData = new FormData();
         formData.append("url", url);
         formData.append("context", context);
         formData.append("type", "post");
     
         try {
-          const response = await axios.post("/api/ocr", formData);
+          const response = await axios.post("/api/analize", formData);
           const data = response.data;
-          alert(data.result.description);
+          alert("The text is: "+data.content+"\nReasoning: "+data.reasoning);
         } catch (error) {
           console.error("Error al subir la imagen:", error);
         }
       };
+
 
     return (
         <Card className="max-w-7xl">
         <MagicCard gradientColor="#D9D9D955">
           <CardHeader />
           <CardContent>
-            <Label >URL</Label>
+            <Label >URL<span className="text-red-500"> &#42;</span></Label>
             <Textarea placeholder="Write your report here" onChange={(e) => setUrl(e.target.value)} required/>
             <p className="text-sm text-muted-foreground">
               This text will be analyzed and a added to the report, if the post has images, the first one will be used as context
@@ -72,7 +72,7 @@ export default function PostForm() {
             <p className="text-sm text-muted-foreground">
               This text will be added as context to the report
             </p>
-            <Button className="mt-10" onClick={()=> handleAnalizePost}>Analize</Button>
+            <Button className="mt-10" onClick={handleAnalizePost}>Analize</Button>
           </CardContent>
           <CardFooter className="grid">
           </CardFooter>

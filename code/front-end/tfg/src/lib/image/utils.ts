@@ -2,12 +2,13 @@ import cloudinary from "cloudinary";
 import streamifier from "streamifier";
 import vision from "@google-cloud/vision";
 import { getGCPCredentials } from '@/lib/getGCPCredentials'; // ajusta la ruta si hace falta
+import axios from "axios";
 
 //Vercel:
-//const clientGoogle = new vision.v1.ImageAnnotatorClient(getGCPCredentials());
+const clientGoogle = new vision.v1.ImageAnnotatorClient(getGCPCredentials());
 
 //Local:
-const clientGoogle = new vision.v1.ImageAnnotatorClient({key: process.env.GOOGLE_APPLICATION_CREDENTIALS});
+//const clientGoogle = new vision.v1.ImageAnnotatorClient({key: process.env.GOOGLE_APPLICATION_CREDENTIALS});
 
 
 cloudinary.v2.config({
@@ -64,3 +65,26 @@ export const ocr = async (url: string): Promise<JSON> => {
     }
   });
 };
+
+export const caption = async (url: string): Promise<JSON> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.post(
+        "https://router.huggingface.co/hf-inference/models/Salesforce/blip-image-captioning-base",
+        { image: url },
+        {
+          headers: {
+            'Content-Type': "application/json",
+            'Authorization': `Bearer ${process.env.HF_API_KEY}`
+          }
+        }
+      );
+      resolve(data as JSON);
+    } catch (error) {
+      console.error("Error in caption:", error);
+      reject(error);
+    }
+  });
+};
+
+

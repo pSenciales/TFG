@@ -13,7 +13,6 @@ const openai = new OpenAI({
 
 export default async function analizeHateSpeech(content_input: string, context: string, language: string) {
   try {
-    console.log("\n\nENTRAMOS EN EL HANDLEANALIZEHATE\n\n");
     const userContent = context
       ? `Analyze this text: ${content_input}. Some context: ${context}`
       : `Analyze this text: ${content_input}.`;

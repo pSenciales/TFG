@@ -39,9 +39,9 @@ export default function ImageForm() {
         formData.append("type", "image");
     
         try {
-          const response = await axios.post("/api/ocr", formData);
-          const data = response.data;
-          alert(data.result.description);
+            const response = await axios.post("/api/analize", formData);
+            const data = response.data;
+            alert("The text is: "+data.content+"\nReasoning: "+data.reasoning);
         } catch (error) {
           console.error("Error al subir la imagen:", error);
         }
