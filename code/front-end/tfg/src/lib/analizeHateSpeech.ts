@@ -11,7 +11,8 @@ const openai = new OpenAI({
   apiKey: process.env.DEEPSEEK_API_KEY
 });
 
-export default async function analizeHateSpeech(content_input: string, context: string, language: string) {
+
+export default async function analizeHateSpeech(content_input: string, context: string) {
   try {
     const userContent = context
       ? `Analyze this text: ${content_input}. Some context: ${context}`

@@ -22,7 +22,7 @@ export async function handleAnalizeImage(formData: FormData): Promise<NextRespon
         const context = formData.get('context') as string || "";
         const content = result.description;
 
-        const analize = await analizeHateSpeech(content, context, "en");
+        const analize = await analizeHateSpeech(content, context);
 
         return NextResponse.json(analize, { status: 200 });
     }
@@ -32,7 +32,7 @@ export async function handleAnalizeImage(formData: FormData): Promise<NextRespon
 export async function handleAnalizeText(formData: FormData): Promise<NextResponse> {
     const content = formData.get('content') as string || "";
     const context = formData.get('context') as string || "";
-    const analize = await analizeHateSpeech(content, context, "en");
+    const analize = await analizeHateSpeech(content, context);
     return NextResponse.json(analize, { status: 200 });
 }
 
@@ -54,7 +54,7 @@ export async function handleAnalizePost(formData: FormData, accessToken: string,
             context += `. Also, an image captioned as: ${img_captioned[0]?.generated_text}`;
         }
 
-        const analize = await analizeHateSpeech(tweet, context, "en");
+        const analize = await analizeHateSpeech(tweet, context);
         return NextResponse.json(analize, { status: 200 });
     } catch (error) {
         return NextResponse.json(error, { status: 500 });
