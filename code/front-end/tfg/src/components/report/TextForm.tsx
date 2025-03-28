@@ -33,7 +33,7 @@ export default function TextForm() {
         formData.append("type", "text");
     
         try {
-          const response = await axios.post("/api/ocr", formData);
+          const response = await axios.post("/api/analize", formData);
           const data = response.data;
           alert("The text is: "+data.content+"\nReasoning: "+data.reasoning);
         } catch (error) {
