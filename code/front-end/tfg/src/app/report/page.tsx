@@ -15,9 +15,7 @@ export default function Report() {
 
 
   const {
-    setDisableContextText,
-    setDisableContextImage,
-    setDisableContextPost,
+    loading,
     setContext,
     setContent,
     setUrl,
@@ -30,14 +28,14 @@ export default function Report() {
       title: "Text",
       value: "text",
       content: (
-        <TextForm/>
+        <TextForm />
       )
     },
     {
       title: "Image",
       value: "image",
       content: (
-       <ImageForm/>
+        <ImageForm />
       )
 
     },
@@ -45,14 +43,45 @@ export default function Report() {
       title: "X's post",
       value: "post",
       content: (
-        <PostForm/>
+        <PostForm />
       )
     },
   ];
 
+  // Un mini-componente que muestra el overlay de carga
+  function FullScreenLoader() {
+    return (
+      <div style={overlayStyle}>
+        <div style={loaderStyle}>Cargando...</div>
+      </div>
+    );
+  }
+
+  // Estilos básicos para el overlay y el contenido centrado
+  const overlayStyle = {
+    position: "fixed" as const,
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999,
+    color: "#fff",
+    fontSize: "1.5rem",
+  };
+
+  const loaderStyle = {
+    padding: "1rem 2rem",
+    backgroundColor: "#222",
+    borderRadius: "8px",
+  };
 
   return (
     <FadeIn duration={0.5}>
+      {loading && <FullScreenLoader />}
 
       <div className="w-full grid place-items-center">
         <h1 className="text-3xl font-bold mt-20 text-center">
@@ -61,9 +90,7 @@ export default function Report() {
         <div className="w-full max-w-7xl mt-10">
           <Tabs
             tabs={tabs}
-            setDisableContextText={setDisableContextText}
-            setDisableContextImage={setDisableContextImage}
-            setDisableContextPost={setDisableContextPost}
+            loading={loading}
             setView={setView}
             setContext={setContext}
             setContent={setContent}

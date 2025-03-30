@@ -56,3 +56,11 @@ export default async function verifySession(session: Session | null, token: JWTT
 
     return true;
 }
+
+export async function verifyCaptchaToken(captchaToken: string) {
+    const response = await axios.post(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET}&response=${captchaToken}`
+    );
+    return response.data.success;
+    
+}

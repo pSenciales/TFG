@@ -27,9 +27,9 @@ def element_not_found(element, message):
 def success(message, code):
     return jsonify({"success": message}), code
 
-#Verify captcha token
+#Verify captchaJWT
 
-def verify_captcha(captcha_jwt: str, captcha_recibed: str):
+def verify_captchaJWT(captcha_jwt: str, captcha_recibed: str):
     try:
         decoded = jwt.decode(captcha_jwt, os.environ["JWT_SECRET"], algorithms=["HS256"])
         if not isinstance(decoded, dict):

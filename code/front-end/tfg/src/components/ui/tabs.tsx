@@ -17,14 +17,12 @@ type TabsProps = {
   activeTabClassName?: string;
   tabClassName?: string;
   contentClassName?: string;
-  setDisableContextText: (disableContext: boolean) => void;
-  setDisableContextImage: (disableContext: boolean) => void;
-  setDisableContextPost: (disableContext: boolean) => void;
   setView: (view: string) => void;
   setContext: (context: string) => void;
   setContent: (content: string) => void;
   setUrl: (url: string) => void;
   setSource: (url: string) => void;
+  loading: boolean;
 }
 
 export const Tabs = ({
@@ -33,14 +31,12 @@ export const Tabs = ({
   activeTabClassName,
   tabClassName,
   contentClassName,
-  setDisableContextText,
-  setDisableContextImage,
-  setDisableContextPost,
   setView,
   setContext,
   setContent,
   setUrl,
-  setSource
+  setSource,
+  loading
 }: TabsProps) => {
   const [active, setActive] = useState<Tab>(propTabs[0]);
 
@@ -53,14 +49,6 @@ export const Tabs = ({
     setUrl("");
     setSource("")
     setView(newTabs[0].value);
-    
-    switch (idx) {
-      case 0: setDisableContextPost(true); setDisableContextImage(true); break;
-      case 1: setDisableContextPost(true); setDisableContextText(true); break;
-      case 2: setDisableContextImage(true); setDisableContextText(true); break;
-    }
-
-
     setActive(newTabs[0]);
   };
 
@@ -83,6 +71,7 @@ export const Tabs = ({
               style={{
                 transformStyle: "preserve-3d",
               }}
+              disabled={loading}
             >
               {active.value === tab.value && (
                 <motion.div

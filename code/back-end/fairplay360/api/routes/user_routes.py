@@ -21,7 +21,7 @@ def create_user():
         return missing
 
     try:
-        if verify_captcha(data['captchaJWT'], data['captchaToken']):
+        if verify_captchaJWT(data['captchaJWT'], data['captchaToken']):
             if User.objects(email=data['email']).first():
                 return jsonify({"error": "Email already in use"}), 409
 

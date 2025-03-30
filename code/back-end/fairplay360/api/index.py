@@ -9,7 +9,7 @@ from flask_cors import CORS
 
 from api.middleware import verify_access_token
 from api.db import connectDB
-from api.utils import success, missing_fields, web_scrap
+from api.utils import success, missing_fields, web_scrap, verify_captchaJWT
 from .model import User, Token
 from .routes import (user_bp, log_bp, report_bp, blacklist_bp)
 
@@ -66,16 +66,38 @@ def scrape_tweets():
         return missing
 
     url = data["url"]
+    captcha_token = data.get("captchaToken")
+    captcha_jwt = data.get("captchaJWT")
+    if captcha_token and captcha_jwt:
+        verify = verify_captchaJWT(captcha_jwt, captcha_token)
+        if not verify:
+            return jsonify({"error": "Invalid captcha"}), 401
+    else:
+        auth_header = request.headers.get("Authorization")
+        if not auth_header:
+            return jsonify({"error": "Access token missing"}), 401
+
+        try:
+            scheme, token = auth_header.split(" ")
+            if scheme.lower() != "bearer":
+                raise ValueError("Invalid scheme")
+        except ValueError:
+            return jsonify({"error": "Invalid authorization header format"}), 401
+
+        provider = request.headers.get("X-Provider", "credentials")
+
+        if not verify_access_token(provider, token):
+            return jsonify({"error": "Invalid or expired token"}), 401
+
     html_rendered = web_scrap(url)
     soup = BeautifulSoup(html_rendered, 'html.parser')
 
     # Buscamos el primer elemento <article>
     article = soup.find('article')
     tweet_text = None
-    img_src = None
+    image_src = None
 
     if article:
-        print(article)
         # Dentro del article, buscamos el primer <div> con el atributo data-testid="tweetText"
         tweet_div = article.find('div', {'data-testid': 'tweetText'})
         if tweet_div:
@@ -108,7 +130,7 @@ def verify():
 @app.before_request
 def check_access_token():
     if (request.path == "/login" or (request.path == "/users" and (request.method == "OPTIONS" or request.method == "POST"))
-            or request.path.startswith("/users/email") or request.path == "/scrape_tweets"):
+            or request.path == "/users/email" or request.path == "/scrape_tweets"):
         return
 
     auth_header = request.headers.get("Authorization")

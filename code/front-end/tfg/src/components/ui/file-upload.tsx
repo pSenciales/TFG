@@ -90,7 +90,7 @@ export const FileUpload = ({
         </div>
         <div className="flex flex-col items-center justify-center">
           <p className="relative z-20 font-sans font-bold text-neutral-700 dark:text-neutral-300 text-base">
-            Upload an image
+            Upload an image <span className="text-red-500">&#42;</span>
           </p>
           <p className="relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-base mt-2">
             Drag and drop your image here or click to upload
@@ -106,8 +106,7 @@ export const FileUpload = ({
                     "shadow-sm"
                   )}
                 >
-                  <div className="flex justify-between w-full items-center relative">
-                    <div className="flex items-center w-full">
+                  <div className="flex justify-between w-full items-center">
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -124,8 +123,6 @@ export const FileUpload = ({
                     >
                       {(file.size / (1024 * 1024)).toFixed(2)} MB
                     </motion.p>
-                    </div>
-                    <motion.button onClick={() => setFiles([])} className="text-red-500 p-0 absolute top-0 right-5  size-min">X</motion.button>
                   </div>
                   <div className="flex text-sm md:flex-row flex-col items-start md:items-center w-full mt-2 justify-between text-neutral-600 dark:text-neutral-400">
                     <motion.p
@@ -157,7 +154,7 @@ export const FileUpload = ({
                   damping: 20,
                 }}
                 className={cn(
-                  "relative group-hover/file:shadow-2xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-32 mt-4 w-full max-w-[8rem] mx-auto rounded-md",
+                  "relative group-hover/file:shadow-2xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-32 mt-4 w-full max-w-[8rem] mx-auto rounded-md border border-dashed border-sky-500",
                   "shadow-[0px_10px_50px_rgba(0,0,0,0.1)]"
                 )}
               >
@@ -178,7 +175,7 @@ export const FileUpload = ({
             {!files.length && (
               <motion.div
                 variants={secondaryVariant}
-                className="absolute opacity-0 border border-dashed border-sky-400 inset-0 z-30 bg-transparent flex items-center justify-center h-32 mt-4 w-full max-w-[8rem] mx-auto rounded-md"
+                className="absolute opacity-0 border border-dashed border-sky-200 inset-0 z-30 bg-transparent flex items-center justify-center h-32 mt-4 w-full max-w-[8rem] mx-auto rounded-md"
               ></motion.div>
             )}
           </div>

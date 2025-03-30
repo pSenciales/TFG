@@ -1,6 +1,7 @@
 import requests
 
 from api.model import User
+import os
 
 
 def verify_google(access_token: str) -> bool:
@@ -31,3 +32,9 @@ def verify_access_token(provider: str, access_token: str) -> bool:
         return verify_credentials(access_token)
     else:
         return False
+
+def verify_captcha(captcha_token: str) -> bool:
+    recaptcha_secret = os.getenv("RECAPTCHA_SECRET")
+    resp = requests.get(f"https://www.google.com/recaptcha/api/siteverify?secret={recaptcha_secret}&response={captcha_token}")
+    data = resp.json()
+    return data["success"]

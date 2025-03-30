@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { uploadImageBuffer, ocr, caption } from "@/lib/image/utils";
 import analizeHateSpeech from "@/lib/analizeHateSpeech";
 import axios from "axios";
+import { AxiosResponse } from "axios";
+import jwt from "jsonwebtoken";
 
 export async function handleAnalizeImage(formData: FormData): Promise<NextResponse> {
     const file = formData.get('file');
@@ -36,24 +38,37 @@ export async function handleAnalizeText(formData: FormData): Promise<NextRespons
     return NextResponse.json(analize, { status: 200 });
 }
 
-export async function handleAnalizePost(formData: FormData, accessToken: string, provider: string): Promise<NextResponse> {
-    const url = formData.get('url');
+export async function handleAnalizePost(formData: FormData): Promise<NextResponse> {
     let context = formData.get('context') as string;
+    const url = formData.get('url');
+    const captchaToken = formData.get('captchaToken');
+    console.log(`TOKEN2: ${captchaToken}`);
+    let scrape: AxiosResponse | null = null;
     try {
-        const scrape = await axios.post(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/scrape_tweets`, { url: url }, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "X-Provider": provider
-            }
-        })
-
+        if (captchaToken) {
+            const captchaJWT = jwt.sign(
+                { captcha: captchaToken },
+                process.env.JWT_SECRET as string,
+                { expiresIn: "1m" }
+              );
+            scrape = await axios.post(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/scrape_tweets`, { url: url, captchaToken: captchaToken as string, captchaJWT: captchaJWT as string })
+        } else {
+            const accessToken = formData.get('accessToken');
+            const provider = formData.get('provider')
+            console.log(`ENTRA AQUI`)
+            scrape = await axios.post(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/scrape_tweets`, { url: url }, {
+                headers: {
+                    Authorization: `Bearer ${accessToken as string}`,
+                    "X-Provider": provider as string
+                }
+            })
+        }
         const tweet = scrape?.data?.tweet as string;
         const img = scrape?.data?.img as string;
         if (img) {
             const img_captioned = await caption(img) as unknown as { generated_text: string }[];
             context += `. Also, an image captioned as: ${img_captioned[0]?.generated_text}`;
         }
-
         const analize = await analizeHateSpeech(tweet, context);
         return NextResponse.json(analize, { status: 200 });
     } catch (error) {
