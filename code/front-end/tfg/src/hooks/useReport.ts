@@ -49,6 +49,6 @@ export function useReport() {
     handleExpired,
     isVerified,
     setIsVerified,
-    captchaToken,
+    captchaToken
   };
 }

@@ -54,7 +54,7 @@ export default function ImageForm() {
             alert("The text is: " + data.content + "\nReasoning: " + data.reasoning);
         } catch (error) {
             console.error("Error al subir la imagen:", error);
-        }finally{
+        } finally {
             if (recaptchaRef.current) {
                 recaptchaRef.current.reset();
             }
@@ -64,7 +64,10 @@ export default function ImageForm() {
 
     return (
         <Card className="max-w-7xl">
-            {loading && <FullScreenLoader />}
+            {loading &&
+                <FullScreenLoader
+                    words={["Extracting text...","Adding context...", "Analizing text...", "Generating report..."]}
+                />}
             <MagicCard gradientColor="#D9D9D955">
                 <CardHeader />
                 <CardContent>

@@ -12,6 +12,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 
 export default function TextForm() {
+    
     const { data: session } = useSession();
     const {
         setContent,
@@ -56,7 +57,10 @@ export default function TextForm() {
 
     return (
         <Card className="max-w-7xl">
-            {loading && <FullScreenLoader />}
+            {loading && 
+            <FullScreenLoader 
+            words={["Adding context...","Analizing text...", "Generating report..."]} 
+            />}
             <MagicCard gradientColor="#D9D9D955">
                 <CardHeader />
                 <CardContent>

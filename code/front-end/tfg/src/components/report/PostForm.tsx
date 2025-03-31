@@ -46,18 +46,21 @@ export default function PostForm() {
       alert("The text is: " + data.content + "\nReasoning: " + data.reasoning);
     } catch (error) {
       console.error("Error al subir la imagen:", error);
-    }finally{
+    } finally {
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
-    }
-    setLoading(false);
+      }
+      setLoading(false);
     }
   };
 
 
   return (
     <Card className="max-w-7xl">
-      {loading && <FullScreenLoader />}
+      {loading &&
+        <FullScreenLoader
+          words={["Scraping tweet...", "Adding context...", "Analizing text...", "Generating report..."]}
+        />}
 
       <MagicCard gradientColor="#D9D9D955">
         <CardHeader />

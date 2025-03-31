@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
         const captchaToken = formData.get("captchaToken")
-        console.log(`TOKEN: ${captchaToken}`);
         const session = await getServerSession(authOptions);
         const token = await getToken({ req });
         let verified = false;
@@ -20,7 +19,6 @@ export async function POST(req: NextRequest) {
             verified = await verifyCaptchaToken(captchaToken as string);
         } else {
             verified = await verifySession(session, token);
-            console.log(`VERIFIED: ${verified}`)
         }
 
         if (!verified) {
