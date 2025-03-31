@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { uploadImageBuffer, ocr, caption } from "@/lib/image/utils";
-import analizeHateSpeech from "@/lib/analizeHateSpeech";
+import analyzeHateSpeech from "@/lib/analyzeHateSpeech";
 import axios from "axios";
 import { AxiosResponse } from "axios";
 import jwt from "jsonwebtoken";
 
-export async function handleAnalizeImage(formData: FormData): Promise<NextResponse> {
+export async function handleAnalyzeImage(formData: FormData): Promise<NextResponse> {
     const file = formData.get('file');
     if (!file || !(file instanceof File)) {
         return NextResponse.json({ error: "No se recibió ningún archivo" }, { status: 400 });
@@ -24,21 +24,21 @@ export async function handleAnalizeImage(formData: FormData): Promise<NextRespon
         const context = formData.get('context') as string || "";
         const content = result.description;
 
-        const analize = await analizeHateSpeech(content, context);
+        const analyze = await analyzeHateSpeech(content, context);
 
-        return NextResponse.json(analize, { status: 200 });
+        return NextResponse.json(analyze, { status: 200 });
     }
 }
 
 
-export async function handleAnalizeText(formData: FormData): Promise<NextResponse> {
+export async function handleAnalyzeText(formData: FormData): Promise<NextResponse> {
     const content = formData.get('content') as string || "";
     const context = formData.get('context') as string || "";
-    const analize = await analizeHateSpeech(content, context);
-    return NextResponse.json(analize, { status: 200 });
+    const analyze = await analyzeHateSpeech(content, context);
+    return NextResponse.json(analyze, { status: 200 });
 }
 
-export async function handleAnalizePost(formData: FormData): Promise<NextResponse> {
+export async function handleAnalyzePost(formData: FormData): Promise<NextResponse> {
     let context = formData.get('context') as string;
     const url = formData.get('url');
     const captchaToken = formData.get('captchaToken');
@@ -69,11 +69,13 @@ export async function handleAnalizePost(formData: FormData): Promise<NextRespons
             const img_captioned = await caption(img) as unknown as { generated_text: string }[];
             context += `. Also, an image captioned as: ${img_captioned[0]?.generated_text}`;
         }
-        const analize = await analizeHateSpeech(tweet, context);
-        return NextResponse.json(analize, { status: 200 });
+        const analyze = await analyzeHateSpeech(tweet, context);
+        return NextResponse.json(analyze, { status: 200 });
     } catch (error) {
         return NextResponse.json(error, { status: 500 });
     }
 
 }
+
+
 

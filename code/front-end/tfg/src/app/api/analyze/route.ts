@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handleAnalizeImage, handleAnalizePost, handleAnalizeText } from "./utils";
+import { handleAnalyzeImage, handleAnalyzePost, handleAnalyzeText } from "./utils";
 import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import verifySession, {verifyCaptchaToken} from "../middleware";
 import { authOptions } from "@/lib/auth";
 import { JWT as JWTType } from 'next-auth/jwt';
-
 
 
 export async function POST(req: NextRequest) {
@@ -27,13 +26,13 @@ export async function POST(req: NextRequest) {
 
         const type = formData.get('type');
         switch (type) {
-            case 'image': return await handleAnalizeImage(formData);
-            case 'text': return await handleAnalizeText(formData);
+            case 'image': return await handleAnalyzeImage(formData);
+            case 'text': return await handleAnalyzeText(formData);
             case 'post': {
                 formData.append("accessToken", (token as JWTType)?.accessToken as string ?? '');
                 formData.append("provider", session?.provider ?? '');
                 formData.append("captchaToken", captchaToken ?? '');
-                return await handleAnalizePost(formData);
+                return await handleAnalyzePost(formData);
             }
             default: return NextResponse.json({ error: "Invalid type of report" }, { status: 400 });
         }

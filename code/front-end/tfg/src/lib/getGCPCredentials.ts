@@ -1,4 +1,3 @@
-// lib/getGCPCredentials.js
 export const getGCPCredentials = () => {
   return process.env.GCP_PRIVATE_KEY
     ? {

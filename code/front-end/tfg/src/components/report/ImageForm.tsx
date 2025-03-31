@@ -1,118 +1,112 @@
-import { useState } from "react";
+import { useSession } from "next-auth/react"
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { FileUpload } from "@/components/ui/file-upload";
-import { Label } from "@radix-ui/react-dropdown-menu";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { MagicCard } from "@/components/magicui/magic-card";
-import { Input } from "@/components/ui/input";
-import { useReport } from "@/hooks/useReport";
-import FullScreenLoader from "./FullScreenLoader";
-import axios from "axios";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useSession } from "next-auth/react";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { FileUpload } from "@/components/ui/file-upload"
+import { Label } from "@radix-ui/react-dropdown-menu"
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { MagicCard } from "@/components/magicui/magic-card"
+
+import { useReport } from "@/hooks/useReport"
+import FullScreenLoader from "./FullScreenLoader"
+import EmailDialog from "./EmailDialog"
+import FadeIn from "../fadeIn"
 
 export default function ImageForm() {
-    const { data: session } = useSession();
+  const { data: session } = useSession()
+  const {
+    setContext,
+    source,
+    loading,
+    isVerified,
+    handleAnalyzeImage,
+    email,
+    emailCheck,
+    handleEmailChange,
+    recaptchaRef,
+    handleChangeRecaptcha,
+    handleExpired,
+    setFiles,
+    files,
+    handleSourceChange,
+    sourceCheck
+  } = useReport()
 
-    const {
-        setContext,
-        context,
-        setSource,
-        source,
-        setLoading,
-        loading,
-        recaptchaRef,
-        handleChangeRecaptcha,
-        handleExpired,
-        isVerified,
-        captchaToken
-    } = useReport();
-    const [files, setFiles] = useState<File[]>([]);
-    const handleFileUpload = (files: File[]) => {
-        setFiles(files);
-        console.log(files);
-    };
-    console.log(files);
+  const handleFileUpload = (newFiles: File[]) => {
+    setFiles(newFiles)
+    console.log(newFiles)
+  }
 
-    const handleAnalizeImage = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        if (!files) return;
+  return (
+    <Card className="max-w-7xl">
+      {loading && (
+        <FullScreenLoader
+          words={["Extracting text...", "Adding context...", "Analyzing text...", "Generating report..."]}
+        />
+      )}
 
-        const formData = new FormData();
-        formData.append("captchaToken", captchaToken)
-        formData.append("file", files[0]);
-        formData.append("context", context);
-        formData.append("source", source);
-        formData.append("type", "image");
+      <MagicCard gradientColor="#D9D9D955">
+        <CardHeader />
+        <CardContent>
+          <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg text-center">
+            <FileUpload onChange={handleFileUpload} />
+          </div>
 
-        try {
-            const response = await axios.post("/api/analize", formData);
-            const data = response.data;
-            alert("The text is: " + data.content + "\nReasoning: " + data.reasoning);
-        } catch (error) {
-            console.error("Error al subir la imagen:", error);
-        } finally {
-            if (recaptchaRef.current) {
-                recaptchaRef.current.reset();
-            }
-            setLoading(false);
-        }
-    };
+          <div className="mt-20">
+            <Label>
+              Source <span className="text-red-500">&#42;</span>
+            </Label>
+            <Input placeholder="Write the original source here" onChange={handleSourceChange} />
+            <p className="text-sm text-muted-foreground">
+              This is the original source of the content, for example a URL.
+            </p>
+            {sourceCheck !== "" && (
+              <FadeIn>
+              <p className="text-red-500 text-sm">{sourceCheck}</p>
+            </FadeIn>
+          )}
 
-    return (
-        <Card className="max-w-7xl">
-            {loading &&
-                <FullScreenLoader
-                    words={["Extracting text...","Adding context...", "Analizing text...", "Generating report..."]}
-                />}
-            <MagicCard gradientColor="#D9D9D955">
-                <CardHeader />
-                <CardContent>
-                    <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg text-center">
-                        <FileUpload onChange={handleFileUpload} />
-                    </div>
-                    <div className="mt-20">
-                        <Label >Source <span className="text-red-500">&#42;</span></Label>
-                        <Input placeholder="Write the original source here" onChange={(e) => setSource(e.target.value)} />
-                        <p className="text-sm text-muted-foreground">
-                            This is the original source of the content, for example an URL
-                        </p>
-                    </div>
-                    <Label className="mt-10">Context</Label>
-                    <Textarea
-                        placeholder="Write the context here"
-                        className="peer-disabled:bg-gray-100"
-                        onChange={(e) => setContext(e.target.value)}
-                    />
-                    <p className="text-sm text-muted-foreground">
-                        This text will be added as context to the report, making the report more accurated
-                    </p>
-                    {!session ? (
-                        <div>
+          </div>
 
-                            <ReCAPTCHA
-                                className="mx-auto mt-10"
-                                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA || ""}
-                                ref={recaptchaRef}
-                                onChange={handleChangeRecaptcha}
-                                onExpired={handleExpired}
-                            />
+          <Label className="mt-10">Context</Label>
+          <Textarea
+            placeholder="Write the context here"
+            className="peer-disabled:bg-gray-100"
+            onChange={(e) => setContext(e.target.value)}
+          />
+          <p className="text-sm text-muted-foreground">
+            This text will be added as context to the report, making the result more accurate.
+          </p>
 
-                            <Button className="mt-10" disabled={files.length !== 1 || source === "" || loading || !isVerified} onClick={handleAnalizeImage}>Analize</Button>
-                        </div>
-
-                    ) : (
-                        <Button className="mt-10" disabled={files.length !== 1 || source === "" || loading} onClick={handleAnalizeImage}>Analize</Button>
-
-                    )
-                    }
-                </CardContent>
-                <CardFooter className="grid">
-                </CardFooter>
-            </MagicCard>
-        </Card>
-    )
+          {!session ? (
+            <EmailDialog
+              type="image"
+              loading={loading}
+              isVerified={isVerified}
+              email={email}
+              emailCheck={emailCheck}
+              handleEmailChange={handleEmailChange}
+              handleAnalyze={handleAnalyzeImage}
+              recaptchaRef={recaptchaRef}
+              handleChangeRecaptcha={handleChangeRecaptcha}
+              handleExpired={handleExpired}
+              params={[source]}
+              checkURL={sourceCheck}
+              files={files}
+            />
+          ) : (
+            <Button
+              className="mt-10"
+              disabled={files.length !== 1 || sourceCheck !== "" || source === "" || loading}
+              onClick={handleAnalyzeImage}
+            >
+              Analyze
+            </Button>
+          )}
+        </CardContent>
+        <CardFooter className="grid" />
+      </MagicCard>
+    </Card>
+  )
 }
