@@ -100,7 +100,7 @@ export async function generateReportPdf(
   const marginRight = 50;
   const availableWidth = width - marginLeft - marginRight;
 
-  const logoPath = "/logo-no-bg.png"
+  const logoPath = path.join(process.cwd(), "public", "logo-no-bg.png");
   const logoBytes = fs.readFileSync(logoPath);
   const logoImage = await pdfDoc.embedPng(logoBytes);
 
