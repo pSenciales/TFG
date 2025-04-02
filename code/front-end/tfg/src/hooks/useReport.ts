@@ -94,6 +94,8 @@ export function useReport() {
     formData.append("source", source);
     formData.append("type", "image");
     if (session) {
+
+      console.log(`SESSION: ${JSON.stringify(session)}`);
       const newEmail = session.user.email || "";
       setEmail(newEmail);
     }
@@ -159,7 +161,7 @@ export function useReport() {
     formData.append("email", email);
 
     try {
-      
+
       await axios.post("/api/analyze", formData);
       alert("EMAIL ENVIADO!");
     } catch (error) {
