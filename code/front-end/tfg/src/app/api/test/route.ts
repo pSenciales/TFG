@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 //import {testStorage} from "@/lib/pdf/utils";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         //testStorage();
         return NextResponse.json({success: "yeyyy"}, {status: 200})

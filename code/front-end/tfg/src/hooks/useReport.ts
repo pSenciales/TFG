@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import generateAndSendPDF from "@/lib/pdf/utils";
 
 
 export function useReport() {

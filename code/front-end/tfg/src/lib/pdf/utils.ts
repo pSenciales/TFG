@@ -1,5 +1,5 @@
 import fs from "fs";
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { PDFDocument, StandardFonts, rgb, PDFFont } from 'pdf-lib'
 import { compileTemplate, initTransporter } from "@/lib/mail/utils"
 import path from "path";
 import { Storage } from "@google-cloud/storage";
@@ -60,13 +60,13 @@ function sanitizeText(text: string): string {
   return text.replace(/[^\u0020-\u007E\u00A0-\u00FF]/g, "");
 }
 
-function wrapText(text: string, maxWidth: number, font: any, fontSize: number): string[] {
+function wrapText(text: string, maxWidth: number, font: PDFFont, fontSize: number): string[] {
   // Reemplaza los saltos de línea por espacios
   const sanitizedText = sanitizeText(text.replace(/\n/g, " "));
   const words = sanitizedText.split(" ");
   const lines: string[] = [];
   let currentLine = "";
-  for (let word of words) {
+  for (const word of words) {
     const testLine = currentLine ? currentLine + " " + word : word;
     const testLineWidth = font.widthOfTextAtSize(testLine, fontSize);
     if (testLineWidth > maxWidth && currentLine) {
