@@ -169,7 +169,6 @@ export default async function generateAndSendPDF(
     const linkToPDF = await generateAndUploadReport(content, context, source, result, reasoning, to);
 
     const html = compileTemplate("pdfReport", { name: to, result });
-
     const transporter = initTransporter();
     await transporter.sendMail({
       from: `Fairplay360 <${process.env.EMAIL_USER}>`,

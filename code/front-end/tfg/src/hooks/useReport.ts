@@ -94,12 +94,10 @@ export function useReport() {
     formData.append("source", source);
     formData.append("type", "image");
     if (session) {
-
-      console.log(`SESSION: ${JSON.stringify(session)}`);
-      const newEmail = session.user.email || "";
-      setEmail(newEmail);
+      formData.append("email", session.user.email || "");
+    } else {
+      formData.append("email", email);
     }
-    formData.append("email", email);
 
     try {
 
@@ -125,10 +123,10 @@ export function useReport() {
     formData.append("context", context);
     formData.append("type", "post");
     if (session) {
-      const newEmail = session.user.email || "";
-      setEmail(newEmail);
+      formData.append("email", session.user.email || "");
+    } else {
+      formData.append("email", email);
     }
-    formData.append("email", email);
 
     try {
 
@@ -155,10 +153,11 @@ export function useReport() {
     formData.append("content", content);
     formData.append("type", "text");
     if (session) {
-      const newEmail = session.user.email || "";
-      setEmail(newEmail);
+      console.log(`SESSION:${session.user.email}`)
+      formData.append("email", session.user.email || "");
+    } else {
+      formData.append("email", email);
     }
-    formData.append("email", email);
 
     try {
 
