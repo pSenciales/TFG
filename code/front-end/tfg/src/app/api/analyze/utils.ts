@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { uploadImageBuffer, ocr, caption } from "@/lib/image/utils";
+import generateAndSendPDF from "@/lib/pdf/utils"
 import analyzeHateSpeech from "@/lib/analyzeHateSpeech";
 import axios from "axios";
 import { AxiosResponse } from "axios";
@@ -23,10 +24,13 @@ export async function handleAnalyzeImage(formData: FormData): Promise<NextRespon
     } else {
         const context = formData.get('context') as string || "";
         const content = result.description;
+        const source = formData.get("source") as string || "";
+        const email = formData.get("email") as string || "";
 
         const analyze = await analyzeHateSpeech(content, context);
+        const res = await generateAndSendPDF(content, context, source, analyze.content, analyze.reasoning, email);
 
-        return NextResponse.json(analyze, { status: 200 });
+        return NextResponse.json(res, { status: 200 });
     }
 }
 
@@ -34,13 +38,18 @@ export async function handleAnalyzeImage(formData: FormData): Promise<NextRespon
 export async function handleAnalyzeText(formData: FormData): Promise<NextResponse> {
     const content = formData.get('content') as string || "";
     const context = formData.get('context') as string || "";
+    const source = formData.get("source") as string || "";;
+    const email = formData.get("email") as string || "";;
+
     const analyze = await analyzeHateSpeech(content, context);
-    return NextResponse.json(analyze, { status: 200 });
+    const res = await generateAndSendPDF(content, context, source, analyze.content, analyze.reasoning, email);
+    return NextResponse.json(res, { status: 200 });
 }
 
 export async function handleAnalyzePost(formData: FormData): Promise<NextResponse> {
     let context = formData.get('context') as string;
-    const url = formData.get('url');
+    const url = formData.get('url') as string || "";
+    const email = formData.get("email") as string || "";
     const captchaToken = formData.get('captchaToken');
     console.log(`TOKEN2: ${captchaToken}`);
     let scrape: AxiosResponse | null = null;
@@ -50,7 +59,7 @@ export async function handleAnalyzePost(formData: FormData): Promise<NextRespons
                 { captcha: captchaToken },
                 process.env.JWT_SECRET as string,
                 { expiresIn: "1m" }
-              );
+            );
             scrape = await axios.post(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/scrape_tweets`, { url: url, captchaToken: captchaToken as string, captchaJWT: captchaJWT as string })
         } else {
             const accessToken = formData.get('accessToken');
@@ -70,7 +79,10 @@ export async function handleAnalyzePost(formData: FormData): Promise<NextRespons
             context += `. Also, an image captioned as: ${img_captioned[0]?.generated_text}`;
         }
         const analyze = await analyzeHateSpeech(tweet, context);
-        return NextResponse.json(analyze, { status: 200 });
+
+        const res = await generateAndSendPDF(tweet, context, url, analyze.content, analyze.reasoning, email);
+
+        return NextResponse.json(res, { status: 200 });
     } catch (error) {
         return NextResponse.json(error, { status: 500 });
     }

@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import welcomeTemplate from "@/lib/mail/templates/welcome";
 import otpTemplate from "@/lib/mail/templates/otp";
 import statusTemplate from "@/lib/mail/templates/status";
+import pdfReportTemplate from "@/lib/mail/templates/pdfReport";
 import otpGenerator from "otp-generator";
 import jwt from "jsonwebtoken";
 
@@ -10,6 +11,7 @@ const templates: Record<string, string> = {
     welcome: welcomeTemplate,
     otp: otpTemplate,
     status: statusTemplate,
+    pdfReport: pdfReportTemplate
 };
 
 export function compileTemplate(templateName: string, params: Record<string, unknown>) {
@@ -21,7 +23,7 @@ export function compileTemplate(templateName: string, params: Record<string, unk
     return template(params);
 }
 
-function initTransporter() {
+export function initTransporter() {
     return nodemailer.createTransport({
         service: "gmail",
         auth: {

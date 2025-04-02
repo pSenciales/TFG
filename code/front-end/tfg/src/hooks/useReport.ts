@@ -3,8 +3,12 @@
 import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import generateAndSendPDF from "@/lib/pdf/utils";
+
 
 export function useReport() {
+  const { data: session } = useSession();
 
   // Controlar el envio del formulario
   const [loading, setLoading] = useState(false);
@@ -90,6 +94,10 @@ export function useReport() {
     formData.append("context", context);
     formData.append("source", source);
     formData.append("type", "image");
+    if(session){
+      setEmail(session.user.email || "");
+    }
+    formData.append("email", email);
 
     try {
       const response = await axios.post("/api/analyze", formData);
@@ -114,6 +122,10 @@ export function useReport() {
     formData.append("url", url);
     formData.append("context", context);
     formData.append("type", "post");
+    if(session){
+      setEmail(session.user.email || "");
+    }
+    formData.append("email", email);
 
     try {
       const response = await axios.post("/api/analyze", formData);
@@ -139,11 +151,13 @@ export function useReport() {
     formData.append("context", context);
     formData.append("content", content);
     formData.append("type", "text");
+    if(session){
+      setEmail(session.user.email || "");
+    }
+    formData.append("email", email);
 
     try {
-      const response = await axios.post("/api/analyze", formData);
-      const data = response.data;
-      alert("The text is: " + data.content + "\nReasoning: " + data.reasoning);
+      await axios.post("/api/analyze", formData);
     } catch (error) {
       console.error("Error al analizar el texto:", error);
     } finally {
@@ -153,6 +167,9 @@ export function useReport() {
       setLoading(false);
     }
   };
+
+
+
 
   return {
     loading,
@@ -187,6 +204,7 @@ export function useReport() {
     sourceCheck,
     setSourceCheck,
     handleUrlChange,
-    handleSourceChange
+    handleSourceChange,
+    session
   };
 }

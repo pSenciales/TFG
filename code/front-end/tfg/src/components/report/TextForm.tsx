@@ -5,14 +5,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MagicCard } from "@/components/magicui/magic-card";
-import { useSession } from "next-auth/react";
 import { useReport } from "@/hooks/useReport";
 import FullScreenLoader from "./FullScreenLoader";
 import EmailDialog from "./EmailDialog";
 import FadeIn from "../fadeIn";
 
 export default function TextForm() {
-  const { data: session } = useSession();
 
   const {
     loading,
@@ -30,7 +28,8 @@ export default function TextForm() {
     emailCheck,
     handleEmailChange,
     handleSourceChange,
-    sourceCheck
+    sourceCheck,
+    session
   } = useReport();
 
   return (
