@@ -152,7 +152,7 @@ export async function generateReportPdf(
   // Guarda el PDF en bytes
   const pdfBytes = await pdfDoc.save();
   // Genera un nombre temporal
-  const tempFilePath = path.join("/temp", `temp_report_${Date.now()}.pdf`);
+  const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
   fs.writeFileSync(tempFilePath, pdfBytes);
   return tempFilePath;
 }
