@@ -59,21 +59,21 @@ export function useReport() {
     const url = e.target.value;
     setUrl(url);
     const tweetRegex = /^https:\/\/x\.com\/[a-zA-Z0-9_]{4,15}\/status\/\d+$/;
-  
+
     if (tweetRegex.test(url)) {
       setUrlCheck("");
     } else {
       setUrlCheck("This is not a valid tweet URL");
     }
   };
-  
+
 
 
   const handleSourceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const source = e.target.value;
     setSource(source);
     const sourceRegex = /^https?:\/\/[^\s]+$/;
-  
+
     if (sourceRegex.test(source)) {
       setSourceCheck("");
     } else {
@@ -93,15 +93,16 @@ export function useReport() {
     formData.append("context", context);
     formData.append("source", source);
     formData.append("type", "image");
-    if(session){
-      setEmail(session.user.email || "");
+    if (session) {
+      const newEmail = session.user.email || "";
+      setEmail(newEmail);
     }
     formData.append("email", email);
 
     try {
-      const response = await axios.post("/api/analyze", formData);
-      const data = response.data;
-      alert("The text is: " + data.content + "\nReasoning: " + data.reasoning);
+
+      await axios.post("/api/analyze", formData);
+      alert("EMAIL ENVIADO!");
     } catch (error) {
       console.error("Error al subir la imagen:", error);
     } finally {
@@ -121,15 +122,16 @@ export function useReport() {
     formData.append("url", url);
     formData.append("context", context);
     formData.append("type", "post");
-    if(session){
-      setEmail(session.user.email || "");
+    if (session) {
+      const newEmail = session.user.email || "";
+      setEmail(newEmail);
     }
     formData.append("email", email);
 
     try {
-      const response = await axios.post("/api/analyze", formData);
-      const data = response.data;
-      alert("The text is: " + data.content + "\nReasoning: " + data.reasoning);
+
+      await axios.post("/api/analyze", formData);
+      alert("EMAIL ENVIADO!");
     } catch (error) {
       console.error("Error al subir la imagen:", error);
     } finally {
@@ -150,13 +152,16 @@ export function useReport() {
     formData.append("context", context);
     formData.append("content", content);
     formData.append("type", "text");
-    if(session){
-      setEmail(session.user.email || "");
+    if (session) {
+      const newEmail = session.user.email || "";
+      setEmail(newEmail);
     }
     formData.append("email", email);
 
     try {
+      
       await axios.post("/api/analyze", formData);
+      alert("EMAIL ENVIADO!");
     } catch (error) {
       console.error("Error al analizar el texto:", error);
     } finally {
