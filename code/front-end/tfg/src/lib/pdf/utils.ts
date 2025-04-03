@@ -24,11 +24,10 @@ export async function generateAndUploadReport(
 ): Promise<string> {
   try {
     // Genera el PDF y obtiene la ruta del archivo temporal.
-    const pdfPath = await generateReportPdf(content, context, source, result, reasoning);
+    const pdfPath = await generateReportPdf(content, context, source, result, reasoning, to);
 
     // Selecciona el bucket.
     const bucket = clientGoogle.bucket("fairplay360-reports");
-    // Define el destino (por ejemplo, en la carpeta "reports").
     const destination = `reports/${to}/${Date.now()}.pdf`;
 
     // Sube el archivo al bucket.
@@ -40,7 +39,6 @@ export async function generateAndUploadReport(
       },
     });
 
-    // Haz el archivo público (si es lo que deseas)
     await uploadedFile.makePublic();
     const publicUrl = uploadedFile.publicUrl();
     console.log("Upload success:", publicUrl);
@@ -60,13 +58,14 @@ function sanitizeText(text: string): string {
   return text.replace(/[^\u0020-\u007E\u00A0-\u00FF]/g, "");
 }
 
-function wrapText(text: string, maxWidth: number, font: PDFFont, fontSize: number): string[] {
-  // Reemplaza los saltos de línea por espacios
+
+function wrapText(text: string, maxWidth: number, font: any, fontSize: number): string[] {
+  // Remplaza saltos de línea por espacios
   const sanitizedText = sanitizeText(text.replace(/\n/g, " "));
   const words = sanitizedText.split(" ");
   const lines: string[] = [];
   let currentLine = "";
-  for (const word of words) {
+  for (let word of words) {
     const testLine = currentLine ? currentLine + " " + word : word;
     const testLineWidth = font.widthOfTextAtSize(testLine, fontSize);
     if (testLineWidth > maxWidth && currentLine) {
@@ -87,72 +86,122 @@ export async function generateReportPdf(
   context: string,
   source: string,
   result: string,
-  reasoning: string
+  reasoning: string,
+  to: string
 ): Promise<string> {
+  // Crear el documento PDF
   const pdfDoc = await PDFDocument.create();
   let page = pdfDoc.addPage();
   const { width, height } = page.getSize();
 
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const fontSize = 12;
+  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const fontSize = 10;
 
   const marginLeft = 50;
-  const marginRight = 50;
+  const marginRight = 150; 
+  const marginTop = 25;
   const availableWidth = width - marginLeft - marginRight;
+
+  const headerMarginRight = 50;
+  const headerAvailableWidth = width - marginLeft - headerMarginRight;
 
   const logoPath = path.join(process.cwd(), "public", "logo-no-bg.png");
   const logoBytes = fs.readFileSync(logoPath);
   const logoImage = await pdfDoc.embedPng(logoBytes);
-
   const logoScale = 0.1;
   const logoDims = logoImage.scale(logoScale);
-
-  // Dibuja el logo
+  const logoX = width - marginRight - logoDims.width;
   page.drawImage(logoImage, {
-    x: marginLeft,
-    y: height - marginLeft - logoDims.height,
+    x: logoX,
+    y: height - marginTop - logoDims.height,
     width: logoDims.width,
     height: logoDims.height,
   });
 
-  // Ajusta el punto de partida para el texto: deja espacio para el logo
-  let y = height - marginLeft - logoDims.height - 20;
+  const gap = 3;
+  const logoText = "Fairplay360";
+  page.drawText(logoText, {
+    x: logoX + logoDims.width + gap,
+    y: height - marginTop - logoDims.height + (logoDims.height - 20) / 2,
+    size: 20,
+    font: fontBold,
+    color: rgb(0, 0, 0),
+  });
 
-  // Prepara los textos a incluir
-  const textItems: string[] = [];
-  textItems.push(`Content: ${content}`);
-  if (context.trim() !== "") {
-    textItems.push(`Context: ${context}`);
-  }
-  textItems.push(`Source: ${source}`);
-  textItems.push(`Result: ${result}`);
-  textItems.push(`Reasoning: ${reasoning}`);
+  let y = height - marginTop - logoDims.height - 40;
 
-  // Recorre cada ítem y dibuja el texto con wrapping
-  for (const text of textItems) {
-    const lines = wrapText(text, availableWidth, font, fontSize);
+  function drawWrappedText(
+    text: string,
+    startY: number,
+    fontUsed: any,
+    size: number,
+    availWidth: number
+  ): number {
+    const lines = wrapText(text, availWidth, fontUsed, size);
     for (const line of lines) {
-      // Si se acaba el espacio vertical, añade nueva página
-      if (y < marginLeft) {
+      if (startY < marginTop + 50) {
         page = pdfDoc.addPage();
-        y = page.getHeight() - marginLeft;
+        startY = page.getHeight() - marginTop;
       }
       page.drawText(line, {
         x: marginLeft,
-        y: y,
-        size: fontSize,
-        font: font,
+        y: startY,
+        size: size,
+        font: fontUsed,
         color: rgb(0, 0, 0),
       });
-      y -= fontSize + 5; // Ajusta el interlineado
+      startY -= size + 5;
     }
-    y -= 10; // Espacio extra entre párrafos
+    return startY;
   }
 
-  // Guarda el PDF en bytes
+  const headerParagraph = `Dear ${to},
+Thank you for submitting your report. 
+We have successfully received your report and our advanced AI system has thoroughly analyzed the provided information. 
+We take these matters very seriously and will review your report promptly.
+Sincerely,
+The Fairplay360 Team`;
+
+  const headerLines = headerParagraph.split("\n");
+  for (const line of headerLines) {
+    const trimmed = line.trim();
+    let usedFont = font;
+    let usedSize = fontSize;
+    if (trimmed.startsWith("Dear") || trimmed === "The Fairplay360 Team") {
+      usedFont = fontBold;
+      usedSize = fontSize;
+    }
+    y = drawWrappedText(line, y, usedFont, usedSize, headerAvailableWidth);
+    y -= 3; //espacio extra entre párrafos en el heading
+  }
+  const fields = [
+    { label: "Content", value: content },
+    { label: "Context", value: context },
+    { label: "Source", value: source },
+    { label: "Result", value: result },
+    { label: "Reasoning", value: reasoning },
+  ];
+    y-=30;
+  for (const field of fields) {
+    if (field.value.trim() !== "") {
+      const headerSize = fontSize + 2;
+      y = drawWrappedText(field.label, y, fontBold, headerSize, availableWidth);
+      y -= 10;
+      y = drawWrappedText(field.value, y, font, fontSize, availableWidth);
+      y -= 20;
+    }
+  }
+
+  // Guarda el PDF en bytes y lo escribe en un archivo temporal.
   const pdfBytes = await pdfDoc.save();
-  // Genera un nombre temporal
+  /*
+  * ----VERCEL---
+  */ 
   const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
+  /* ---LOCAL---
+  * const tempFilePath = path.join(process.cwd(), `temp_report_${Date.now()}.pdf`);
+  */
   fs.writeFileSync(tempFilePath, pdfBytes);
   return tempFilePath;
 }
