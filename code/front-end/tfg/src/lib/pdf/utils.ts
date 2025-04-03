@@ -101,8 +101,7 @@ export async function generateReportPdf(
   const marginLeft = 50;
   const marginRightLogo = 150; 
   const marginTop = 25;
-  const availableWidthLogo = width - marginLeft - marginRightLogo;
-
+  
   const MarginRightText = 50;
   const availableWidthText = width - marginLeft - MarginRightText;
 
