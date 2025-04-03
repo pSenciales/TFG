@@ -59,13 +59,13 @@ function sanitizeText(text: string): string {
 }
 
 
-function wrapText(text: string, maxWidth: number, font: any, fontSize: number): string[] {
+function wrapText(text: string, maxWidth: number, font: PDFFont, fontSize: number): string[] {
   // Remplaza saltos de línea por espacios
   const sanitizedText = sanitizeText(text.replace(/\n/g, " "));
   const words = sanitizedText.split(" ");
   const lines: string[] = [];
   let currentLine = "";
-  for (let word of words) {
+  for (const word of words) {
     const testLine = currentLine ? currentLine + " " + word : word;
     const testLineWidth = font.widthOfTextAtSize(testLine, fontSize);
     if (testLineWidth > maxWidth && currentLine) {
@@ -134,7 +134,7 @@ export async function generateReportPdf(
   function drawWrappedText(
     text: string,
     startY: number,
-    fontUsed: any,
+    fontUsed: PDFFont,
     size: number,
     availWidth: number
   ): number {
