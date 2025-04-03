@@ -99,19 +99,19 @@ export async function generateReportPdf(
   const fontSize = 10;
 
   const marginLeft = 50;
-  const marginRight = 150; 
+  const marginRightLogo = 150; 
   const marginTop = 25;
-  const availableWidth = width - marginLeft - marginRight;
+  const availableWidthLogo = width - marginLeft - marginRightLogo;
 
-  const headerMarginRight = 50;
-  const headerAvailableWidth = width - marginLeft - headerMarginRight;
+  const MarginRightText = 50;
+  const availableWidthText = width - marginLeft - MarginRightText;
 
   const logoPath = path.join(process.cwd(), "public", "logo-no-bg.png");
   const logoBytes = fs.readFileSync(logoPath);
   const logoImage = await pdfDoc.embedPng(logoBytes);
   const logoScale = 0.1;
   const logoDims = logoImage.scale(logoScale);
-  const logoX = width - marginRight - logoDims.width;
+  const logoX = width - marginRightLogo - logoDims.width;
   page.drawImage(logoImage, {
     x: logoX,
     y: height - marginTop - logoDims.height,
@@ -172,7 +172,7 @@ The Fairplay360 Team`;
       usedFont = fontBold;
       usedSize = fontSize;
     }
-    y = drawWrappedText(line, y, usedFont, usedSize, headerAvailableWidth);
+    y = drawWrappedText(line, y, usedFont, usedSize, availableWidthText);
     y -= 3; //espacio extra entre párrafos en el heading
   }
   const fields = [
@@ -186,9 +186,9 @@ The Fairplay360 Team`;
   for (const field of fields) {
     if (field.value.trim() !== "") {
       const headerSize = fontSize + 2;
-      y = drawWrappedText(field.label, y, fontBold, headerSize, availableWidth);
+      y = drawWrappedText(field.label, y, fontBold, headerSize, availableWidthText);
       y -= 10;
-      y = drawWrappedText(field.value, y, font, fontSize, availableWidth);
+      y = drawWrappedText(field.value, y, font, fontSize, availableWidthText);
       y -= 20;
     }
   }
