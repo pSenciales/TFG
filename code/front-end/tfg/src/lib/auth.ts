@@ -2,7 +2,8 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { access } from "fs";
 
 const FLASK_API_URL = process.env.NEXT_PUBLIC_FLASK_API_URL
 
@@ -21,7 +22,7 @@ export const authOptions: NextAuthOptions = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "user@example.com" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -29,12 +30,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const {data} = await axios.post(`${FLASK_API_URL}/login`, {
+          const { data } = await axios.post(`${FLASK_API_URL}/login`, {
             email: credentials.email,
             password: credentials.password,
           });
           return data;
-          
+
         } catch (error: unknown) {
           if (error instanceof Error) {
             throw new Error(error.message);
@@ -46,10 +47,31 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account, user}) {
+    async jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token;
         token.provider = account.provider;
+        if (account.provider !== "credentials") {
+          try {
+            await axios.post(`${FLASK_API_URL}/users`, {
+              name: user.name,
+              email: user.email,
+              provider: account.provider,
+            },{
+              headers: {
+                Authorization: `Bearer ${account.access_token}`,
+                "X-Provider": account.provider,
+              }
+            });
+          } catch (error) {
+            if (error instanceof AxiosError) {
+              console.error(error);
+            } else {
+              console.error("Error en la autenticación");
+            }
+          }
+        }
+
       }
       if (!token.accessToken && user) {
         token.accessToken = user.access_token;
@@ -60,9 +82,10 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.user.id = token.sub as string;
       session.provider = token.provider as string;
+      session.expires = Date.now() + 60 * 60 * 1000 + 1000 * 60;
       return session;
     },
-    async redirect({baseUrl}){
+    async redirect({ baseUrl }) {
       return baseUrl
     }
   }

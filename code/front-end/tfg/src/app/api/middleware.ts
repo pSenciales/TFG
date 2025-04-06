@@ -1,4 +1,5 @@
 import { Session } from 'next-auth';
+import { signOut } from 'next-auth/react';
 import { JWT as JWTType } from 'next-auth/jwt';
 import axios from 'axios';
 
@@ -19,7 +20,7 @@ async function verifyGithub(accessToken: string) {
 async function verifyCredentials(accessToken: string) {
     const headers = {
         Authorization: `Bearer ${accessToken}`,
-        "X-Provider": "credentials"
+        "X-Provider": "credentials",
     }
 
     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/verify`, { headers: headers });
@@ -42,25 +43,25 @@ async function verifyAcessToken(provider: string, accessToken: string) {
 }
 
 
-export default async function verifySession(session: Session | null, token: JWTType | null) {
-    if (!session || !token || Date.parse(session.expires) < Date.now()) {
-        console.error("Invalid session");
-        return false;
+export default async function verifySession(session: Session | null, token: (JWTType & { exp: number }) | null) {
+    if (!session || !token || session.expires < Date.now()) {
+        console.error("Session expired or invalid token");
+        return {verification:false, error:"Session expired or invalid token"};
     }
 
     const verification = await verifyAcessToken(session.provider, token.accessToken as string);
     if (verification !== "success") {
         console.error("Invalid access token");
-        return false;
+        return {verification:false, error:"Invalid access token"};
     }
 
-    return true;
+    return {verification:true, error:""};	
 }
 
 export async function verifyCaptchaToken(captchaToken: string) {
     const response = await axios.post(
         `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET}&response=${captchaToken}`
     );
-    return response.data.success;
+    return {verification: response.data.success, error: response.data.success ? "" : "Captcha verification failed"};
     
 }

@@ -176,9 +176,15 @@ export function useSignup() {
       name,
       password,
       email,
+      provider: "credentials",
       captchaJWT,
       captchaToken,
+    },{
+      headers: {
+        "Content-Type": "application/json",
+      }
     });
+    
     signIn("credentials", {
       email: email,
       password: password,

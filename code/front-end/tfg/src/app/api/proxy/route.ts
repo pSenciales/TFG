@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import axios from "axios";
-import verifySession  from "@/app/api/middleware";
+import verifySession, {verifyCaptchaToken} from "@/app/api/middleware";
 import { authOptions } from "@/lib/auth";
 import { getToken } from "next-auth/jwt"
+import { JWT as JWTType } from 'next-auth/jwt';
 
 export async function POST(req: NextRequest) {
     try {
@@ -11,7 +12,7 @@ export async function POST(req: NextRequest) {
         const session = await getServerSession(authOptions);
         const token = await getToken({req})
         
-        const verification = verifySession(session, token);
+        const verification = await verifySession(session, { ...token, exp: (token as JWTType)?.exp ?? 0 } as JWTType & { exp: number });
         if (!verification) {
             return NextResponse.redirect("/login");
         }

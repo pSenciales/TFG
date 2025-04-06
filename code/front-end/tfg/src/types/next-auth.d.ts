@@ -4,6 +4,7 @@ import type { Session } from "next-auth";
 declare module "next-auth" {
   interface Session {
     provider: string;
+    expires: number;
     user: {
       id: string;
       name?: string | null;

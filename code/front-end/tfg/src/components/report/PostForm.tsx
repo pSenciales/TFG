@@ -48,7 +48,7 @@ export default function PostForm() {
             URL <span className="text-red-500">&#42;</span>
           </Label>
           <Input
-            placeholder="Paste the URL here"
+            placeholder="e.g https://x.com/user/status/1234567890"
             onChange={handleUrlChange}
             required
             className="w-[50%]"

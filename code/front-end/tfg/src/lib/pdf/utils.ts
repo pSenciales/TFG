@@ -196,11 +196,12 @@ The Fairplay360 Team`;
   const pdfBytes = await pdfDoc.save();
   /*
   * ----VERCEL---
+  *  const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
   */ 
-  const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
   /* ---LOCAL---
-  * const tempFilePath = path.join(process.cwd(), `temp_report_${Date.now()}.pdf`);
+  * 
   */
+  const tempFilePath = path.join(process.cwd(), `temp_report_${Date.now()}.pdf`);
   fs.writeFileSync(tempFilePath, pdfBytes);
   return tempFilePath;
 }
@@ -212,7 +213,7 @@ export default async function generateAndSendPDF(
   source: string,
   result: string,
   reasoning: string,
-  to: string): Promise<string> {
+  to: string): Promise<{ message: string; link: string } | { error: string }> {
   try {
     const linkToPDF = await generateAndUploadReport(content, context, source, result, reasoning, to);
 
@@ -232,9 +233,8 @@ export default async function generateAndSendPDF(
 
 
     );
-    return "success";
+    return {message:"success", link: linkToPDF};
   } catch (error) {
-    console.error("Error al generar y enviar el PDF: " + error);
-    return "error";
+    return {error:"Error al generar y enviar el PDF: " + error};
   }
 }

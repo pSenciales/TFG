@@ -2,9 +2,10 @@
 
 import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
-import { useSession } from "next-auth/react";
-
+import axios, { AxiosError } from "axios";
+import { signOut, useSession } from "next-auth/react";
+import Swal from 'sweetalert2'
+import reportService from "@/services/reportService";
 
 export function useReport() {
   const { data: session } = useSession();
@@ -72,7 +73,7 @@ export function useReport() {
   const handleSourceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const source = e.target.value;
     setSource(source);
-    const sourceRegex = /^https?:\/\/[^\s]+$/;
+    const sourceRegex = /^https?:\/\/\S+\.\S+$/;
 
     if (sourceRegex.test(source)) {
       setSourceCheck("");
@@ -100,11 +101,32 @@ export function useReport() {
     }
 
     try {
-
-      await axios.post("/api/analyze", formData);
-      alert("EMAIL ENVIADO!");
+      const { data } = await axios.post("/api/analyze", formData);
+      if (data.status === 200) {
+        Swal.fire({
+          title: 'Email sent!',
+          text: 'The analisis will be sent to your email',
+          icon: 'success'
+        })
+      }
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
+      if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
+        {
+          Swal.fire({
+            title: 'The session has expired!',
+            text: 'please log in again',
+            icon: 'warning'
+          })
+          signOut();
+          window.location.href = "/login";
+        }
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'An error occurred while sending the analysis. Please try again later.',
+          icon: 'error'
+        })
+      }
     } finally {
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -130,10 +152,34 @@ export function useReport() {
 
     try {
 
-      await axios.post("/api/analyze", formData);
-      alert("EMAIL ENVIADO!");
+      const { data } = await axios.post("/api/analyze", formData);
+      console.log(data.status)
+      if (data.status === 200) {
+        Swal.fire({
+          title: 'Email sent!',
+          text: 'The analisis will be sent to your email',
+          icon: 'success'
+        })
+      }
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
+      if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
+        {
+          Swal.fire({
+            title: 'The session has expired!',
+            text: 'please log in again',
+            icon: 'warning'
+          })
+          signOut();
+          window.location.href = "/login";
+        }
+      } else {
+        console.log(error)
+        Swal.fire({
+          title: 'Error!',
+          text: 'An error occurred while sending the analysis. Please try again later.',
+          icon: 'error'
+        })
+      }
     } finally {
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -153,7 +199,6 @@ export function useReport() {
     formData.append("content", content);
     formData.append("type", "text");
     if (session) {
-      console.log(`SESSION:${session.user.email}`)
       formData.append("email", session.user.email || "");
     } else {
       formData.append("email", email);
@@ -161,10 +206,33 @@ export function useReport() {
 
     try {
 
-      await axios.post("/api/analyze", formData);
-      alert("EMAIL ENVIADO!");
+      const { data } = await axios.post("/api/analyze", formData);
+      if (data.status === 200) {
+        Swal.fire({
+          title: 'Email sent!',
+          text: 'The analisis will be sent to your email',
+          icon: 'success'
+        })
+
+      }
     } catch (error) {
-      console.error("Error al analizar el texto:", error);
+      if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
+        {
+          Swal.fire({
+            title: 'The session has expired!',
+            text: 'please log in again',
+            icon: 'warning'
+          })
+          signOut();
+          window.location.href = "/login";
+        }
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'An error occurred while sending the analysis. Please try again later.',
+          icon: 'error'
+        })
+      }
     } finally {
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();

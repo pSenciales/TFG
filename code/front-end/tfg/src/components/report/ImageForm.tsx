@@ -57,7 +57,7 @@ export default function ImageForm() {
             <Label>
               Source <span className="text-red-500">&#42;</span>
             </Label>
-            <Input placeholder="Write the original source here" onChange={handleSourceChange} />
+            <Input               placeholder="e.g https://example.com" onChange={handleSourceChange} />
             <p className="text-sm text-muted-foreground">
               This is the original source of the content, for example a URL.
             </p>

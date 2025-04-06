@@ -60,7 +60,7 @@ export default function TextForm() {
               Source <span className="text-red-500">&#42;</span>
             </Label>
             <Input
-              placeholder="Write the original source here"
+              placeholder="e.g https://example.com"
               value={source}
               onChange={handleSourceChange}
             />
