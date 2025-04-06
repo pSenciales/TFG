@@ -1,5 +1,4 @@
 import { Session } from 'next-auth';
-import { signOut } from 'next-auth/react';
 import { JWT as JWTType } from 'next-auth/jwt';
 import axios from 'axios';
 

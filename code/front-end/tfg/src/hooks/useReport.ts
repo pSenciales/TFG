@@ -5,7 +5,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import axios, { AxiosError } from "axios";
 import { signOut, useSession } from "next-auth/react";
 import Swal from 'sweetalert2'
-import reportService from "@/services/reportService";
 
 export function useReport() {
   const { data: session } = useSession();

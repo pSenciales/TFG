@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import axios from "axios";
-import verifySession, {verifyCaptchaToken} from "@/app/api/middleware";
+import verifySession from "@/app/api/middleware";
 import { authOptions } from "@/lib/auth";
 import { getToken } from "next-auth/jwt"
 import { JWT as JWTType } from 'next-auth/jwt';

@@ -3,7 +3,6 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios, { AxiosError } from "axios";
-import { access } from "fs";
 
 const FLASK_API_URL = process.env.NEXT_PUBLIC_FLASK_API_URL
 

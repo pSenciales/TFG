@@ -196,12 +196,12 @@ The Fairplay360 Team`;
   const pdfBytes = await pdfDoc.save();
   /*
   * ----VERCEL---
-  *  const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
   */ 
+ const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
   /* ---LOCAL---
   * 
-  */
   const tempFilePath = path.join(process.cwd(), `temp_report_${Date.now()}.pdf`);
+  */
   fs.writeFileSync(tempFilePath, pdfBytes);
   return tempFilePath;
 }
