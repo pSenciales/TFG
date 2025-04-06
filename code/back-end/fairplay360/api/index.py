@@ -7,9 +7,9 @@ from datetime import datetime, timezone
 from flask_cors import CORS
 
 
-from api.middleware import verify_access_token
+from api.middleware import verify_access_token, verify_session
 from api.db import connectDB
-from api.utils import success, missing_fields, web_scrap, verify_captchaJWT
+from api.utils import success, missing_fields, web_scrap
 from .model import User, Token
 from .routes import (user_bp, log_bp, report_bp, blacklist_bp)
 
@@ -66,28 +66,6 @@ def scrape_tweets():
         return missing
 
     url = data["url"]
-    captcha_token = data.get("captchaToken")
-    captcha_jwt = data.get("captchaJWT")
-    if captcha_token and captcha_jwt:
-        verify = verify_captchaJWT(captcha_jwt, captcha_token)
-        if not verify:
-            return jsonify({"error": "Invalid captcha"}), 401
-    else:
-        auth_header = request.headers.get("Authorization")
-        if not auth_header:
-            return jsonify({"error": "Access token missing"}), 401
-
-        try:
-            scheme, token = auth_header.split(" ")
-            if scheme.lower() != "bearer":
-                raise ValueError("Invalid scheme")
-        except ValueError:
-            return jsonify({"error": "Invalid authorization header format"}), 401
-
-        provider = request.headers.get("X-Provider", "credentials")
-
-        if not verify_access_token(provider, token):
-            return jsonify({"error": "Invalid or expired token"}), 401
 
     html_rendered = web_scrap(url)
     soup = BeautifulSoup(html_rendered, 'html.parser')
@@ -114,40 +92,22 @@ def scrape_tweets():
     return jsonify({"tweet": tweet_text, "img":image_src}), 200
 
 
-
-
-
-
-
-
-
-
-
 @app.route('/verify', methods=['GET'])
 def verify():
     return success("success", 200)
 
 @app.before_request
 def check_access_token():
-    if (request.path == "/login" or (request.path == "/users" and (request.method == "OPTIONS" or request.method == "POST"))
-            or request.path == "/users/email" or request.path == "/scrape_tweets"):
+    if request.path == "/login" or request.path.startswith("/users/email") or request.method == "OPTIONS":
         return
+    print(request.method)
+    data = {}
+    if request.method != "GET":
+        data = request.json
+    if verify_error := verify_session(data, request):
+        return verify_error
 
-    auth_header = request.headers.get("Authorization")
-    if not auth_header:
-        return jsonify({"error": "Access token missing"}), 401
-
-    try:
-        scheme, token = auth_header.split(" ")
-        if scheme.lower() != "bearer":
-            raise ValueError("Invalid scheme")
-    except ValueError:
-        return jsonify({"error": "Invalid authorization header format"}), 401
-
-    provider = request.headers.get("X-Provider", "credentials")
-
-    if not verify_access_token(provider, token):
-        return jsonify({"error": "Invalid or expired token"}), 401
+    return
 
 
 @app.after_request

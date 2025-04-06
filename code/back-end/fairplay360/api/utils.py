@@ -1,6 +1,4 @@
 import os
-
-import jwt
 from flask import jsonify
 from scrapfly import ScrapflyClient, ScrapeConfig, ScrapeApiResponse
 
@@ -27,18 +25,7 @@ def element_not_found(element, message):
 def success(message, code):
     return jsonify({"success": message}), code
 
-#Verify captchaJWT
 
-def verify_captchaJWT(captcha_jwt: str, captcha_recibed: str):
-    try:
-        decoded = jwt.decode(captcha_jwt, os.environ["JWT_SECRET"], algorithms=["HS256"])
-        if not isinstance(decoded, dict):
-            raise ValueError("Invalid token")
-        return decoded.get("captcha") == captcha_recibed
-    except jwt.ExpiredSignatureError:
-        return "Token expired"
-    except jwt.InvalidTokenError:
-        return "Invalid token"
 
 #Web scrap
 def web_scrap(url: str):

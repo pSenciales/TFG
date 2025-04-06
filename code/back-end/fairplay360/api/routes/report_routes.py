@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 
-from api.model import Report, User, State
+from api.middleware import verify_session
+from api.model import Report, User, File
 from api.utils import *
 
 report_bp = Blueprint('report_routes', __name__, url_prefix='/reports')
@@ -20,32 +21,41 @@ def get_reports():
 def create_report():
     data = request.get_json()
 
-    # Verifica campos obligatorios (no es necesario el campo state, ya que tiene valor por defecto)
-    if missing := missing_fields(["content", "is_hate", "user_id"], data):
+    # Verifica campos obligatorios
+    if missing := missing_fields(["content", "source", "is_hate", "notification_email", "pdf_link"], data):
         return missing
 
-    # Convierte el valor de 'state' a enum. Si no se envía, se usa el valor por defecto 'processing'
-    state_value = data.get('state', 'processing')
-    try:
-        state_enum = State(state_value.lower())
-    except ValueError:
-        return jsonify({"error": "Invalid state value"}), 422
+    provider = data.get('provider')
+    user_obj = None
+    if provider:
+        user_obj = User.objects(email=data['notification_email'], provider=provider).first()
+    user_id = str(user_obj.id) if user_obj else None
 
-    # Se pueden pasar opcionalmente imágenes, pdf y resoluciones si se envían en el JSON,
-    # de lo contrario se asigna una lista vacía (lo que coincide con el default en el modelo)
+    # Crea el objeto File para el PDF usando la URL proporcionada
+    pdf_file = File(url=data['pdf_link'])
+
+    # Crea el reporte
+    is_hate_value = data.get('is_hate')
+    # Si es string, conviértelo
+    if isinstance(is_hate_value, str):
+        is_hate_value = is_hate_value.lower() == 'true'
+    # Si ya es booleano, se queda igual
+
     report = Report(
-        content=data['content'],
-        state=state_enum,
+        content=data.get('content'),
         source=data.get('source'),
-        is_hate=data['is_hate'],
-        user_id=data['user_id'],
+        context=data.get('context', ""),
+        is_hate=is_hate_value,
+        user_id=user_id,
+        notification_email=data['notification_email'],
         images=data.get('images', []),
-        pdf=data.get('pdf', []),
+        pdf=[pdf_file],
         resolutions=data.get('resolutions', [])
     )
     report.save()
 
     return success("Report created", 201)
+
 
 
 

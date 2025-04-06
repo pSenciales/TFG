@@ -11,11 +11,25 @@ class Token(EmbeddedDocument):
 
 class User(Document):
     name = StringField(required=True, max_length=100)
-    email = EmailField(required=True, unique=True)
+    email = EmailField(required=True)
+    provider = StringField(
+        required=True,
+        choices=["google", "github", "credentials"],
+        default="credentials"
+    )
     password = StringField(required=False)
     is_admin = BooleanField(default=False)
     access_token = EmbeddedDocumentField(Token, required=False)
     created_at = DateTimeField(default=lambda: datetime.now(UTC))
+
+    meta = {
+        "indexes": [
+            {
+                "fields": ["email", "provider"],
+                "unique": True,
+            }
+        ]
+    }
 
     def set_password(self, password):
         salt = bcrypt.gensalt()
