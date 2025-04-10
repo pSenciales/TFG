@@ -130,9 +130,12 @@ export default function NavBar() {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>Hello, {session.user?.name ? session.user.name.split(" ")[0] : "Guest"}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                 <DropdownMenuItem>
+                 <DropdownMenuItem >
+                    <Link href={"/my-reports"}>My Reports</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
                     Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem>

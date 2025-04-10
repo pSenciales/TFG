@@ -4,8 +4,7 @@ import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios, { AxiosError } from "axios";
 
-const FLASK_API_URL = process.env.NEXT_PUBLIC_FLASK_API_URL
-
+const FLASK_API_URL = process.env.NEXT_PUBLIC_FLASK_API_URL;
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -20,8 +19,15 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "user@example.com" },
-        password: { label: "Password", type: "password" }
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "user@example.com",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -34,7 +40,6 @@ export const authOptions: NextAuthOptions = {
             password: credentials.password,
           });
           return data;
-
         } catch (error: unknown) {
           if (error instanceof Error) {
             throw new Error(error.message);
@@ -45,23 +50,29 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+
   callbacks: {
     async jwt({ token, account, user }) {
-      if (account) {
-        token.accessToken = account.access_token;
+      if (account && user) {
+        token.accessToken = account.access_token || user.access_token;
         token.provider = account.provider;
+        token.accessTokenExpires = Date.now() + 60 * 60 * 1000;
         if (account.provider !== "credentials") {
           try {
-            await axios.post(`${FLASK_API_URL}/users`, {
-              name: user.name,
-              email: user.email,
-              provider: account.provider,
-            },{
-              headers: {
-                Authorization: `Bearer ${account.access_token}`,
-                "X-Provider": account.provider,
+            await axios.post(
+              `${FLASK_API_URL}/users`,
+              {
+                name: user.name,
+                email: user.email,
+                provider: account.provider,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${account.access_token}`,
+                  "X-Provider": account.provider,
+                },
               }
-            });
+            );
           } catch (error) {
             if (error instanceof AxiosError) {
               console.error(error);
@@ -70,25 +81,20 @@ export const authOptions: NextAuthOptions = {
             }
           }
         }
-
-      }
-      if (!token.accessToken && user) {
-        token.accessToken = user.access_token;
-        token.provider = "credentials";
+        return token;
       }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.sub as string;
       session.provider = token.provider as string;
-      session.expires = Date.now() + 60 * 60 * 1000 + 1000 * 60;
       return session;
     },
+
     async redirect({ baseUrl }) {
-      return baseUrl
-    }
-  }
-  ,
+      return baseUrl;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",

@@ -12,12 +12,12 @@ export async function POST(req: NextRequest) {
         const session = await getServerSession(authOptions);
         const token = await getToken({req})
         
-        const verification = await verifySession(session, { ...token, exp: (token as JWTType)?.exp ?? 0 } as JWTType & { exp: number });
-        if (!verification) {
-            return NextResponse.redirect("/login");
+        const verification =  await verifySession(session, { ...token, exp: (token as JWTType)?.exp ?? 0 } as JWTType & { exp: number });
+        if (!verification.verification) {
+            return NextResponse.json({ error: verification.error }, { status: 401 });
         }
         
-        const headers = { Authorization: `Bearer ${token?.accessToken}`, "Content-Type": "application/json"}
+        const headers = { Authorization: `Bearer ${token?.accessToken}`,"X-Provider":session?.provider, "Content-Type": "application/json"}
         let response;
         switch (method.toLowerCase()){
             case "get": response = await axios.get(url, {headers: headers}); break;

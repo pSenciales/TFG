@@ -10,10 +10,19 @@ report_bp = Blueprint('report_routes', __name__, url_prefix='/reports')
 @report_bp.route('/', methods=['GET'])
 @report_bp.route('', methods=['GET'])
 def get_reports():
-    reports = Report.objects()
-    if not reports:
-        return jsonify({}), 200
-    return jsonify(reports.to_json()), 200
+    cursor = request.args.get('cursor', default=0, type=int)
+    limit = request.args.get('limit', default=6, type=int)
+
+    reports = Report.objects.skip(cursor).limit(limit)
+
+    reports_data = reports.to_json()
+
+    next_cursor = cursor + len(reports_data) if len(reports_data) == limit else None
+
+    return jsonify({
+        "reports": reports_data,
+        "nextCursor": next_cursor
+    }), 200
 
 
 @report_bp.route('/', methods=['POST'])
@@ -88,15 +97,45 @@ def update_report(report_id):
     report.save()
     return success("Report updated", 200)
 
-@report_bp.route('/user/<user_id>', methods=["GET"])
-def get_user_reports(user_id):
-    user = User.objects(id=user_id).first()
 
-    if not_found := element_not_found(user, "User not found"):
-        return not_found
+import json
+from flask import request, jsonify
+from mongoengine import DoesNotExist
 
-    reports = Report.objects(user_id=user_id).order_by('-created_at')
-    if not reports:
-        return jsonify({}), 200
-    return jsonify(reports.to_json()), 200
+
+@report_bp.route('/user', methods=['GET'])
+def get_user_reports():
+    # Extraer email y provider desde la query string
+    email = request.args.get('email')
+    provider = request.args.get('provider')
+
+    if not email or not provider:
+        return jsonify({"error": "Missing email or provider"}), 400
+
+    # Buscar el usuario basado en el email y provider
+    user = User.objects(email=email, provider=provider).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Parámetros de paginación: cursor (offset) y limit
+    cursor = request.args.get('cursor', default=0, type=int)
+    limit = 1
+
+    # Filtrar reportes del usuario, ordenados descendente por fecha de creación,
+    # y aplicar skip y limit
+    reports_query = Report.objects(user_id=str(user.id)).order_by('-created_at')
+    reports = reports_query.skip(cursor).limit(limit)
+
+    # Convertir los reportes a un objeto Python (lista) para poder calcular el largo
+    reports_list = json.loads(reports.to_json())
+
+    # Calcular el siguiente cursor: si se han obtenido "limit" elementos,
+    # se asume que puede haber más; en caso contrario, no hay siguiente página
+    next_cursor = cursor + len(reports_list) if len(reports_list) == limit else None
+
+    return jsonify({
+        "reports": reports_list,
+        "nextCursor": next_cursor
+    }), 200
+
 
