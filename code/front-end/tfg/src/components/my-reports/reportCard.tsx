@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { Report } from "@/types/reports";
-import axios from "axios";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,12 +9,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Swal from "sweetalert2"
 
 interface ReportCardProps {
   report: Report;
+  onDelete: () => void;
+  openPDF: () => void;
 }
 
-export default function ReportCard({ report }: ReportCardProps) {
+export default function ReportCard({ report, onDelete, openPDF }: ReportCardProps) {
 
 
   // Ejemplo: Si tu Report no trae imagen, puedes usar un placeholder
@@ -23,10 +25,13 @@ export default function ReportCard({ report }: ReportCardProps) {
 
   const dateString = new Date(report.created_at.$date).toDateString();
   // => 'Thu Apr 24 2025'. Ajústalo como quieras
-  const color = report.state === "processing" ? "bg-yellow-600" : report.state === "accepted" ? "bg-green-500" : "bg-red-500";
+  const stateColor = report.state === "processing" ? "bg-yellow-600" : report.state === "accepted" ? "bg-green-600" : "bg-red-600";
+
+  const hateColor = String(report.is_hate) === "true" ? "bg-red-600" : "bg-green-600";
+  const hateText = String(report.is_hate) === "true" ? "Is hate" : "Not hate";
 
   return (
-    <div className="flex items-center w-full max-w-md rounded-lg border border-gray-200 bg-white shadow p-3 space-x-3 relative">
+    <div className="flex items-center w-[100%] max-h-xl rounded-lg border border-gray-200 bg-white shadow p-3 space-x-3 relative">
       {/* Imagen a la izquierda (ajusta el tamaño) */}
       <div className="w-24 h-16 relative overflow-hidden rounded-md">
         <Image
@@ -42,7 +47,7 @@ export default function ReportCard({ report }: ReportCardProps) {
         <div className="flex items-start gap-2">
           {/* Etiqueta de hora */}
           <span className="inline-block bg-gray-800 text-white text-xs font-medium px-2 py-0.5 rounded-md">
-            {new Date(report.created_at.$date).toDateString()}
+            {dateString}
           </span>
 
           {/* Menú (los tres puntos) */}
@@ -66,30 +71,36 @@ export default function ReportCard({ report }: ReportCardProps) {
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>{"Report #" + report._id.$oid.slice(0, 15)}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                Download
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path opacity="0.5"
-                    d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"
-                    stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M12 3V16M12 16L16 11.625M12 16L8 11.625" stroke="#000000" strokeWidth="1.5"
-                      strokeLinecap="round" strokeLinejoin="round">
-                  </path>
-                </svg>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                if (report.pdf && report.pdf[0]?.url) {
-                  window.open(report.pdf[0].url, '_blank');
+              <DropdownMenuItem onClick={
+                () => {
+                  openPDF();
                 }
-              }}>
+              }>
                 View
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="3.5" stroke="#000000"></circle>
+                  <path d="M21 12C21 12 20 4 12 4C4 4 3 12 3 12" stroke="#000000"></path></svg>
+
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                Log out
+              <DropdownMenuItem
+                onClick={async () => {
+                  const confirmed = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "This will delete the report permanently.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                  });
+
+                  if (confirmed.isConfirmed) {
+                    onDelete();
+                  }
+                }}
+              >
+                Delete
               </DropdownMenuItem>
+
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -97,22 +108,37 @@ export default function ReportCard({ report }: ReportCardProps) {
 
         {/* Texto del reporte */}
         <p className="text-sm text-gray-800 font-medium mt-1">
-          Content: {report.content.slice(0, 15) + "..."}
+          Content:
+          <span className="sm:hidden">{report.content.slice(0, 12) + "..."}</span>
+          <span className="hidden xs:inline sm:hidden">{report.content.slice(0, 15) + "..."}</span>
+          <span className="hidden sm:inline md:hidden">{report.content.slice(0, 18) + "..."}</span>
+          <span className="hidden md:inline lg:hidden">{report.content.slice(0, 20) + "..."}</span>
+          <span className="hidden lg:inline">{report.content.slice(0, 22) + "..."}</span>
         </p>
         <p className="text-sm text-gray-800 font-medium mt-1">
-          Source: <a href={report.source}>{report.source.slice(0, 15) + "..."}</a>
+          Source: <a href={report.source}>
+            <span className="sm:hidden">{report.source.slice(0, 12) + "..."}</span>
+            <span className="hidden xs:inline sm:hidden">{report.source.slice(0, 15) + "..."}</span>
+            <span className="hidden sm:inline md:hidden">{report.source.slice(0, 18) + "..."}</span>
+            <span className="hidden md:inline lg:hidden">{report.source.slice(0, 20) + "..."}</span>
+            <span className="hidden lg:inline">{report.source.slice(0, 22) + "..."}</span>
+          </a>
         </p>
       </div>
 
-      {/* Badge / estado (cerrado, abierto, etc.) */}
-      <div className="self-end">
-        <span
-          className={`ml-3 inline-block text-white text-xs font-semibold py-1 px-2 rounded-full ${color}`}
-          title="Current state"
-        >
-          {report.state}
-        </span>
-      </div>
+      <span
+        className={`absolute bottom-10 right-1 text-white text-xs font-semibold py-1 px-2 rounded-full ${hateColor}`}
+        title="Is Hate"
+      >
+        {hateText}
+      </span>
+
+      <span
+        className={`absolute bottom-3 right-1 text-white text-xs font-semibold py-1 px-2 rounded-full ${stateColor}`}
+        title="Current State"
+      >
+        {report.state}
+      </span>
     </div>
   );
 }

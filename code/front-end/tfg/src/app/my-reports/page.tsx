@@ -6,7 +6,7 @@ import axios, { AxiosError } from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { Report, ReportsResponse } from "@/types/reports";
-import ReportCard  from "@/components/my-reports/reportCard";
+import ReportCard from "@/components/my-reports/reportCard";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
 
@@ -20,7 +20,7 @@ async function fetchReports({
   // La queryKey es un array: ["reports", { email, provider }]
   queryKey: (string | { email: string; provider: string })[];
 }) {
-  const [_, params] = queryKey;
+  const [params] = queryKey;
   const { email, provider } = params as { email: string; provider: string };
   const cursor = pageParam;
 
@@ -128,8 +128,11 @@ export default function MyReports() {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (status === "loading") {
-    return <div>Loading session...</div>;
+  if (status === "loading" || isLoading) {
+    return <FadeIn><div className="mt-20"><p style={{ textAlign: "center" }} className="text-black">
+
+      Loading reports <ThreeDot color="#000000" size="small" />
+    </p></div> </FadeIn>;
   }
   if (!session) {
     if (typeof window !== "undefined") {
@@ -137,42 +140,61 @@ export default function MyReports() {
     }
     return null;
   }
-  if (isLoading) {
-    return <div>Loading reports...</div>;
-  }
   if (isError) {
     return <div>Error loading reports</div>;
   }
 
-  // @ts-expect-error
+  // @ts-expect-error typescript no typea correctamente data
   const allReports = data?.pages?.flatMap((page: ReportsResponse) => page.reports) ?? [];
+
+  async function deleteReport(reportId: string): Promise<void> {
+      try {
+        await axios.post("/api/proxy", {
+          method: "delete",
+          url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/${reportId}`,
+        });
+      } catch (error) {
+        console.error("Error deleting report", error);
+      }
+  }
+
+  function openPDF(report: Report): void{
+      if (report.pdf && report.pdf[0]?.url) {
+        window.open(report.pdf[0].url, '_blank');
+      }
+  }
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
       <FadeIn duration={0.5}>
-      <h1 className="text-center text-3xl font-bold mt-10">My Reports</h1>
+        <h1 className="text-center text-3xl font-bold mt-10">My Reports</h1>
       </FadeIn>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-7xl mx-auto place-items-start">
-      {allReports.map((report: Report) => (
-        <div key={report._id.$oid} className="w-full mb-2">
-        <ReportCard report={report} />
-        </div>
-      ))}
+  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full max-w-7xl place-items-start">
+  
+        {allReports.map((report: Report) => (
+          <div key={report._id.$oid} className="w-full mb-2">
+            <ReportCard 
+            report={report} 
+            onDelete={() => deleteReport(report._id.$oid)}
+            openPDF={() => openPDF(report)}
+            />
+          </div>
+        ))}
       </div>
 
       {hasNextPage && (
-      <div
-        ref={sentinelRef}
-        style={{ height: 1 }}
-        aria-label="Sentinel for Infinite Scroll"
-      />
+        <div
+          ref={sentinelRef}
+          style={{ height: 1 }}
+          aria-label="Sentinel for Infinite Scroll"
+        />
       )}
 
       {isFetchingNextPage && (
-      <p style={{ textAlign: "center" }} className="text-black">
+        <p style={{ textAlign: "center" }} className="text-black">
 
-                        Loading <ThreeDot color="#000000" size="large" />
-      </p>
+          Loading <ThreeDot color="#000000" size="large" />
+        </p>
       )}
     </div>
   );

@@ -102,7 +102,7 @@ def check_access_token():
         return
     print(request.method)
     data = {}
-    if request.method != "GET":
+    if request.method != "GET" and request.method != "DELETE":
         data = request.json
     if verify_error := verify_session(data, request):
         return verify_error
