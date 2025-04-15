@@ -119,7 +119,7 @@ def get_user_reports():
 
     # Parámetros de paginación: cursor (offset) y limit
     cursor = request.args.get('cursor', default=0, type=int)
-    limit = 1
+    limit = 9
 
     # Filtrar reportes del usuario, ordenados descendente por fecha de creación,
     # y aplicar skip y limit

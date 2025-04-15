@@ -3,7 +3,7 @@ interface ReportFile{
     url: string;
 }
 export interface Report {
-    _id: string;
+    _id: {$oid: string};
     content: string;
     context: string;
     state: string;
