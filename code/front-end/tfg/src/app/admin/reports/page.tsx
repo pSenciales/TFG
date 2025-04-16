@@ -6,7 +6,7 @@ import axios, { AxiosError } from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { Report, ReportsResponse } from "@/types/reports";
-import ReportCard from "@/components/my-reports/reportCard";
+import ReportCard from "@/components/my-reports/ReportCard";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
 
@@ -173,6 +173,7 @@ export default function MyReports() {
           <FadeIn>
             <div key={report._id.$oid} className="w-full mb-2">
               <ReportCard
+                key={report._id.$oid}
                 report={report}
                 onDelete={() => deleteReport(report._id.$oid)}
                 openPDF={() => openPDF(report)}

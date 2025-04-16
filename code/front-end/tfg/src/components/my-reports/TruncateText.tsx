@@ -1,7 +1,7 @@
 
 
 interface TruncateTextProps {
-  text: String;
+  text: string;
 }
 
 
