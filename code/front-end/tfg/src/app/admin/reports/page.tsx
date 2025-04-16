@@ -10,7 +10,6 @@ import ReportCard from "@/components/my-reports/ReportCard";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
 
-
 // Función de fetch para useInfiniteQuery
 
 
@@ -24,10 +23,9 @@ export default function MyReports() {
   }) {
     const cursor = pageParam;
     const email = session?.user.email ?? "not found";
-    const provider = session?.provider ?? "not found";
 
 
-    const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/user?email=${email}&provider=${provider}&cursor=${cursor}`;
+    const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/admin?email=${email}&cursor=${cursor}`;
 
     try {
       const res = await axios.post(
@@ -134,7 +132,7 @@ export default function MyReports() {
       Loading reports <ThreeDot color="#000000" size="small" />
     </p></div> </FadeIn>;
   }
-  if (!session) {
+  if (!session || session.role != "admin") {
     if (typeof window !== "undefined") {
       window.location.href = "/login";
     }
@@ -167,7 +165,7 @@ export default function MyReports() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
       <FadeIn duration={0.5}>
-        <h1 className="text-center text-3xl font-bold mt-10">My Reports</h1>
+        <h1 className="text-center text-3xl font-bold mt-10">Reports</h1>
       </FadeIn>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full max-w-7xl place-items-start">
 
@@ -178,7 +176,7 @@ export default function MyReports() {
                 report={report}
                 onDelete={() => deleteReport(report._id.$oid)}
                 openPDF={() => openPDF(report)}
-                admin = {false}
+                admin={true}
               />
             </div>
           </FadeIn>

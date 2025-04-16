@@ -3,6 +3,7 @@ import type { Session } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
+    role: string = "user";
     provider: string;
     expires: number;
     user: {
@@ -15,5 +16,6 @@ declare module "next-auth" {
 
   interface User {
     access_token: string;
+    role: string;
   }
 }

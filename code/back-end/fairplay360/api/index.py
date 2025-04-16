@@ -51,11 +51,13 @@ def login():
     access_token = bcrypt.hashpw(token_bytes, salt).decode('utf-8')
     user.access_token = Token(access_token=access_token)
     user.save()
+    role = "admin" if user.is_admin else "user"
 
     return jsonify({
         "id": str(user.id),
         "name": user.name,
         "email": user.email,
+        "role": role,
         "access_token": access_token,
     }), 200
 

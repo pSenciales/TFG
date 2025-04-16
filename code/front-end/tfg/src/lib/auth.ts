@@ -57,6 +57,8 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token || user.access_token;
         token.provider = account.provider;
         token.accessTokenExpires = Date.now() + 60 * 60 * 1000;
+        token.role = user.role || "user";
+        
         if (account.provider !== "credentials") {
           try {
             await axios.post(
@@ -76,7 +78,7 @@ export const authOptions: NextAuthOptions = {
           } catch (error) {
             if (error instanceof AxiosError) {
               console.error(error);
-            } else {
+            } else { 
               console.error("Error en la autenticación");
             }
           }
@@ -86,6 +88,8 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      console.log(JSON.stringify(token));
+      session.role = token.role as string;
       session.user.id = token.sub as string;
       session.provider = token.provider as string;
       return session;

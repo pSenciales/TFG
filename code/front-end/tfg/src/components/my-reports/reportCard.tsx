@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import { Report } from "@/types/reports";
+import TruncateText from "@/components/my-reports/TruncateText";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +11,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 import Swal from "sweetalert2"
 
 interface ReportCardProps {
   report: Report;
   onDelete: () => void;
   openPDF: () => void;
+  admin: boolean;
 }
 
-export default function ReportCard({ report, onDelete, openPDF }: ReportCardProps) {
+export default function ReportCard({ report, onDelete, openPDF, admin }: ReportCardProps) {
 
 
   // Ejemplo: Si tu Report no trae imagen, puedes usar un placeholder
@@ -29,6 +41,8 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
 
   const hateColor = String(report.is_hate) === "true" ? "bg-red-600" : "bg-green-600";
   const hateText = String(report.is_hate) === "true" ? "Is hate" : "Not hate";
+
+  const sourceOrEmail = admin ? report.notification_email : report.source;
 
   return (
     <div className="flex items-center w-[100%] max-h-xl rounded-lg border border-gray-200 bg-white shadow p-3 space-x-3 relative">
@@ -108,22 +122,47 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
 
         {/* Texto del reporte */}
         <p className="text-sm text-gray-800 font-medium mt-1">
-          Content:
-          <span className="sm:hidden">{report.content.slice(0, 12) + "..."}</span>
-          <span className="hidden xs:inline sm:hidden">{report.content.slice(0, 15) + "..."}</span>
-          <span className="hidden sm:inline md:hidden">{report.content.slice(0, 18) + "..."}</span>
-          <span className="hidden md:inline lg:hidden">{report.content.slice(0, 20) + "..."}</span>
-          <span className="hidden lg:inline">{report.content.slice(0, 22) + "..."}</span>
+        {"Content: "}
+          <TruncateText text={report.content}/>
         </p>
-        <p className="text-sm text-gray-800 font-medium mt-1">
-          Source: <a href={report.source}>
-            <span className="sm:hidden">{report.source.slice(0, 12) + "..."}</span>
-            <span className="hidden xs:inline sm:hidden">{report.source.slice(0, 15) + "..."}</span>
-            <span className="hidden sm:inline md:hidden">{report.source.slice(0, 18) + "..."}</span>
-            <span className="hidden md:inline lg:hidden">{report.source.slice(0, 20) + "..."}</span>
-            <span className="hidden lg:inline">{report.source.slice(0, 22) + "..."}</span>
-          </a>
-        </p>
+
+        <TooltipProvider>
+          <Tooltip >
+            <TooltipTrigger asChild>
+              <p className="text-sm text-gray-800 font-medium mt-1">
+                {(
+                  admin ?
+                    (
+                      <>
+                      {"User: "}
+
+                        <TruncateText text={sourceOrEmail}/>
+                    </>
+                    )
+                    :
+                    (
+                      <>
+                        {"Source: "} <a href={sourceOrEmail}>
+                        <TruncateText text={sourceOrEmail}/>
+                        </a>
+                      </>
+                    )
+
+                )}
+
+              </p>
+            </TooltipTrigger>
+            <TooltipContent
+              side="bottom"
+              align="center"
+              sideOffset={4}
+              slideFrom="top"
+            >
+              <p>{sourceOrEmail.length <= 40 ? sourceOrEmail : sourceOrEmail.slice(0, 37) + "..."}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
       </div>
 
       <span

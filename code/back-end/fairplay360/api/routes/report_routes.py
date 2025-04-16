@@ -1,6 +1,6 @@
-from flask import Blueprint, request
+import json
+from flask import Blueprint,request, jsonify
 
-from api.middleware import verify_session
 from api.model import Report, User, File
 from api.utils import *
 
@@ -98,9 +98,6 @@ def update_report(report_id):
     return success("Report updated", 200)
 
 
-import json
-from flask import request, jsonify
-from mongoengine import DoesNotExist
 
 
 @report_bp.route('/user', methods=['GET'])
@@ -138,4 +135,38 @@ def get_user_reports():
         "nextCursor": next_cursor
     }), 200
 
+@report_bp.route('/admin', methods=['GET'])
+def get_admin_reports():
+    # Extraer email y provider desde la query string
+    email = request.args.get('email')
+
+    if not email:
+        return jsonify({"error": "Missing email or provider"}), 400
+
+    # Buscar el usuario basado en el email y provider
+    user = User.objects(email=email, provider="credentials").first()
+    if not user or user.is_admin is False:
+        return jsonify({"error": "User not valid"}), 404
+
+    # Parámetros de paginación: cursor (offset) y limit
+    cursor = request.args.get('cursor', default=0, type=int)
+    limit = 9
+
+    # Filtrar reportes del usuario, ordenados descendente por fecha de creación,
+    # y aplicar skip y limit
+    reports_query = Report.objects(notification_email__ne=str(email)).order_by('-created_at')
+
+    reports = reports_query.skip(cursor).limit(limit)
+
+    # Convertir los reportes a un objeto Python (lista) para poder calcular el largo
+    reports_list = json.loads(reports.to_json())
+
+    # Calcular el siguiente cursor: si se han obtenido "limit" elementos,
+    # se asume que puede haber más; en caso contrario, no hay siguiente página
+    next_cursor = cursor + len(reports_list) if len(reports_list) == limit else None
+
+    return jsonify({
+        "reports": reports_list,
+        "nextCursor": next_cursor
+    }), 200
 
