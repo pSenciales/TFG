@@ -6,7 +6,7 @@ import axios, { AxiosError } from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { Report, ReportsResponse } from "@/types/reports";
-import ReportCard from "@/components/my-reports/ReportCard";
+import ReportCard from "@/components/my-reports/reportCard";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
 
