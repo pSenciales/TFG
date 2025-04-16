@@ -10,7 +10,7 @@ from flask_cors import CORS
 from api.middleware import verify_access_token, verify_session
 from api.db import connectDB
 from api.utils import success, missing_fields, web_scrap
-from .model import User, Token
+from .model import User, Token, Blacklist
 from .routes import (user_bp, log_bp, report_bp, blacklist_bp)
 
 connectDB()
@@ -31,6 +31,11 @@ def login():
 
     if not data or not "email" in data or not "password" in data:
         return jsonify({"error": "Missing credentials"}), 400
+
+    blacklisted = Blacklist.objects(email=email).first()
+    if blacklisted:
+        return jsonify({"error": "User banned"}), 403
+
 
     user = User.objects(email=data["email"]).first()
     if not user:

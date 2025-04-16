@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from api.model import User, Report
+from api.model import User, Report, Blacklist
 from api.utils import *
 user_bp = Blueprint('user_routes', __name__, url_prefix='/users')
 
@@ -78,6 +78,9 @@ def update_user(user_id):
 @user_bp.route('/email/<user_email>', methods=['GET'])
 def get_user_by_email(user_email):
     user = User.objects(email=user_email).first()
+    blacklisted = Blacklist.objects(email=email).first()
+    if blacklisted:
+        return success("User banned", 200)
     if not user:
         return success("User not found", 200)
     return success("User found", 200)
