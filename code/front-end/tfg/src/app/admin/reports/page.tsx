@@ -170,7 +170,7 @@ export default function MyReports() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full max-w-7xl place-items-start">
 
         {allReports.map((report: Report) => (
-          <FadeIn>
+          <FadeIn key={report._id.$oid}>
             <div key={report._id.$oid} className="w-full mb-2">
               <ReportCard
                 key={report._id.$oid}
