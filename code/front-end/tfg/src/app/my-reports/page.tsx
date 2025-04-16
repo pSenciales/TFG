@@ -12,67 +12,67 @@ import { ThreeDot } from "react-loading-indicators";
 
 
 // Función de fetch para useInfiniteQuery
-async function fetchReports({
-  pageParam = 0,
-  queryKey,
-}: {
-  pageParam?: number;
-  // La queryKey es un array: ["reports", { email, provider }]
-  queryKey: (string | { email: string; provider: string })[];
-}) {
-  const [params] = queryKey;
-  const { email, provider } = params as { email: string; provider: string };
-  const cursor = pageParam;
 
-  const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/user?email=${email}&provider=${provider}&cursor=${cursor}`;
-
-  try {
-    const res = await axios.post(
-      "/api/proxy",
-      { url, method: "get" },
-      { headers: { "Content-Type": "application/json" } }
-    );
-
-    const data = res.data as ReportsResponse;
-    return {
-      ...data, // { reports: Report[], nextCursor: number|null }
-      currentCursor: cursor,
-    };
-  } catch (error) {
-    if (
-      error instanceof AxiosError &&
-      error.status === 401 &&
-      error.response?.data.error === "Session expired or invalid token"
-    ) {
-      // Sesión expirada
-      await Swal.fire({
-        title: "The session has expired!",
-        text: "Please log in again",
-        icon: "warning",
-      }).then(() => {
-        signOut();
-        window.location.href = "/login";
-      });
-    } else {
-      console.error(error);
-      Swal.fire({
-        title: "Error!",
-        text: "An error occurred while fetching data. Please try again later.",
-        icon: "error",
-      });
-    }
-
-    // Retornamos datos vacíos para no romper el tipado
-    return {
-      reports: [],
-      nextCursor: null,
-      currentCursor: cursor,
-    } as ReportsResponse & { currentCursor: number };
-  }
-}
 
 export default function MyReports() {
   const { data: session, status } = useSession();
+
+  async function fetchReports({
+    pageParam = 0
+    }: {
+    pageParam?: number;
+  }) {
+    const cursor = pageParam;
+    const email = session?.user.email ?? "not found";
+    const provider = session?.provider ?? "not found";
+    
+  
+    const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/user?email=${email}&provider=${provider}&cursor=${cursor}`;
+  
+    try {
+      const res = await axios.post(
+        "/api/proxy",
+        { url, method: "get" },
+        { headers: { "Content-Type": "application/json" } }
+      );
+  
+      const data = res.data as ReportsResponse;
+      return {
+        ...data, // { reports: Report[], nextCursor: number|null }
+        currentCursor: cursor,
+      };
+    } catch (error) {
+      if (
+        error instanceof AxiosError &&
+        error.status === 401 &&
+        error.response?.data.error === "Session expired or invalid token"
+      ) {
+        // Sesión expirada
+        await Swal.fire({
+          title: "The session has expired!",
+          text: "Please log in again",
+          icon: "warning",
+        }).then(() => {
+          signOut();
+          window.location.href = "/login";
+        });
+      } else {
+        console.error(error);
+        Swal.fire({
+          title: "Error!",
+          text: "An error occurred while fetching data. Please try again later.",
+          icon: "error",
+        });
+      }
+  
+      // Retornamos datos vacíos para no romper el tipado
+      return {
+        reports: [],
+        nextCursor: null,
+        currentCursor: cursor,
+      } as ReportsResponse & { currentCursor: number };
+    }
+  }
 
   // useInfiniteQuery<TQueryFnData, TError, TData, TQueryKey, TPageParam>
   const {
