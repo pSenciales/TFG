@@ -32,7 +32,7 @@ def login():
     if not data or not "email" in data or not "password" in data:
         return jsonify({"error": "Missing credentials"}), 400
 
-    blacklisted = Blacklist.objects(email=email).first()
+    blacklisted = Blacklist.objects(email=data["email"]).first()
     if blacklisted:
         return jsonify({"error": "User banned"}), 403
 

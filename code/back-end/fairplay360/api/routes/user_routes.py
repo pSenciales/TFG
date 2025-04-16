@@ -78,7 +78,7 @@ def update_user(user_id):
 @user_bp.route('/email/<user_email>', methods=['GET'])
 def get_user_by_email(user_email):
     user = User.objects(email=user_email).first()
-    blacklisted = Blacklist.objects(email=email).first()
+    blacklisted = Blacklist.objects(email=user_email).first()
     if blacklisted:
         return success("User banned", 200)
     if not user:
