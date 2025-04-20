@@ -107,7 +107,7 @@ export function useMyReports() {
           // Dentro de fetchReports o donde montes la URL:
           const email = session?.user?.email ?? "";
           const provider = session?.provider ?? "";
-          const cursor = 0;      // o el valor que saques de pageParam
+          const cursor = pageParam || 0;      // o el valor que saques de pageParam
           const limit = 9;      // si quieres hacerlo configurable, añádelo a appliedFilters también
       
           // Desestructuramos los filtros aplicados
