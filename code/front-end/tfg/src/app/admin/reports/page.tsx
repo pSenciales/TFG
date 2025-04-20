@@ -1,14 +1,20 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect} from "react";
+
 import { useSession, signOut } from "next-auth/react";
 import axios, { AxiosError } from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { Report, ReportsResponse } from "@/types/reports";
-import ReportCard from "@/components/my-reports/ReportCard";
+import ReportAdminCard from "@/components/my-reports/ReportAdminCard";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
+import { useMyReports } from "@/hooks/useMyReports";
+
+import SortAndFilterButton from "@/components/my-reports/SortAndFilterButton";
+import SearchBar from "@/components/my-reports/SearchBar";
+
 
 // Función de fetch para useInfiniteQuery
 
@@ -16,16 +22,73 @@ import { ThreeDot } from "react-loading-indicators";
 export default function MyReports() {
   const { data: session, status } = useSession();
 
+  const {
+    toggleCheckbox,
+    applyFilters,
+    banUser,
+    openPDF,
+    deleteReport,
+    setFilterEmail,
+    appliedFilters,
+    filterEmail,
+    isHateCheckBox,
+    setIsHateCheckBox,
+    notHateCheckBox,
+    setNotHateCheckBox,
+    processingCheckBox,
+    setProcessingCheckBox,
+    acceptedCheckBox,
+    setAcceptedCheckBox,
+    rejectedCheckBox,
+    setRejectedCheckBox,
+    sortBy,
+    setSortBy,
+    filtersCount
+    
+  } = useMyReports();
+
   async function fetchReports({
     pageParam = 0
   }: {
     pageParam?: number;
   }) {
-    const cursor = pageParam;
-    const email = session?.user.email ?? "not found";
 
+    // Dentro de fetchReports o donde montes la URL:
+    const email = session?.user?.email ?? "";
+    const cursor = 0;      // o el valor que saques de pageParam
+    const limit = 9;      // si quieres hacerlo configurable, añádelo a appliedFilters también
 
-    const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/admin?email=${email}&cursor=${cursor}`;
+    // Desestructuramos los filtros aplicados
+    const {
+      filterEmail,
+      sortBy,
+      includeHate,
+      includeNotHate,
+      statuses
+    } = appliedFilters;
+
+    // Montamos los params
+    const params = new URLSearchParams({
+      email,
+      cursor: String(cursor),
+      limit: String(limit),
+      sortBy
+    });
+
+    // Búsqueda por email si existe
+    if (filterEmail) {
+      params.set("searchEmail", filterEmail);
+    }
+
+    // Hate / not-hate
+    params.set("includeHate", includeHate.toString());
+    params.set("includeNotHate", includeNotHate.toString());
+
+    // Estados: uno por entrada
+    statuses.forEach((s) => params.append("status", s));
+
+    // URL final
+    const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/admin?${params.toString()}`;
 
     try {
       const res = await axios.post(
@@ -72,6 +135,18 @@ export default function MyReports() {
     }
   }
 
+  type Filters = {
+    email: string;
+    provider: string;
+    filterEmail: string;
+    sortBy: string;
+    includeHate: boolean;
+    includeNotHate: boolean;
+    statuses: string[];
+  };
+
+  type ReportsQueryKey = ["reports", Filters];
+
   // useInfiniteQuery<TQueryFnData, TError, TData, TQueryKey, TPageParam>
   const {
     data,
@@ -84,16 +159,21 @@ export default function MyReports() {
     ReportsResponse, // TQueryFnData 
     Error,           // TError
     ReportsResponse, // TData (lo mismo si no usas select)
-    (string | { email: string; provider: string })[], // TQueryKey
+    ReportsQueryKey, // TQueryKey
     number           // TPageParam: el tipo de pageParam
   >({
     queryKey: [
       "reports",
       {
-        email: session?.user?.email ?? "",
-        provider: session?.provider ?? "",
+        email: session?.user.email,
+        provider: session?.provider,
+        filterEmail: appliedFilters.filterEmail,
+        sortBy: appliedFilters.sortBy,
+        includeHate: appliedFilters.includeHate,
+        includeNotHate: appliedFilters.includeNotHate,
+        statuses: appliedFilters.statuses,
       },
-    ],
+    ] as ReportsQueryKey,
     enabled: status === "authenticated",
     queryFn: fetchReports,
     initialPageParam: 0,
@@ -145,44 +225,77 @@ export default function MyReports() {
   // @ts-expect-error typescript no typea correctamente data
   const allReports = data?.pages?.flatMap((page: ReportsResponse) => page.reports) ?? [];
 
-  async function deleteReport(reportId: string): Promise<void> {
-    try {
-      await axios.post("/api/proxy", {
-        method: "delete",
-        url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/${reportId}`,
-      });
-    } catch (error) {
-      console.error("Error deleting report", error);
-    }
-  }
-
-  function openPDF(report: Report): void {
-    if (report.pdf && report.pdf[0]?.url) {
-      window.open(report.pdf[0].url, '_blank');
-    }
-  }
+ 
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
       <FadeIn duration={0.5}>
         <h1 className="text-center text-3xl font-bold mt-10">Reports</h1>
       </FadeIn>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full max-w-7xl place-items-start">
+      {/* ─── FILTER CONTROLS ──────────────────────────────────────────── */}
+      {/* ─── SEARCH + FILTER ROW ─────────────────────────────── */}
+      <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
+          {/* Search field */}
+          <SearchBar
+            filterEmail={filterEmail}
+            setFilterEmail={setFilterEmail}
+            applyFilters={applyFilters}
+          />
 
-        {allReports.map((report: Report) => (
-          <FadeIn key={report._id.$oid}>
-            <div key={report._id.$oid} className="w-full mb-2">
-              <ReportCard
-                key={report._id.$oid}
-                report={report}
-                onDelete={() => deleteReport(report._id.$oid)}
-                openPDF={() => openPDF(report)}
-                admin={true}
-              />
-            </div>
-          </FadeIn>
-        ))}
+          {/* Sort & Filter button */}
+          <SortAndFilterButton
+             sortBy={sortBy}
+             setSortBy={setSortBy}
+             toggleCheckbox={toggleCheckbox}
+             isHateCheckBox={isHateCheckBox}
+             setIsHateCheckBox={setIsHateCheckBox}
+             notHateCheckBox={notHateCheckBox}
+             setNotHateCheckBox={setNotHateCheckBox}
+             processingCheckBox={processingCheckBox}
+             setProcessingCheckBox={setProcessingCheckBox}
+             acceptedCheckBox={acceptedCheckBox}
+             setAcceptedCheckBox={setAcceptedCheckBox}
+             rejectedCheckBox={rejectedCheckBox}
+             setRejectedCheckBox={setRejectedCheckBox}
+             applyFilters={applyFilters}
+             filtersCount={filtersCount}
+          />
+        </div>
       </div>
+
+      {
+        allReports && allReports.length > 0 ? (
+          <>
+            {/* OUTER CONTAINER: constrains both search bar + cards */}
+            <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
+
+
+              {/* ─── REPORTS GRID ───────────────────────────────────────── */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {allReports.map((report: Report) => (
+                  <FadeIn key={report._id.$oid}>
+                    <ReportAdminCard
+                      report={report}
+                      onDelete={() => deleteReport(report._id.$oid)}
+                      openPDF={() => openPDF(report)}
+                      banUser={() => banUser(report.notification_email)}
+                    />
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+          </>
+
+        ) : (
+          <div>
+
+            <h1 className="font-bold text-xl w-full">Oops! There are not any reports right now...😅 </h1>
+          </div>
+
+        )
+      }
+
 
       {hasNextPage && (
         <div

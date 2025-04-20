@@ -26,10 +26,9 @@ interface ReportCardProps {
   report: Report;
   onDelete: () => void;
   openPDF: () => void;
-  admin: boolean;
 }
 
-export default function ReportCard({ report, onDelete, openPDF, admin }: ReportCardProps) {
+export default function ReportCard({ report, onDelete, openPDF }: ReportCardProps) {
 
 
   // Ejemplo: Si tu Report no trae imagen, puedes usar un placeholder
@@ -42,7 +41,7 @@ export default function ReportCard({ report, onDelete, openPDF, admin }: ReportC
   const hateColor = String(report.is_hate) === "true" ? "bg-red-600" : "bg-green-600";
   const hateText = String(report.is_hate) === "true" ? "Is hate" : "Not hate";
 
-  const sourceOrEmail = admin ? report.notification_email : report.source;
+  const source = report.source;
 
   return (
     <div className="flex items-center w-[100%] max-h-xl rounded-lg border border-gray-200 bg-white shadow p-3 space-x-3 relative">
@@ -122,34 +121,17 @@ export default function ReportCard({ report, onDelete, openPDF, admin }: ReportC
 
         {/* Texto del reporte */}
         <p className="text-sm text-gray-800 font-medium mt-1">
-        {"Content: "}
-          <TruncateText text={report.content}/>
+          {"Content: "}
+          <TruncateText text={report.content} />
         </p>
 
         <TooltipProvider>
           <Tooltip >
             <TooltipTrigger asChild>
               <p className="text-sm text-gray-800 font-medium mt-1">
-                {(
-                  admin ?
-                    (
-                      <>
-                      {"User: "}
-
-                        <TruncateText text={sourceOrEmail}/>
-                    </>
-                    )
-                    :
-                    (
-                      <>
-                        {"Source: "} <a href={sourceOrEmail}>
-                        <TruncateText text={sourceOrEmail}/>
-                        </a>
-                      </>
-                    )
-
-                )}
-
+                {"Source: "} <a href={source}>
+                  <TruncateText text={source} />
+                </a>
               </p>
             </TooltipTrigger>
             <TooltipContent
@@ -158,7 +140,7 @@ export default function ReportCard({ report, onDelete, openPDF, admin }: ReportC
               sideOffset={4}
               slideFrom="top"
             >
-              <p>{sourceOrEmail.length <= 40 ? sourceOrEmail : sourceOrEmail.slice(0, 37) + "..."}</p>
+              <p>{source.length <= 40 ? source : source.slice(0, 37) + "..."}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

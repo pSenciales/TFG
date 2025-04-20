@@ -132,17 +132,26 @@ export default function NavBar() {
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>Hello, {session.user?.name ? session.user.name.split(" ")[0] : "Guest"}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                 <DropdownMenuItem >
-                    <Link href={"/my-reports"}>My Reports</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={()=> signOut()}>
+                <DropdownMenuItem >
+                  <Link href={"/my-reports"}>My Reports</Link>
+                </DropdownMenuItem>
+                {session.role === "admin" ? (
+                  <DropdownMenuItem >
+                  <Link href={"/admin/reports"}>Admin Portal</Link>
+                </DropdownMenuItem>
+                ) :
+                  (
+                    <>
+                    </>
+                  )}
+                <DropdownMenuItem>
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut()}>
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -95,6 +95,20 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
 
+    async signIn({user}) {
+      const email = user.email as string;
+      console.log(`EMAIL: ${email}`)
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/users/email/${email}`);
+      const { success } = response.data;
+      console.log(`SUCCESS: ${success}`)
+      const isAllowedToSignIn = success !== "User banned";
+      if (isAllowedToSignIn) {
+        return true
+      } else {
+        return false
+      }
+    },
+
     async redirect({ baseUrl }) {
       return baseUrl;
     },

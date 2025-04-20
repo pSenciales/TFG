@@ -30,6 +30,10 @@ export function useLogin() {
         setErrorLogin("Wrong email or password")
       } else if (res?.status === 200) {
         window.location.href = "/";
+      }else if(res?.status === 403){
+        setDisabled(false);
+        setLoading(false);
+        setErrorLogin("User banned")
       }
     } catch (error: unknown) {
       console.error("An error occurred during login:", error);

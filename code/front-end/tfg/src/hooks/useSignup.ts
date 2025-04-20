@@ -118,30 +118,52 @@ export function useSignup() {
     }
   };
 
+
+  const resetVerification = () => {
+    setIsVerified(false);
+    setCaptchaToken("");
+    recaptchaRef.current?.reset();
+  };
+  
   const handleContinue = async (captchaTokenGenerated: string | null) => {
     setDisabled(true);
     setLoading(true);
     try {
       const response = await axios.get(`${FLASK_URL}/users/email/${email}`);
       console.log(response.data);
-      if (response.data.success === "User found") {
-        toast.warning("Email already in use", {
-          description: `${email} is already registered, try to log in here`,
-          action: {
-            label: "LogIn",
-            onClick: () => {
-              window.location.href = "/login";
+     
+      
+      const { success } = response.data;
+      
+      switch (success) {
+        case "User found": {
+          toast.warning("Email already in use", {
+            description: `${email} is already registered, try to log in here`,
+            action: {
+              label: "Log In",
+              onClick: () => (window.location.href = "/login"),
             },
-          },
-        });
-        setIsVerified(false);
-        setCaptchaToken("");
-        if (recaptchaRef.current) {
-          recaptchaRef.current.reset();
+          });
+          resetVerification();
+          break;
         }
-      } else if (response.data.success === "User not found") {
-        await handleSendEmail(captchaTokenGenerated, null);
-        setStep(3);
+      
+        case "User banned": {
+          toast.error("Email not allowed", {
+            description: `${email} is banned`,
+          });
+          resetVerification();
+          break;
+        }
+      
+        case "User not found": {
+          await handleSendEmail(captchaTokenGenerated, null);
+          setStep(3);
+          break;
+        }
+      
+        default:
+          console.warn("Unhandled response:", success);
       }
     } catch (error: unknown) {
       console.error("Unexpected error:", error);
