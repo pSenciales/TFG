@@ -112,68 +112,30 @@ def get_user_reports():
 
     # Buscar el usuario basado en el email y provider
     try:
-        user = User.objects.get(email=email, provider="credentials")
+        user = User.objects.get(email=email, provider=provider)
     except DoesNotExist:
-        return jsonify({"error": "User not valid"}), 404
-
-    # Parámetros de paginación: cursor (offset) y limit
-    cursor = request.args.get('cursor', default=0, type=int)
-    limit = 9
-
-    # Filtrar reportes del usuario, ordenados descendente por fecha de creación,
-    # y aplicar skip y limit
-    reports_query = Report.objects(user_id=str(user.id)).order_by('-created_at')
-    reports = reports_query.skip(cursor).limit(limit)
-
-    # Convertir los reportes a un objeto Python (lista) para poder calcular el largo
-    reports_list = json.loads(reports.to_json())
-
-    # Calcular el siguiente cursor: si se han obtenido "limit" elementos,
-    # se asume que puede haber más; en caso contrario, no hay siguiente página
-    next_cursor = cursor + len(reports_list) if len(reports_list) == limit else None
-
-    return jsonify({
-        "reports": reports_list,
-        "nextCursor": next_cursor
-    }), 200
-
-@report_bp.route('/admin', methods=['GET'])
-def get_admin_reports():
-    # ——————————— Autorización idéntica a la tuya ———————————
-    email = request.args.get('email')
-    if not email:
-        return jsonify({"error": "Missing email"}), 400
-
-    try:
-        user = User.objects.get(email=email, provider="credentials")
-    except DoesNotExist:
-        return jsonify({"error": "User not valid"}), 404
-
-    if not user.is_admin:
         return jsonify({"error": "User not valid"}), 404
 
     # ——————————— Parámetros de paginación ———————————
     cursor = request.args.get('cursor', default=0, type=int)
-    limit  = request.args.get('limit', default=9,  type=int)
+    limit = request.args.get('limit', default=9, type=int)
 
     # ——————————— Parámetros de filtrado ———————————
     # Orden (sortBy puede ser: date_desc, date_asc, content_asc, content_desc)
-    sort_by     = request.args.get('sortBy', default='date_desc')
+    sort_by = request.args.get('sortBy', default='date_desc')
     # Búsqueda por email de usuario (substring, case‑insensitive)
-    search_email = request.args.get('searchEmail', default=None)
     # Hate filters: include both por defecto, se pueden pasar como 'true'/'false'
-    include_hate     = request.args.get('includeHate',  'true') == 'true'
-    include_not_hate = request.args.get('includeNotHate','true') == 'true'
-    # Status: lista de estados a mostrar, ejemplo ?status=processing&status=accepted
+    include_hate = request.args.get('includeHate', 'true') == 'true'
+    include_not_hate = request.args.get('includeNotHate', 'true') == 'true'
+    # Status: lista de estados a mostrar, ejemplo ?status=processing&status=accepted&status=rejected
     statuses = request.args.getlist('status')
 
     # ——————————— Construcción del query ———————————
-    q = Report.objects(notification_email__ne=email)
+    q = Report.objects(user_id=str(user.id)).order_by('-created_at')
+    return apply_filters(q, include_hate, include_not_hate, statuses, sort_by, cursor, limit)
 
-    # Filtrado por substring de email
-    if search_email:
-        q = q.filter(notification_email__icontains=search_email)
 
+def apply_filters(q, include_hate, include_not_hate, statuses, sort_by, cursor, limit):
     # Filtrado por is_hate (solo si uno de los dos flags es falso)
     if include_hate != include_not_hate:
         q = q.filter(is_hate=include_hate)
@@ -203,9 +165,47 @@ def get_admin_reports():
 
     # Calcular nextCursor
     next_cursor = cursor + len(reports_list) if len(reports_list) == limit else None
-
     return jsonify({
         "reports": reports_list,
         "nextCursor": next_cursor
     }), 200
+
+@report_bp.route('/admin', methods=['GET'])
+def get_admin_reports():
+    email = request.args.get('email')
+    if not email:
+        return jsonify({"error": "Missing email"}), 400
+
+    try:
+        user = User.objects.get(email=email, provider="credentials")
+    except DoesNotExist:
+        return jsonify({"error": "User not valid"}), 404
+
+    if not user.is_admin:
+        return jsonify({"error": "User not valid"}), 404
+
+    # ——————————— Parámetros de paginación ———————————
+    cursor = request.args.get('cursor', default=0, type=int)
+    limit  = request.args.get('limit', default=9,  type=int)
+
+    # ——————————— Parámetros de filtrado ———————————
+    # Orden (sortBy puede ser: date_desc, date_asc, content_asc, content_desc)
+    sort_by     = request.args.get('sortBy', default='date_desc')
+    # Búsqueda por email de usuario (substring, case‑insensitive)
+    search_email = request.args.get('searchEmail', default=None)
+    # Hate filters: include both por defecto, se pueden pasar como 'true'/'false'
+    include_hate     = request.args.get('includeHate',  'true') == 'true'
+    include_not_hate = request.args.get('includeNotHate','true') == 'true'
+    # Status: lista de estados a mostrar, ejemplo ?status=processing&status=accepted&status=rejected
+    statuses = request.args.getlist('status')
+
+    # ——————————— Construcción del query ———————————
+    q = Report.objects(notification_email__ne=email)
+
+    # Filtrado por substring de email
+    if search_email:
+        q = q.filter(notification_email__icontains=search_email)
+
+    return apply_filters(q, include_hate, include_not_hate, statuses, sort_by, cursor, limit)
+
 
