@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect} from "react";
-
-import { useSession, signOut } from "next-auth/react";
-import axios, { AxiosError } from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import Swal from "sweetalert2";
 import { Report, ReportsResponse } from "@/types/reports";
 import ReportAdminCard from "@/components/my-reports/ReportAdminCard";
 import FadeIn from "@/components/fadeIn";
@@ -20,7 +16,6 @@ import SearchBar from "@/components/my-reports/SearchBar";
 
 
 export default function MyReports() {
-  const { data: session, status } = useSession();
 
   const {
     toggleCheckbox,
@@ -43,10 +38,14 @@ export default function MyReports() {
     setRejectedCheckBox,
     sortBy,
     setSortBy,
-    filtersCount
+    filtersCount,
+    fetchReports,
+    session,
+    status
     
   } = useMyReports();
 
+  /*
   async function fetchReports({
     pageParam = 0
   }: {
@@ -133,7 +132,7 @@ export default function MyReports() {
         currentCursor: cursor,
       } as ReportsResponse & { currentCursor: number };
     }
-  }
+  }*/
 
   type Filters = {
     email: string;
@@ -175,7 +174,7 @@ export default function MyReports() {
       },
     ] as ReportsQueryKey,
     enabled: status === "authenticated",
-    queryFn: fetchReports,
+    queryFn: ({ pageParam = 0 }) => fetchReports({ pageParam, isAdmin: true }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
       lastPage.nextCursor !== null ? lastPage.nextCursor : undefined,

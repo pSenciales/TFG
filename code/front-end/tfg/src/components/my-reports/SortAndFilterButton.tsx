@@ -80,8 +80,8 @@ export default function SortAndFilterButton(
                                 <SelectGroup>
                                     <SelectItem value="date_desc">Date ↓</SelectItem>
                                     <SelectItem value="date_asc">Date ↑</SelectItem>
-                                    <SelectItem value="content_desc">Content A‑Z</SelectItem>
-                                    <SelectItem value="content_asc">Content Z‑A</SelectItem>
+                                    <SelectItem value="content_asc">Content A‑Z</SelectItem>
+                                    <SelectItem value="content_desc">Content Z‑A</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

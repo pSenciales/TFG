@@ -1,11 +1,8 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect} from "react";
 
-import { useSession, signOut } from "next-auth/react";
-import axios, { AxiosError } from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import Swal from "sweetalert2";
 import { Report, ReportsResponse } from "@/types/reports";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
@@ -19,7 +16,6 @@ import ReportCard from "@/components/my-reports/ReportCard";
 
 
 export default function MyReports() {
-  const { data: session, status } = useSession();
 
   const {
     toggleCheckbox,
@@ -39,10 +35,14 @@ export default function MyReports() {
     setRejectedCheckBox,
     sortBy,
     setSortBy,
-    filtersCount
+    filtersCount,
+    fetchReports,
+    session,
+    status
     
   } = useMyReports();
 
+  /*
   async function fetchReports({
     pageParam = 0
   }: {
@@ -126,7 +126,7 @@ export default function MyReports() {
         currentCursor: cursor,
       } as ReportsResponse & { currentCursor: number };
     }
-  }
+  }*/
 
   type Filters = {
     email: string;
@@ -168,7 +168,7 @@ export default function MyReports() {
       },
     ] as ReportsQueryKey,
     enabled: status === "authenticated",
-    queryFn: fetchReports,
+    queryFn: ({ pageParam = 0 }) => fetchReports({ pageParam, isAdmin: false }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
       lastPage.nextCursor !== null ? lastPage.nextCursor : undefined,
@@ -252,8 +252,7 @@ export default function MyReports() {
 
       {
         allReports && allReports.length > 0 ? (
-          <>
-            {/* OUTER CONTAINER: constrains both search bar + cards */}
+
             <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
 
 
@@ -270,7 +269,6 @@ export default function MyReports() {
                 ))}
               </div>
             </div>
-          </>
 
         ) : (
           <div className="text-center">

@@ -32,11 +32,9 @@ interface ReportCardProps {
 export default function ReportAdminCard({ report, onDelete, openPDF, banUser }: ReportCardProps) {
 
 
-    // Ejemplo: Si tu Report no trae imagen, puedes usar un placeholder
     const imageUrl = "/logo-no-bg.png";
 
     const dateString = new Date(report.created_at.$date).toDateString();
-    // => 'Thu Apr 24 2025'. Ajústalo como quieras
     const stateColor = report.state === "processing" ? "bg-yellow-600" : report.state === "accepted" ? "bg-green-600" : "bg-red-600";
 
     const hateColor = String(report.is_hate) === "true" ? "bg-red-600" : "bg-green-600";
@@ -45,7 +43,6 @@ export default function ReportAdminCard({ report, onDelete, openPDF, banUser }: 
 
     return (
         <div className="flex items-center w-[100%] max-h-xl rounded-lg border border-gray-200 bg-white shadow p-3 space-x-3 relative">
-            {/* Imagen a la izquierda (ajusta el tamaño) */}
             <div className="w-24 h-16 relative overflow-hidden rounded-md">
                 <Image
                     src={imageUrl}
@@ -55,15 +52,12 @@ export default function ReportAdminCard({ report, onDelete, openPDF, banUser }: 
                 />
             </div>
 
-            {/* Contenido textual principal */}
             <div className="flex-1 flex flex-col justify-center">
                 <div className="flex items-start gap-2">
-                    {/* Etiqueta de hora */}
                     <span className="inline-block bg-gray-800 text-white text-xs font-medium px-2 py-0.5 rounded-md">
                         {dateString}
                     </span>
 
-                    {/* Menú (los tres puntos) */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <button

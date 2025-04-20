@@ -97,8 +97,10 @@ export function useMyReports() {
       }
 
       async function fetchReports({
+          isAdmin,
           pageParam = 0
         }: {
+          isAdmin: boolean;
           pageParam?: number;
         }) {
       
@@ -134,8 +136,16 @@ export function useMyReports() {
           statuses.forEach((s) => params.append("status", s));
       
           // URL final
-          const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/user?${params.toString()}`;
-      
+          let url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports`
+          if(isAdmin){
+            url += "/admin?";
+            if (filterEmail) {
+              params.set("searchEmail", filterEmail);
+            }
+          }else{
+            url += "/user?";
+          }
+          url += params.toString();
           try {
             const res = await axios.post(
               "/api/proxy",
@@ -204,6 +214,7 @@ export function useMyReports() {
     setSortBy,
     filtersCount,
     fetchReports,
-    session
+    session,
+    status
   };
 }
