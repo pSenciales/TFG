@@ -24,7 +24,7 @@ def create_log():
         return missing
 
     log = Log(
-        action=data.get['action'] ,
+        action=data['action'] ,
         user_id=data['user_id']
     )
 
