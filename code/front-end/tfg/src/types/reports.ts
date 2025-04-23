@@ -21,3 +21,13 @@ export interface ReportsResponse {
     reports: Report[];
     nextCursor: number | null;
   }
+
+export interface Filters {
+    email: string;
+    provider: string;
+    filterEmail: string;
+    sortBy: string;
+    includeHate: boolean;
+    includeNotHate: boolean;
+    statuses: string[];
+  };

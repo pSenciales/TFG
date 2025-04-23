@@ -2,7 +2,7 @@ import json
 from flask import Blueprint,request, jsonify
 from mongoengine import DoesNotExist
 
-from api.model import Report, User, File
+from api.model import Report, User, File, Resolution
 from api.utils import *
 
 report_bp = Blueprint('report_routes', __name__, url_prefix='/reports')
@@ -89,8 +89,11 @@ def update_report(report_id):
 
     data = request.get_json()
 
-    if 'resolutions' in data:
-        report.resolutions.extend(data['resolutions'])
+    resolution = data.get('resolution')
+
+    if resolution:
+        new_resolution = Resolution(action=resolution.action, reason=resolution.reason, user_id=resolution.user_id)
+        report.resolutions.extend(new_resolution)
 
     if 'state' in data:
         report.state = data['state']

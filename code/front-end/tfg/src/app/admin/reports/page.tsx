@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useEffect} from "react";
+import React, { useRef, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Report, ReportsResponse } from "@/types/reports";
+import { Report, ReportsResponse, Filters } from "@/types/reports";
 import ReportAdminCard from "@/components/my-reports/ReportAdminCard";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
@@ -22,7 +22,8 @@ export default function MyReports() {
     applyFilters,
     banUser,
     openPDF,
-    deleteReport,
+    handleResolve,
+    deleteReportAndLog,
     setFilterEmail,
     appliedFilters,
     filterEmail,
@@ -42,107 +43,8 @@ export default function MyReports() {
     fetchReports,
     session,
     status
-    
+
   } = useMyReports();
-
-  /*
-  async function fetchReports({
-    pageParam = 0
-  }: {
-    pageParam?: number;
-  }) {
-
-    // Dentro de fetchReports o donde montes la URL:
-    const email = session?.user?.email ?? "";
-    const cursor = 0;      // o el valor que saques de pageParam
-    const limit = 9;      // si quieres hacerlo configurable, añádelo a appliedFilters también
-
-    // Desestructuramos los filtros aplicados
-    const {
-      filterEmail,
-      sortBy,
-      includeHate,
-      includeNotHate,
-      statuses
-    } = appliedFilters;
-
-    // Montamos los params
-    const params = new URLSearchParams({
-      email,
-      cursor: String(cursor),
-      limit: String(limit),
-      sortBy
-    });
-
-    // Búsqueda por email si existe
-    if (filterEmail) {
-      params.set("searchEmail", filterEmail);
-    }
-
-    // Hate / not-hate
-    params.set("includeHate", includeHate.toString());
-    params.set("includeNotHate", includeNotHate.toString());
-
-    // Estados: uno por entrada
-    statuses.forEach((s) => params.append("status", s));
-
-    // URL final
-    const url = `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/admin?${params.toString()}`;
-
-    try {
-      const res = await axios.post(
-        "/api/proxy",
-        { url, method: "get" },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      const data = res.data as ReportsResponse;
-      return {
-        ...data, // { reports: Report[], nextCursor: number|null }
-        currentCursor: cursor,
-      };
-    } catch (error) {
-      if (
-        error instanceof AxiosError &&
-        error.status === 401 &&
-        error.response?.data.error === "Session expired or invalid token"
-      ) {
-        // Sesión expirada
-        await Swal.fire({
-          title: "The session has expired!",
-          text: "Please log in again",
-          icon: "warning",
-        }).then(() => {
-          signOut();
-          window.location.href = "/login";
-        });
-      } else {
-        console.error(error);
-        Swal.fire({
-          title: "Error!",
-          text: "An error occurred while fetching data. Please try again later.",
-          icon: "error",
-        });
-      }
-
-      // Retornamos datos vacíos para no romper el tipado
-      return {
-        reports: [],
-        nextCursor: null,
-        currentCursor: cursor,
-      } as ReportsResponse & { currentCursor: number };
-    }
-  }*/
-
-  type Filters = {
-    email: string;
-    provider: string;
-    filterEmail: string;
-    sortBy: string;
-    includeHate: boolean;
-    includeNotHate: boolean;
-    statuses: string[];
-  };
 
   type ReportsQueryKey = ["reports", Filters];
 
@@ -174,7 +76,7 @@ export default function MyReports() {
       },
     ] as ReportsQueryKey,
     enabled: status === "authenticated",
-    queryFn: ({ pageParam = 0 }) => fetchReports({ pageParam, isAdmin: true }),
+    queryFn: ({ pageParam = 0 }) => fetchReports({ pageParam, urlUser: "admin" }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
       lastPage.nextCursor !== null ? lastPage.nextCursor : undefined,
@@ -224,18 +126,16 @@ export default function MyReports() {
   // @ts-expect-error typescript no typea correctamente data
   const allReports = data?.pages?.flatMap((page: ReportsResponse) => page.reports) ?? [];
 
- 
+
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
       <FadeIn duration={0.5}>
         <h1 className="text-center text-3xl font-bold mt-10">Reports</h1>
       </FadeIn>
-      {/* ─── FILTER CONTROLS ──────────────────────────────────────────── */}
-      {/* ─── SEARCH + FILTER ROW ─────────────────────────────── */}
       <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
         <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
-          {/* Search field */}
+          {/* Search bar */}
           <SearchBar
             filterEmail={filterEmail}
             setFilterEmail={setFilterEmail}
@@ -244,21 +144,21 @@ export default function MyReports() {
 
           {/* Sort & Filter button */}
           <SortAndFilterButton
-             sortBy={sortBy}
-             setSortBy={setSortBy}
-             toggleCheckbox={toggleCheckbox}
-             isHateCheckBox={isHateCheckBox}
-             setIsHateCheckBox={setIsHateCheckBox}
-             notHateCheckBox={notHateCheckBox}
-             setNotHateCheckBox={setNotHateCheckBox}
-             processingCheckBox={processingCheckBox}
-             setProcessingCheckBox={setProcessingCheckBox}
-             acceptedCheckBox={acceptedCheckBox}
-             setAcceptedCheckBox={setAcceptedCheckBox}
-             rejectedCheckBox={rejectedCheckBox}
-             setRejectedCheckBox={setRejectedCheckBox}
-             applyFilters={applyFilters}
-             filtersCount={filtersCount}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            toggleCheckbox={toggleCheckbox}
+            isHateCheckBox={isHateCheckBox}
+            setIsHateCheckBox={setIsHateCheckBox}
+            notHateCheckBox={notHateCheckBox}
+            setNotHateCheckBox={setNotHateCheckBox}
+            processingCheckBox={processingCheckBox}
+            setProcessingCheckBox={setProcessingCheckBox}
+            acceptedCheckBox={acceptedCheckBox}
+            setAcceptedCheckBox={setAcceptedCheckBox}
+            rejectedCheckBox={rejectedCheckBox}
+            setRejectedCheckBox={setRejectedCheckBox}
+            applyFilters={applyFilters}
+            filtersCount={filtersCount}
           />
         </div>
       </div>
@@ -266,19 +166,17 @@ export default function MyReports() {
       {
         allReports && allReports.length > 0 ? (
           <>
-            {/* OUTER CONTAINER: constrains both search bar + cards */}
             <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
-
-
-              {/* ─── REPORTS GRID ───────────────────────────────────────── */}
+              {/* Grid con los reportes */}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {allReports.map((report: Report) => (
                   <FadeIn key={report._id.$oid}>
                     <ReportAdminCard
                       report={report}
-                      onDelete={() => deleteReport(report._id.$oid)}
+                      onDelete={() => deleteReportAndLog(report._id.$oid)}
                       openPDF={() => openPDF(report)}
                       banUser={() => banUser(report.notification_email)}
+                      handleResolve={() => handleResolve(report._id.$oid)}
                     />
                   </FadeIn>
                 ))}
