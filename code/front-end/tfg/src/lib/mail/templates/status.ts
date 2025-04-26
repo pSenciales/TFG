@@ -38,14 +38,14 @@ const statusTemplate = `
             margin: 20px 0;
             color: #ffffff;
         }
-        .status.approved {
+        .status.accepted {
             background-color: #28a745;
         }
-        .status.pending {
+        .status.processing {
             background-color: #ffc107;
             color: #333;
         }
-        .status.declined {
+        .status.rejected {
             background-color: #dc3545;
         }
         .button {
@@ -53,8 +53,8 @@ const statusTemplate = `
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
+            color: #ffffff !important;
+            text-decoration: none !important;
             border-radius: 5px;
             font-size: 18px;
         }
@@ -70,8 +70,9 @@ const statusTemplate = `
         <h1>Actualización de Estado</h1>
         <p>Hola {{name}}. Una de tus denuncias ha cambiado de estado. Consulta los detalles a continuación:</p>
         <div class="status {{statusClass}}">Estado: {{status}}</div>
+        <p>Motivos: {{reason}}</p>
         <p>Haz clic en el botón de abajo para ver tus denuncias:</p>
-        <a href="https://fairplay360.vercel.app" class="button">Ver mis denuncias</a>
+        <a href="https://fairplay360.vercel.app/my-reports" class="button">Ver mis denuncias</a>
         <p class="footer">Si no esperabas esta actualización, ignora este correo.</p>
     </div>
 </body>

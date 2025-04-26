@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 import axios, { AxiosError } from "axios";
 import { useSession, signOut } from "next-auth/react";
 import { ReportsResponse } from "@/types/reports";
-import { useQueryClient } from "@tanstack/react-query";  // <-- añade useQueryClient
+import { useQueryClient } from "@tanstack/react-query";
+
 
 
 export function useMyReports() {
@@ -116,77 +117,69 @@ export function useMyReports() {
     }
   }
 
-  async function handleResolve(reportId: string) {
+  async function handleResolve(
+    reportId: string,
+    email: string,
+  ) {
     const result = await Swal.fire<{
       resolution: string;
       status: string;
     }>({
       title: "Resolve Report",
       html: `
-      <div class="space-y-4 text-left">
-        <textarea
-          id="swal-resolution"
-          class="
-            block w-full min-h-[6rem]
-            rounded-md border border-input bg-transparent
-            px-3 py-2 text-sm text-input placeholder:text-muted-foreground
-            focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
-            disabled:cursor-not-allowed disabled:opacity-50
-          "
-          placeholder="Enter resolution details…"
-        ></textarea>
-        <select
-          id="swal-status"
-          class="
-            block w-full
-            rounded-md border border-input bg-background
-            px-3 py-2 text-sm text-input
-            focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
-            disabled:cursor-not-allowed disabled:opacity-50
-          "
-        >
-          <option value="processing">Processing</option>
-          <option value="accepted">Accepted</option>
-          <option value="rejected">Rejected</option>
-        </select>
-      </div>
-    `,
-      focusConfirm: true,
+        <div class="space-y-4 text-left">
+          <textarea
+            id="swal-resolution"
+            class="block w-full min-h-[6rem] rounded-md border border-input bg-transparent px-3 py-2 text-sm text-input placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            placeholder="Enter resolution details…"
+          ></textarea>
+          <select
+            id="swal-status"
+            class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-input focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            <option value="processing">Processing</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+      `,
+      focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: "Save",
       cancelButtonText: "Cancel",
-      preConfirm: () => {
-        const resolutionEl = document.getElementById("swal-resolution") as HTMLTextAreaElement;
-        const statusEl = document.getElementById("swal-status") as HTMLSelectElement;
-        return {
-          resolution: resolutionEl.value,
-          status: statusEl.value,
-        };
+      showLoaderOnConfirm: true,
+      allowOutsideClick: () => !Swal.isLoading(),
+      preConfirm: async () => {
+        const resolutionEl = document.getElementById(
+          "swal-resolution"
+        ) as HTMLTextAreaElement;
+        const statusEl = document.getElementById(
+          "swal-status"
+        ) as HTMLSelectElement;
+        const resolution = resolutionEl.value;
+        const status = statusEl.value;
+
+        // Aquí se muestra el loader automáticamente
+        const res = await axios.post("/api/resolve", {
+          resolution: {
+            action: `Resolved with status ${status} the report with id: ${reportId}`,
+            reason: resolution,
+            user_id: session?.user.id
+          },
+          state: status,
+          reportId,
+          email,
+        });
+        if (res.status !== 200) {
+          throw new Error("Failed to save resolution");
+        }
+        return { status };
       },
     });
 
     if (result.isConfirmed && result.value) {
-      const { resolution, status } = result.value;
-      try {
-        await axios.post("/api/proxy", {
-          method: "put",
-          url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/${reportId}`,
-          body: {
-            resolution:{
-              action: `Resolved with status ${status} the report with id: ${reportId}`,
-              reason: resolution,
-              user_id: session?.user.id,
-            },
-            state: status,
-          },
-        });
-        Swal.fire("Saved!", "La resolución se ha guardado.", "success");
-        // Aquí invalidas o refetch-eas tu lista
-        queryClient.invalidateQueries({ queryKey: ["reports"] });
-      } catch (err) {
-        console.error(err);
-        Swal.fire("Error", "No se pudo guardar la resolución.", "error");
-      }
+      Swal.fire("Saved!", "La resolución se ha guardado.", "success");
+      queryClient.invalidateQueries({ queryKey: ["reports"] });
     }
   }
 

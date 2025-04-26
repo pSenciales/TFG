@@ -176,7 +176,7 @@ export default function MyReports() {
                       onDelete={() => deleteReportAndLog(report._id.$oid)}
                       openPDF={() => openPDF(report)}
                       banUser={() => banUser(report.notification_email)}
-                      handleResolve={() => handleResolve(report._id.$oid)}
+                      handleResolve={() => handleResolve(report._id.$oid, report.notification_email)}
                     />
                   </FadeIn>
                 ))}

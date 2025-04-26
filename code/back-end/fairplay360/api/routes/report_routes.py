@@ -92,8 +92,18 @@ def update_report(report_id):
     resolution = data.get('resolution')
 
     if resolution:
-        new_resolution = Resolution(action=resolution.action, reason=resolution.reason, user_id=resolution.user_id)
-        report.resolutions.extend(new_resolution)
+
+
+        if missing := missing_fields(["action", "user_id"], resolution):
+            return missing
+
+        action = resolution['action']
+        reason = resolution.get('reason', "No reason was given")
+        user_id = resolution['user_id']
+
+        new_resolution = Resolution(action=action, reason=reason, user_id=user_id)
+
+        report.resolutions.append(new_resolution)
 
     if 'state' in data:
         report.state = data['state']
