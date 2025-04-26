@@ -1,5 +1,5 @@
 from datetime import datetime, UTC
-from mongoengine import Document, StringField, BooleanField, DateTimeField, URLField, EnumField, EmbeddedDocument, EmbeddedDocumentField, ListField
+from mongoengine import Document, StringField, BooleanField, DateTimeField, URLField, EmbeddedDocument, EmbeddedDocumentField, ListField
 
 
 
