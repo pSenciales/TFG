@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { getToken } from "next-auth/jwt"
 import { JWT as JWTType } from 'next-auth/jwt';
 
-import { initTransporter, compileTemplate, sendMail } from "@/lib/mail/utils";
+import { compileTemplate, sendMail } from "@/lib/mail/utils";
 
 export async function POST(req: NextRequest) {
     try {
@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: response.message }, { status: 400 });
         } else {
             if (response.status === 200) {
-                const transporter = initTransporter();
                 const html = compileTemplate("status", {
                     status: state,
                     statusClass: state.toLowerCase(),

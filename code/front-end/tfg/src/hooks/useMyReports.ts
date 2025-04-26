@@ -7,6 +7,7 @@ import axios, { AxiosError } from "axios";
 import { useSession, signOut } from "next-auth/react";
 import { ReportsResponse } from "@/types/reports";
 import { useQueryClient } from "@tanstack/react-query";
+import resolveAlert from "@/lib/mail/templates/resolveAlert";
 
 
 
@@ -126,23 +127,7 @@ export function useMyReports() {
       status: string;
     }>({
       title: "Resolve Report",
-      html: `
-        <div class="space-y-4 text-left">
-          <textarea
-            id="swal-resolution"
-            class="block w-full min-h-[6rem] rounded-md border border-input bg-transparent px-3 py-2 text-sm text-input placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-            placeholder="Enter resolution details…"
-          ></textarea>
-          <select
-            id="swal-status"
-            class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-input focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          >
-            <option value="processing">Processing</option>
-            <option value="accepted">Accepted</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
-      `,
+      html: resolveAlert,
       focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: "Save",
@@ -178,7 +163,7 @@ export function useMyReports() {
     });
 
     if (result.isConfirmed && result.value) {
-      Swal.fire("Saved!", "La resolución se ha guardado.", "success");
+      Swal.fire("Saved!", "Resolution saved.", "success");
       queryClient.invalidateQueries({ queryKey: ["reports"] });
     }
   }
@@ -211,7 +196,6 @@ export function useMyReports() {
     pageParam?: number;
   }) {
 
-    // Dentro de fetchReports o donde montes la URL:
     const email = session?.user?.email ?? "";
     const provider = session?.provider ?? "";
     const cursor = pageParam || 0;      // o el valor que saques de pageParam
