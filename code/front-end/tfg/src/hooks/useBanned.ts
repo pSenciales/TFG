@@ -14,6 +14,13 @@ export function useBanned() {
   const [appliedFilters, setAppliedFilters] = useState("");
   const queryClient = useQueryClient();
 
+
+  interface RawBannedRecord {
+  _id: string;
+  created_at?: { $date: number };
+  email?: string;
+}
+
   async function fetchBanned({
     pageParam = 0,
   }: {
@@ -33,20 +40,27 @@ export function useBanned() {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      // Si res.data es un string, lo parseamos
-      const payload = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
-      // payload.users o payload (array directamente)
-      const rawUsers: any[] = payload.users ?? payload;
+      // 1) Parsear si viene string
+      const parsed = typeof res.data === "string"
+        ? JSON.parse(res.data)
+        : res.data;
+
+      // 2) Extraer array de RawBannedRecord
+      const rawUsers: RawBannedRecord[] = Array.isArray(parsed)
+        ? parsed
+        : (parsed as { users: RawBannedRecord[] }).users;
+
+      // 3) Mapear al tipo BannedUser
       const users: BannedUser[] = rawUsers.map((u) => ({
-        email: u._id ?? u.email,
-        created_at: u.created_at ?? Date.now(),
+        email: u._id ?? u.email!,
+        created_at: u.created_at 
+          ? u.created_at 
+          : { $date: Date.now() },
       }));
 
-      return {
-        users,
-        nextCursor: payload.nextCursor ?? null,
-        currentCursor: cursor,
-      };
+      const nextCursor = (parsed as any).nextCursor ?? null;
+
+      return { users, nextCursor, currentCursor: cursor };
     } catch (error) {
       if (
         error instanceof AxiosError &&
