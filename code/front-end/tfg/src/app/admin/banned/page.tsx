@@ -1,18 +1,27 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
 import { useBanned } from "@/hooks/useBanned";
 import SearchBar from "@/components/my-reports/SearchBar";
 import { BannedUser, BannedUsersResponse } from "@/types/banned";
+import BannedCard from "@/components/banned/BannedCard";
 
 export default function Banned() {
-  const queryClient = useQueryClient();
-  const { session, status, filterEmail, setFilterEmail, fetchBanned } = useBanned();
+  const {
+    session,
+    status,
+    filterEmail,
+    appliedFilters,
+    setAppliedFilters,
+    setFilterEmail,
+    fetchBanned,
+    restoreAccess
+  } = useBanned();
 
-  type BannedQueryKey = ["users", { filterEmail: string }];
+  type BannedQueryKey = ["users", { appliedFilters: string }];
 
   const {
     data,
@@ -21,7 +30,6 @@ export default function Banned() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    refetch,
   } = useInfiniteQuery<
     BannedUsersResponse,
     Error,
@@ -29,7 +37,7 @@ export default function Banned() {
     BannedQueryKey,
     number
   >({
-    queryKey: ["users", { filterEmail }] as BannedQueryKey,
+    queryKey: ["users", { appliedFilters }] as BannedQueryKey,
     enabled: status === "authenticated",
     queryFn: ({ pageParam = 0 }) => fetchBanned({ pageParam }),
     initialPageParam: 0,
@@ -79,8 +87,14 @@ export default function Banned() {
         </h1>
       </FadeIn>
 
-      <div className="w-full max-w-7xl mx-auto px-4">
-        
+      <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
+        <div className="flex flex-row items-end space-x-4">
+          <SearchBar
+            filterEmail={filterEmail}
+            setFilterEmail={setFilterEmail}
+            applyFilters={() => setAppliedFilters(filterEmail)}
+          />
+        </div>
       </div>
 
       {allUsers.length > 0 ? (
@@ -88,20 +102,20 @@ export default function Banned() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {allUsers.map((user) => (
               <FadeIn key={user.email}>
-                <div className="p-4 border rounded shadow">
-                  <p className="font-medium">{user.email}</p>
-                  <p className="text-sm text-gray-500">
-                    Banned on {new Date(user.created_at.$date).toLocaleString()}
-                  </p>
-                </div>
+                <BannedCard
+                  user={user}
+                  restoreAccess={() => restoreAccess(user.email)}
+                />
               </FadeIn>
             ))}
           </div>
         </div>
       ) : (
-        <p className="text-center font-bold">
-          ¡Vaya! No hay usuarios baneados que mostrar.
-        </p>
+        <FadeIn>
+          <p className="text-center font-bold">
+            Oops! There are not any banned users right now...😅
+          </p>
+        </FadeIn>
       )}
 
       {hasNextPage && <div ref={sentinelRef} style={{ height: 1 }} />}

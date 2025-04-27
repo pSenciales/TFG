@@ -4,11 +4,15 @@ import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import axios, { AxiosError } from "axios";
 import Swal from "sweetalert2";
+import { useQueryClient } from "@tanstack/react-query";
 import { BannedUsersResponse, BannedUser } from "@/types/banned";
+
 
 export function useBanned() {
   const { data: session, status } = useSession();
   const [filterEmail, setFilterEmail] = useState("");
+  const [appliedFilters, setAppliedFilters] = useState("");
+  const queryClient = useQueryClient();
 
   async function fetchBanned({
     pageParam = 0,
@@ -16,7 +20,7 @@ export function useBanned() {
     pageParam?: number;
   }): Promise<BannedUsersResponse & { currentCursor: number }> {
     const cursor = pageParam;
-    const params = new URLSearchParams({ cursor: String(cursor) });
+    const params = new URLSearchParams({ cursor: String(cursor)});
     if (filterEmail) params.set("searchEmail", filterEmail);
 
     try {
@@ -67,11 +71,46 @@ export function useBanned() {
     }
   }
 
+  async function restoreAccess(email: string): Promise<void> {
+    try {
+      const res = await axios.post(
+        "/api/proxy",
+        {
+          url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/blacklist/${email}`,
+          method: "delete",
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (res.status === 200) {
+        await axios.post("/api/proxy", {
+                  method: "post",
+                  url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/logs`,
+                  body: {
+                    action: "Restored access to email: " + email,
+                    user_id: session?.user.id
+                  }
+                }).then(() => {
+                  Swal.fire("Success", "Access restored successfully.", "success");
+                });
+        queryClient.invalidateQueries({ queryKey: ["users"] });
+      } else {
+        Swal.fire("Error", "Could not restore user access.", "error");
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Could not restore user access.", "error");
+    }
+  }
+
   return {
     session,
     status,
     filterEmail,
     setFilterEmail,
     fetchBanned,
+    appliedFilters,
+    setAppliedFilters,
+    restoreAccess
   };
 }

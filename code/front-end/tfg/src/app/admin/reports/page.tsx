@@ -185,10 +185,11 @@ export default function MyReports() {
           </>
 
         ) : (
-          <div>
-
-            <h1 className="font-bold text-xl w-full">Oops! There are not any reports right now...😅 </h1>
-          </div>
+          <FadeIn>
+            <div>
+              <h1 className="font-bold text-xl w-full">Oops! There are not any reports right now...😅 </h1>
+            </div>
+          </FadeIn>
 
         )
       }

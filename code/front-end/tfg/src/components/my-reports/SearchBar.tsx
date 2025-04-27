@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 interface SearchBarProps {
     filterEmail: string;
     setFilterEmail: React.Dispatch<React.SetStateAction<string>>;
-    applyFilters: () => void;
+    applyFilters?: () => void;
 }
 
 

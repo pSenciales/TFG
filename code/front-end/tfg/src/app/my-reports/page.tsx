@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect} from "react";
+import React, { useRef, useEffect } from "react";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Report, ReportsResponse, Filters } from "@/types/reports";
@@ -39,7 +39,7 @@ export default function MyReports() {
     fetchReports,
     session,
     status
-    
+
   } = useMyReports();
 
 
@@ -126,7 +126,7 @@ export default function MyReports() {
   // @ts-expect-error typescript no typea correctamente data
   const allReports = data?.pages?.flatMap((page: ReportsResponse) => page.reports) ?? [];
 
- 
+
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
@@ -137,21 +137,21 @@ export default function MyReports() {
         <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
           {/* Sort & Filter button */}
           <SortAndFilterButton
-             sortBy={sortBy}
-             setSortBy={setSortBy}
-             toggleCheckbox={toggleCheckbox}
-             isHateCheckBox={isHateCheckBox}
-             setIsHateCheckBox={setIsHateCheckBox}
-             notHateCheckBox={notHateCheckBox}
-             setNotHateCheckBox={setNotHateCheckBox}
-             processingCheckBox={processingCheckBox}
-             setProcessingCheckBox={setProcessingCheckBox}
-             acceptedCheckBox={acceptedCheckBox}
-             setAcceptedCheckBox={setAcceptedCheckBox}
-             rejectedCheckBox={rejectedCheckBox}
-             setRejectedCheckBox={setRejectedCheckBox}
-             applyFilters={applyFilters}
-             filtersCount={filtersCount}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            toggleCheckbox={toggleCheckbox}
+            isHateCheckBox={isHateCheckBox}
+            setIsHateCheckBox={setIsHateCheckBox}
+            notHateCheckBox={notHateCheckBox}
+            setNotHateCheckBox={setNotHateCheckBox}
+            processingCheckBox={processingCheckBox}
+            setProcessingCheckBox={setProcessingCheckBox}
+            acceptedCheckBox={acceptedCheckBox}
+            setAcceptedCheckBox={setAcceptedCheckBox}
+            rejectedCheckBox={rejectedCheckBox}
+            setRejectedCheckBox={setRejectedCheckBox}
+            applyFilters={applyFilters}
+            filtersCount={filtersCount}
           />
         </div>
       </div>
@@ -159,29 +159,30 @@ export default function MyReports() {
       {
         allReports && allReports.length > 0 ? (
 
-            <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
+          <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
 
 
-              {/* Grid de reportes */}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {allReports.map((report: Report) => (
-                  <FadeIn key={report._id.$oid}>
-                    <ReportCard
-                      report={report}
-                      onDelete={() => deleteReport(report._id.$oid)}
-                      openPDF={() => openPDF(report)}
-                    />
-                  </FadeIn>
-                ))}
-              </div>
+            {/* Grid de reportes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {allReports.map((report: Report) => (
+                <FadeIn key={report._id.$oid}>
+                  <ReportCard
+                    report={report}
+                    onDelete={() => deleteReport(report._id.$oid)}
+                    openPDF={() => openPDF(report)}
+                  />
+                </FadeIn>
+              ))}
             </div>
+          </div>
 
         ) : (
-          <div className="text-center">
-
-            <h1 className="font-bold text-xl w-full">Oops! It looks like you do not have any reports righ now...😅</h1>
-            <h1 className="font-bold text-xl w-full">Report <a className="text-blue underline decoration-wavy" href="/report">here</a> now!</h1>
-          </div>
+          <FadeIn>
+            <div className="text-center">
+              <h1 className="font-bold text-xl w-full">Oops! It looks like you do not have any reports righ now...😅</h1>
+              <h1 className="font-bold text-xl w-full">Report <a className="text-blue underline decoration-wavy" href="/report">here</a> now!</h1>
+            </div>
+          </FadeIn>
 
         )
       }

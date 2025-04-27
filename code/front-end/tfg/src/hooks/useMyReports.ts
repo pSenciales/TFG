@@ -94,15 +94,15 @@ export function useMyReports() {
 
   async function banUser(notification_email: string): Promise<void> {
     try {
-      const { status } = await axios.post("/api/proxy", {
+      const res = await axios.post("/api/proxy", {
         method: "post",
         url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/blacklist`,
         body: {
           email: notification_email
         }
       });
-
-      if (status === 201) {
+      console.log("Response data:", JSON.stringify(res));
+      if (res.status === 200) {
         await axios.post("/api/proxy", {
           method: "post",
           url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/logs`,
@@ -110,6 +110,8 @@ export function useMyReports() {
             action: "Banned a user with email: " + notification_email,
             user_id: session?.user.id
           }
+        }).then(() => {
+          Swal.fire("Success", "User banned successfully.", "success");
         });
       }
 
