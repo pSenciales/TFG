@@ -21,6 +21,11 @@ export function useBanned() {
   email?: string;
 }
 
+interface RawBannedListResponse {
+  users: RawBannedRecord[];
+  nextCursor: number | null;
+}
+
   async function fetchBanned({
     pageParam = 0,
   }: {
@@ -58,7 +63,7 @@ export function useBanned() {
           : { $date: Date.now() },
       }));
 
-      const nextCursor = (parsed as any).nextCursor ?? null;
+      const nextCursor = (parsed as RawBannedListResponse).nextCursor ?? null;
 
       return { users, nextCursor, currentCursor: cursor };
     } catch (error) {
