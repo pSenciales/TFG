@@ -3,17 +3,34 @@ from flask import Blueprint, request
 from api.model import Blacklist
 from api.utils import *
 from api.utils import success, missing_fields, element_not_found
+import json
 
 blacklist_bp = Blueprint('blacklist_routes', __name__, url_prefix='/blacklist')
 
 
 @blacklist_bp.route('/', methods=['GET'])
 @blacklist_bp.route('', methods=['GET'])
-def get_reports():
-    blacklist = Blacklist.objects()
-    if not blacklist:
-        return jsonify({}), 200
-    return jsonify(blacklist.to_json()), 200
+def get_blacklist():
+    cursor = request.args.get('cursor', default=0, type=int)
+    limit = 9
+    search_email = request.args.get('searchEmail', default=None)
+
+    query = Blacklist.objects
+    if search_email:
+        query = query.filter(email__icontains=search_email)
+
+    results = query.skip(cursor).limit(limit)
+
+
+    users_list = json.loads(results.to_json())
+
+    next_cursor = cursor + len(users_list) if len(users_list) == limit else None
+
+    # 6) Devolvemos JSON
+    return jsonify({
+        "users": users_list,
+        "nextCursor": next_cursor
+    }), 200
 
 
 @blacklist_bp.route('/', methods=['POST'])

@@ -12,7 +12,7 @@ report_bp = Blueprint('report_routes', __name__, url_prefix='/reports')
 @report_bp.route('', methods=['GET'])
 def get_reports():
     cursor = request.args.get('cursor', default=0, type=int)
-    limit = request.args.get('limit', default=6, type=int)
+    limit = 9
 
     reports = Report.objects.skip(cursor).limit(limit)
 
@@ -131,7 +131,7 @@ def get_user_reports():
 
     # ——————————— Parámetros de paginación ———————————
     cursor = request.args.get('cursor', default=0, type=int)
-    limit = request.args.get('limit', default=9, type=int)
+    limit = 9
 
     # ——————————— Parámetros de filtrado ———————————
     # Orden (sortBy puede ser: date_desc, date_asc, content_asc, content_desc)
@@ -199,7 +199,7 @@ def get_admin_reports():
 
     # ——————————— Parámetros de paginación ———————————
     cursor = request.args.get('cursor', default=0, type=int)
-    limit  = request.args.get('limit', default=9,  type=int)
+    limit  = 9
 
     # ——————————— Parámetros de filtrado ———————————
     # Orden (sortBy puede ser: date_desc, date_asc, content_asc, content_desc)
