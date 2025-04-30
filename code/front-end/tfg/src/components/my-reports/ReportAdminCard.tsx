@@ -20,7 +20,6 @@ interface ReportCardProps {
     handleResolve: () => void;
 }
 
-DropdownActions
 
 export default function ReportAdminCard({ report, onDelete, openPDF, banUser, handleResolve }: ReportCardProps) {
 

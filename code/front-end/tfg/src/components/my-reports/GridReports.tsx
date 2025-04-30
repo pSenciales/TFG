@@ -21,6 +21,7 @@ export default function GridReports({ allReports, openPDF, banUser, handleResolv
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {allReports.map((report: Report) => (
                     <ReportAdminCard
+                        key={report._id.$oid}
                         report={report}
                         onDelete={() => deleteReportAndLog(report._id.$oid)}
                         openPDF={() => openPDF(report)}
