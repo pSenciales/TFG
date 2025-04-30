@@ -1,6 +1,9 @@
 import json
 from flask import Blueprint,request, jsonify
 from mongoengine import DoesNotExist
+from datetime import datetime, UTC, timedelta
+import pandas as pd
+from pytz import UTC
 
 from api.model import Report, User, File, Resolution
 from api.utils import *
@@ -220,5 +223,81 @@ def get_admin_reports():
         q = q.filter(notification_email__icontains=search_email)
 
     return apply_filters(q, include_hate, include_not_hate, statuses, sort_by, cursor, limit)
+
+@report_bp.route('/stats', methods=['GET'])
+def reports_stats():
+    #Leer parámetro y calcular rango
+    days = int(request.args.get("days", 90))
+    end = datetime.utcnow()
+    start = end - timedelta(days=days)
+
+    #Traer solo los campos necesarios
+    qs = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end
+    ).only("created_at", "resolutions.created_at")
+
+    #Construir listas de fechas
+    report_dates = []
+    resolution_dates = []
+    for rpt in qs:
+        report_dates.append({"date": rpt.created_at})
+        for res in rpt.resolutions:
+            dt = res.created_at
+            # si viene con tz, lo hacemos naive UTC
+            if getattr(dt, "tzinfo", None):
+                dt = dt.astimezone(UTC).replace(tzinfo=None)
+            # filtramos en el rango
+            if start <= dt <= end:
+                resolution_dates.append({"date": dt})
+
+    #Crear DataFrames
+    df_r = pd.DataFrame(report_dates)
+    df_s = pd.DataFrame(resolution_dates)
+
+    #Helper para agrupar + rellenar
+    def group_and_fill(df: pd.DataFrame, col_name: str) -> pd.DataFrame:
+        # Generar la lista de todos los días (date objects) en el rango
+        all_days = pd.date_range(start.date(), end.date(), freq="D").date
+
+        #Si no hay datos, devolvemos un DataFrame de ceros para todos los días
+        if df.empty:
+            return pd.DataFrame({
+                "day": [d.strftime("%Y-%m-%d") for d in all_days],
+                col_name: [0] * len(all_days)
+            })
+
+        #Convertir a datetime y extraer solo la fecha (sin hora)
+        df = df.copy()
+        df["day"] = pd.to_datetime(df["date"]).dt.date
+
+        #Contar ocurrencias por día
+        grp = df.groupby("day").size()
+
+        #Reindexar para incluir todos los días y rellenar con 0 donde falte
+        grp = grp.reindex(all_days, fill_value=0)
+
+        #Construir DataFrame final
+        return pd.DataFrame({
+            "day": [d.strftime("%Y-%m-%d") for d in all_days],
+            col_name: grp.values
+        })
+
+    #Agrupar/rellenar por reports y resolutions
+    df_reports = group_and_fill(df_r, "reports")
+    df_resols  = group_and_fill(df_s, "resolutions")
+
+    #Mergear ambos resultados
+    df_final = pd.merge(
+        df_reports,
+        df_resols,
+        on="day",
+        how="inner"  # ambos tienen mismos días
+    )
+
+    #Convertir a lista de dicts
+    result = df_final.to_dict(orient="records")
+
+    return jsonify(result), 200
 
 
