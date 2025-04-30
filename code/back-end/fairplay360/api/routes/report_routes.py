@@ -224,7 +224,97 @@ def get_admin_reports():
 
     return apply_filters(q, include_hate, include_not_hate, statuses, sort_by, cursor, limit)
 
-@report_bp.route('/stats', methods=['GET'])
+
+
+@report_bp.route('/stats/hate', methods=['GET'])
+def hate_statistics():
+    # 1) Parseamos days
+    try:
+        days = int(request.args.get('days', 7))
+    except ValueError:
+        return jsonify({"error": "Invalid 'days' parameter"}), 400
+
+    # 2) Calculamos rango de fechas en UTC
+    end = datetime.now(UTC)
+    start = end - timedelta(days=days)
+
+    # 3) Hacemos dos conteos
+    hate_count = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end,
+        is_hate=True
+    ).count()
+
+    not_hate_count = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end,
+        is_hate=False
+    ).count()
+
+    data = [
+        {
+          "Tag": "Hate",
+            "number": hate_count,
+        },
+        {
+            "Tag": "Not Hate",
+            "number": not_hate_count,
+        }
+    ]
+
+    return jsonify(data), 200
+
+@report_bp.route('/stats/status', methods=['GET'])
+def status_statistics_chart():
+    # Parseamos days
+    try:
+        days = int(request.args.get('days', 7))
+    except ValueError:
+        return jsonify({"error": "Invalid 'days' parameter"}), 400
+
+    # Rango de fechas
+    end = datetime.now(UTC)
+    start = end - timedelta(days=days)
+
+    # Conteos para cada status
+    processing_count = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end,
+        state="processing"
+    ).count()
+
+    accepted_count = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end,
+        state="accepted"
+    ).count()
+
+    rejected_count = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end,
+        state="rejected"
+    ).count()
+
+    # Formateamos array para el grafico
+    data = [
+        {
+            "tag": "Processing",
+            "number": processing_count,
+
+        },
+        {
+            "tag": "Accepted",
+            "number": accepted_count,
+        },
+        {
+            "tag": "Rejected",
+            "number": rejected_count,
+        },
+    ]
+
+    return jsonify(data), 200
+
+@report_bp.route('/stats/reports', methods=['GET'])
 def reports_stats():
     #Leer parámetro y calcular rango
     days = int(request.args.get("days", 90))
