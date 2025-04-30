@@ -107,7 +107,7 @@ export function useMyReports() {
           method: "post",
           url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/logs`,
           body: {
-            action: "Banned a user with email: " + notification_email,
+            action: "Banned an user with email: " + notification_email,
             user_id: session?.user.id
           }
         }).then(() => {

@@ -1,21 +1,27 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Report, ReportsResponse, Filters } from "@/types/reports";
-import ReportAdminCard from "@/components/my-reports/ReportAdminCard";
+import { ReportsResponse, Filters } from "@/types/reports";
 import FadeIn from "@/components/fadeIn";
 import { ThreeDot } from "react-loading-indicators";
 import { useMyReports } from "@/hooks/useMyReports";
 
 import SortAndFilterButton from "@/components/my-reports/SortAndFilterButton";
 import SearchBar from "@/components/my-reports/SearchBar";
+import { Button } from "@/components/ui/button";
+
+import GridReports from "@/components/my-reports/GridReports";
+import TableReports from "@/components/my-reports/TableReports";
 
 
 // Función de fetch para useInfiniteQuery
 
 
 export default function MyReports() {
+
+  const [table, setTable] = useState(false);
+  const [tableButtonStyle, setTableButtonStyle] = useState<"ghost" | "outline">("ghost");
 
   const {
     toggleCheckbox,
@@ -126,61 +132,108 @@ export default function MyReports() {
   // @ts-expect-error typescript no typea correctamente data
   const allReports = data?.pages?.flatMap((page: ReportsResponse) => page.reports) ?? [];
 
+  function handleTableChange() {
+    setTable(!table);
+    if (table) {
+      setTableButtonStyle("ghost")
+    } else {
+      setTableButtonStyle("outline")
+    }
 
+  }
+
+  function RenderGrid() {
+    return (
+      <GridReports
+        allReports={allReports}
+        openPDF={openPDF}
+        banUser={banUser}
+        handleResolve={handleResolve}
+        deleteReportAndLog={deleteReportAndLog}
+      />
+    )
+  }
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
       <FadeIn duration={0.5}>
         <h1 className="text-center text-3xl font-bold mt-10">Reports</h1>
-      </FadeIn>
-      <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
-          {/* Search bar */}
-          <SearchBar
-            filterEmail={filterEmail}
-            setFilterEmail={setFilterEmail}
-            applyFilters={applyFilters}
-          />
+        <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
+          <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
+            {/* Search bar */}
+            <SearchBar
+              filterEmail={filterEmail}
+              setFilterEmail={setFilterEmail}
+              applyFilters={applyFilters}
+            />
 
-          {/* Sort & Filter button */}
-          <SortAndFilterButton
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            toggleCheckbox={toggleCheckbox}
-            isHateCheckBox={isHateCheckBox}
-            setIsHateCheckBox={setIsHateCheckBox}
-            notHateCheckBox={notHateCheckBox}
-            setNotHateCheckBox={setNotHateCheckBox}
-            processingCheckBox={processingCheckBox}
-            setProcessingCheckBox={setProcessingCheckBox}
-            acceptedCheckBox={acceptedCheckBox}
-            setAcceptedCheckBox={setAcceptedCheckBox}
-            rejectedCheckBox={rejectedCheckBox}
-            setRejectedCheckBox={setRejectedCheckBox}
-            applyFilters={applyFilters}
-            filtersCount={filtersCount}
-          />
+            {/* Sort & Filter button */}
+            <SortAndFilterButton
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              toggleCheckbox={toggleCheckbox}
+              isHateCheckBox={isHateCheckBox}
+              setIsHateCheckBox={setIsHateCheckBox}
+              notHateCheckBox={notHateCheckBox}
+              setNotHateCheckBox={setNotHateCheckBox}
+              processingCheckBox={processingCheckBox}
+              setProcessingCheckBox={setProcessingCheckBox}
+              acceptedCheckBox={acceptedCheckBox}
+              setAcceptedCheckBox={setAcceptedCheckBox}
+              rejectedCheckBox={rejectedCheckBox}
+              setRejectedCheckBox={setRejectedCheckBox}
+              applyFilters={applyFilters}
+              filtersCount={filtersCount}
+            />
+
+            <div className="hidden md:block">
+              <Button variant={tableButtonStyle} size="icon" onClick={handleTableChange}>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 9H21M3 15H21M9 9L9 20M15 9L15 20M6.2 20H17.8C18.9201 20 19.4802 
+                20 19.908 19.782C20.2843 19.5903 20.5903 19.2843 20.782 18.908C21 18.4802 21 
+                17.9201 21 16.8V7.2C21 6.0799 21 5.51984 20.782 5.09202C20.5903 4.71569 20.2843 
+                4.40973 19.908 4.21799C19.4802 4 18.9201 4 17.8 4H6.2C5.0799 4 4.51984 4 4.09202 
+                4.21799C3.71569 4.40973 3.40973 4.71569 3.21799 5.09202C3 5.51984 3 6.07989 3 
+                7.2V16.8C3 17.9201 3 18.4802 3.21799 18.908C3.40973 19.2843 3.71569 19.5903 4.09202 
+                19.782C4.51984 20 5.07989 20 6.2 20Z" stroke="#000000" strokeWidth="2" strokeLinecap="round"
+                    strokeLinejoin="round">
+                  </path>
+                </svg>
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
 
+      </FadeIn>
       {
         allReports && allReports.length > 0 ? (
           <>
             <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
               {/* Grid con los reportes */}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {allReports.map((report: Report) => (
-                  <FadeIn key={report._id.$oid}>
-                    <ReportAdminCard
-                      report={report}
-                      onDelete={() => deleteReportAndLog(report._id.$oid)}
-                      openPDF={() => openPDF(report)}
-                      banUser={() => banUser(report.notification_email)}
-                      handleResolve={() => handleResolve(report._id.$oid, report.notification_email)}
-                    />
-                  </FadeIn>
-                ))}
+
+
+              <div className="block md:hidden">
+
+                <RenderGrid />
+
               </div>
+              {table ? (
+                <div className="hidden md:block">
+                  <TableReports
+                    allReports={allReports}
+                    openPDF={openPDF}
+                    banUser={banUser}
+                    handleResolve={handleResolve}
+                    deleteReportAndLog={deleteReportAndLog}
+                  />
+                </div>
+              ) : (
+                <div className="hidden md:block">
+                  <RenderGrid />
+                </div>
+              )
+              }
+
             </div>
           </>
 
@@ -212,3 +265,5 @@ export default function MyReports() {
     </div>
   );
 }
+
+

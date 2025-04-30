@@ -100,8 +100,8 @@ export function useReport() {
     }
 
     try {
-      const { data } = await axios.post("/api/analyze", formData);
-      if (data.status === 200) {
+      const res = await axios.post("/api/analyze", formData);
+      if (res.status === 200) {
         Swal.fire({
           title: 'Email sent!',
           text: 'The analisis will be sent to your email',
@@ -151,9 +151,8 @@ export function useReport() {
 
     try {
 
-      const { data } = await axios.post("/api/analyze", formData);
-      console.log(data.status)
-      if (data.status === 200) {
+      const res = await axios.post("/api/analyze", formData);
+      if (res.status === 200) {
         Swal.fire({
           title: 'Email sent!',
           text: 'The analisis will be sent to your email',
@@ -205,8 +204,8 @@ export function useReport() {
 
     try {
 
-      const { data } = await axios.post("/api/analyze", formData);
-      if (data.status === 200) {
+      const res = await axios.post("/api/analyze", formData);
+      if (res.status === 200) {
         Swal.fire({
           title: 'Email sent!',
           text: 'The analisis will be sent to your email',
