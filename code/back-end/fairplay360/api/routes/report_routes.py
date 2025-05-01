@@ -257,7 +257,7 @@ def hate_statistics():
             "number": hate_count,
         },
         {
-            "tag": "Not Hate",
+            "tag": "Not_Hate",
             "number": not_hate_count,
         }
     ]
