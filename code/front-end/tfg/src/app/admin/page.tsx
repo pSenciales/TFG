@@ -36,7 +36,7 @@ export default function AdminPortal() {
       icon: <FileText size={32} className="text-indigo-600" />,
     },
     {
-      href: "/admin/users",
+      href: "/admin/banned",
       title: "Banned Users",
       description: "View and unban users",
       icon: <Users size={32} className="text-green-600" />,
