@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { Report } from "@/types/reports";
 import DropdownActions from "@/components/my-reports/DropdownActions";
 import TruncateText from "@/components/my-reports/TruncateText";

@@ -35,7 +35,6 @@ import {
 } from "@/components/ui/select"
 
 export default function ReportsResolutionsChart() {
-  const [chartData, setChartData] = useState<ReportsResolutionsChartData[]>([]);
   const [days, setDays] = useState<string>("7");
   async function fetchData(): Promise<ReportsResolutionsChartData[]> {
     try {
