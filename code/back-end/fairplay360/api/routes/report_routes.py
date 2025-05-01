@@ -253,11 +253,11 @@ def hate_statistics():
 
     data = [
         {
-          "Tag": "Hate",
+          "tag": "Hate",
             "number": hate_count,
         },
         {
-            "Tag": "Not Hate",
+            "tag": "Not Hate",
             "number": not_hate_count,
         }
     ]
