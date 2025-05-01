@@ -314,6 +314,47 @@ def status_statistics_chart():
 
     return jsonify(data), 200
 
+@report_bp.route('/stats/registered', methods=['GET'])
+def status_statistics_chart():
+    # Parseamos days
+    try:
+        days = int(request.args.get('days', 7))
+    except ValueError:
+        return jsonify({"error": "Invalid 'days' parameter"}), 400
+
+    # Rango de fechas
+    end = datetime.now(UTC)
+    start = end - timedelta(days=days)
+
+    # Conteos para cada status
+    registered_count = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end,
+        user_id__exists=True
+    ).count()
+
+    # Informes de usuarios no registrados (no tienen user_id)
+    unregistered_count = Report.objects(
+        created_at__gte=start,
+        created_at__lte=end,
+        user_id__exists=False
+    ).count()
+
+    # Formateamos array para el grafico
+    data = [
+        {
+            "tag": "Registered",
+            "number": registered_count,
+
+        },
+        {
+            "tag": "Unregistered",
+            "number": unregistered_count,
+        }
+    ]
+
+    return jsonify(data), 200
+
 @report_bp.route('/stats/reports', methods=['GET'])
 def reports_stats():
     #Leer parámetro y calcular rango
