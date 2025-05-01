@@ -265,7 +265,7 @@ def hate_statistics():
     return jsonify(data), 200
 
 @report_bp.route('/stats/status', methods=['GET'])
-def status_statistics_chart():
+def status_statistics():
     # Parseamos days
     try:
         days = int(request.args.get('days', 7))
@@ -315,7 +315,7 @@ def status_statistics_chart():
     return jsonify(data), 200
 
 @report_bp.route('/stats/registered', methods=['GET'])
-def status_statistics_chart():
+def registerd_statistics():
     # Parseamos days
     try:
         days = int(request.args.get('days', 7))
