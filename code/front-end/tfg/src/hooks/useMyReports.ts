@@ -51,14 +51,17 @@ export function useMyReports() {
     statuses: ["processing", "accepted", "rejected"] as string[],
   });
 
-  async function deleteReport(reportId: string): Promise<number | undefined> {
+  async function deleteReport(reportId: string, role: string): Promise<number | undefined> {
     try {
       const { status } = await axios.post("/api/proxy", {
         method: "delete",
         url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/${reportId}`,
       });
 
-      queryClient.invalidateQueries({ queryKey: ["reports"] });
+      if(role === "user"){
+
+        queryClient.invalidateQueries({ queryKey: ["reports"] });
+      }
 
       return status;
     } catch (error) {
@@ -69,7 +72,7 @@ export function useMyReports() {
   async function deleteReportAndLog(reportId: string): Promise<void> {
     try {
 
-      const statusDelete = await deleteReport(reportId);
+      const statusDelete = await deleteReport(reportId, "admin");
 
       if (statusDelete === 200) {
         await axios.post("/api/proxy", {
@@ -80,6 +83,7 @@ export function useMyReports() {
             user_id: session?.user.id
           }
         });
+        queryClient.invalidateQueries({ queryKey: ["reportsAdmin"] });
       }
     } catch (error) {
       console.error("Error deleting report", error);
@@ -166,7 +170,7 @@ export function useMyReports() {
 
     if (result.isConfirmed && result.value) {
       Swal.fire("Saved!", "Resolution saved.", "success");
-      queryClient.invalidateQueries({ queryKey: ["reports"] });
+      queryClient.invalidateQueries({ queryKey: ["reportsAdmin"] });
     }
   }
 

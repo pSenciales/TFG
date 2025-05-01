@@ -137,7 +137,7 @@ export default function NavBar() {
                 </DropdownMenuItem>
                 {session.role === "admin" ? (
                   <DropdownMenuItem >
-                  <Link href={"/admin/reports"}>Admin Portal</Link>
+                  <Link href={"/admin"}>Admin Portal</Link>
                 </DropdownMenuItem>
                 ) :
                   (

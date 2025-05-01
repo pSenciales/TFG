@@ -36,7 +36,7 @@ export default function Step2({
       >
         <Image src="/left-arrow.svg" alt="Back" width="20" height="20" /> All log in options
       </Button>
-      <div className="grid gap-5">
+      <form className="grid gap-5">
         <div>
           <Label>Email</Label>
           <Input
@@ -86,7 +86,7 @@ export default function Step2({
           'Log in with email'
         )}
         </Button>
-      </div>
+      </form>
     </div>
   );
 }

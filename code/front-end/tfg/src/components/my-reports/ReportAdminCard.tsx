@@ -24,8 +24,6 @@ interface ReportCardProps {
 export default function ReportAdminCard({ report, onDelete, openPDF, banUser, handleResolve }: ReportCardProps) {
 
 
-    const imageUrl = "/logo-no-bg.png";
-
     const dateString = new Date(report.created_at.$date).toDateString();
     const stateColor = report.state === "processing" ? "bg-yellow-600" : report.state === "accepted" ? "bg-green-600" : "bg-red-600";
 
@@ -35,15 +33,6 @@ export default function ReportAdminCard({ report, onDelete, openPDF, banUser, ha
 
     return (
         <div className="flex items-center w-[100%] max-h-xl rounded-lg border border-gray-200 bg-white shadow p-3 space-x-3 relative">
-            <div className="w-24 h-16 relative overflow-hidden rounded-md">
-                <Image
-                    src={imageUrl}
-                    alt="Report image"
-                    fill
-                    className="object-cover"
-                />
-            </div>
-
             <div className="flex-1 flex flex-col justify-center">
                 <div className="flex items-start gap-2">
                     <span className="inline-block bg-gray-800 text-white text-xs font-medium px-2 py-0.5 rounded-md">

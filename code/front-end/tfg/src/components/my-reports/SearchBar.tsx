@@ -9,15 +9,21 @@ interface SearchBarProps {
 }
 
 
-export default function SearchBar(
-    {
-        filterEmail,
-        setFilterEmail,
-        applyFilters
-    }: SearchBarProps) {
+export default function SearchBar({
+    filterEmail,
+    setFilterEmail,
+    applyFilters
+}: SearchBarProps) {
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        if (applyFilters) {
+            applyFilters(); 
+        }
+    };
 
     return (
-        <div className="flex-1 md:flex-none">
+        <form className="flex-1 md:flex-none" onSubmit={handleSubmit}>
             <Label><p>Search by email</p></Label>
             <div className="relative w-full mt-1">
                 <Input
@@ -28,10 +34,9 @@ export default function SearchBar(
                     onChange={(e) => { setFilterEmail(e.target.value) }}
                 />
                 <button
-                    type="button"
+                    type="submit" // Change to "submit" to allow Enter key to trigger the form
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                     aria-label="Search"
-                    onClick={applyFilters}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +54,6 @@ export default function SearchBar(
                     </svg>
                 </button>
             </div>
-        </div>
-    )
+        </form>
+    );
 }

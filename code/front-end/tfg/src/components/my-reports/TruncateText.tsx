@@ -6,13 +6,14 @@ interface TruncateTextProps {
 
 
 
-export default function TruncateText({text}:TruncateTextProps){
-    return (
-        <>
-        <span className="sm:hidden">{text.length <= 11 ? text : text.slice(0, 8) + "..."}</span>
-                        <span className="hidden xs:inline sm:hidden">{text.length <= 18 ? text : text.slice(0, 15) + "..."}</span>
-                        <span className="hidden sm:inline md:hidden">{text.length <= 21 ? text : text.slice(0, 18) + "..."}</span>
-                        <span className="hidden md:inline lg:hidden">{text.length <= 15 ? text : text.slice(0, 14) + "..."}</span>
-                        <span className="hidden lg:inline">{text.length <= 18 ? text : text.slice(0, 21) + "..."}</span></>
-    )
+export default function TruncateText({ text }: TruncateTextProps) {
+  return (
+    <>
+      <span className="xs:inline sm:hidden">{text.length <= 22 ? text : text.slice(0, 25) + "..."}</span>
+      <span className="hidden sm:inline md:hidden">{text.length <= 62 ? text : text.slice(0, 65) + "..."}</span>
+      <span className="hidden md:inline lg:hidden">{text.length <= 27 ? text : text.slice(0, 30) + "..."}</span>
+      <span className="hidden lg:inline xl:hidden">{text.length <= 47 ? text : text.slice(0, 50) + "..."}</span>
+      <span className="hidden xl:inline">{text.length <= 32 ? text : text.slice(0, 35) + "..."}</span>
+      </>
+  )
 }

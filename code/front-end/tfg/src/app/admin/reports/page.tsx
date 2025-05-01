@@ -20,6 +20,7 @@ import TableReports from "@/components/my-reports/TableReports";
 
 export default function MyReports() {
 
+
   const [table, setTable] = useState(false);
   const [tableButtonStyle, setTableButtonStyle] = useState<"ghost" | "outline">("ghost");
 
@@ -52,7 +53,7 @@ export default function MyReports() {
 
   } = useMyReports();
 
-  type ReportsQueryKey = ["reports", Filters];
+  type ReportsQueryKey = ["reportsAdmin", Filters];
 
   // useInfiniteQuery<TQueryFnData, TError, TData, TQueryKey, TPageParam>
   const {
@@ -70,7 +71,7 @@ export default function MyReports() {
     number           // TPageParam: el tipo de pageParam
   >({
     queryKey: [
-      "reports",
+      "reportsAdmin",
       {
         email: session?.user.email,
         provider: session?.provider,
@@ -207,43 +208,45 @@ export default function MyReports() {
       </FadeIn>
       {
         allReports && allReports.length > 0 ? (
-          <>
-            <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
-              {/* Grid con los reportes */}
+          <FadeIn>
+
+            <>
+              <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
+                {/* Grid con los reportes */}
 
 
-              <div className="block md:hidden">
+                <div className="block md:hidden">
 
-                <RenderGrid />
+                  <RenderGrid />
+
+                </div>
+                {table ? (
+                  <div className="hidden md:block">
+                    <TableReports
+                      allReports={allReports}
+                      openPDF={openPDF}
+                      banUser={banUser}
+                      handleResolve={handleResolve}
+                      deleteReportAndLog={deleteReportAndLog}
+                    />
+                  </div>
+                ) : (
+                  <div className="hidden md:block">
+                    <RenderGrid />
+                  </div>
+                )
+                }
 
               </div>
-              {table ? (
-                <div className="hidden md:block">
-                  <TableReports
-                    allReports={allReports}
-                    openPDF={openPDF}
-                    banUser={banUser}
-                    handleResolve={handleResolve}
-                    deleteReportAndLog={deleteReportAndLog}
-                  />
-                </div>
-              ) : (
-                <div className="hidden md:block">
-                  <RenderGrid />
-                </div>
-              )
-              }
-
-            </div>
-          </>
+            </>
+          </FadeIn>
 
         ) : (
           <FadeIn>
-            <div>
-              <h1 className="font-bold text-xl w-full">Oops! There are not any reports right now...😅 </h1>
+            <div className="text-center">
+              <h1 className="font-bold text-xl w-full">Oops! It looks like there are not any reports righ now...😅</h1>
             </div>
           </FadeIn>
-
         )
       }
 

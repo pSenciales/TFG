@@ -158,7 +158,7 @@ export default function MyReports() {
 
       {
         allReports && allReports.length > 0 ? (
-
+          
           <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
 
 
@@ -168,7 +168,7 @@ export default function MyReports() {
                 <FadeIn key={report._id.$oid}>
                   <ReportCard
                     report={report}
-                    onDelete={() => deleteReport(report._id.$oid)}
+                    onDelete={() => deleteReport(report._id.$oid, "user")}
                     openPDF={() => openPDF(report)}
                   />
                 </FadeIn>
