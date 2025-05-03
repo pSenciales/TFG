@@ -366,13 +366,16 @@ def reports_stats():
     qs = Report.objects(
         created_at__gte=start,
         created_at__lte=end
-    ).only("created_at", "resolutions.created_at")
+    ).only("created_at")
+    qs_all = Report.objects().only("resolutions.created_at")
 
     #Construir listas de fechas
     report_dates = []
     resolution_dates = []
     for rpt in qs:
         report_dates.append({"date": rpt.created_at})
+        
+    for rpt in qs_all:
         for res in rpt.resolutions:
             dt = res.created_at
             # si viene con tz, lo hacemos naive UTC
