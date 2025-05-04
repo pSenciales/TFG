@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { Users, FileText, PieChart } from "lucide-react";
+import FadeIn  from "@/components/fadeIn";
 
 export default function AdminPortal() {
   const { data: session } = useSession();
@@ -51,7 +52,9 @@ export default function AdminPortal() {
 
   return (
     <div className="p-8 space-y-16">
-      <h1 className="text-4xl font-bold text-center">Admin Portal</h1>
+      <FadeIn>
+
+      <h1 className="text-4xl font-bold text-center my-10">Admin Portal</h1>
 
       <BentoGrid className="gap-8">
         {cards.map((card) => (
@@ -67,7 +70,7 @@ export default function AdminPortal() {
       </BentoGrid>
 
       {/* Pie de página con hora en vivo */}
-      <div className="mt-12 text-center text-sm text-gray-500 space-y-1">
+      <div className="mt-8 text-center text-sm text-gray-500 space-y-1">
         {session?.user?.email && (
           <p>
             Logged in as <strong>{session.user.email}</strong>
@@ -79,19 +82,8 @@ export default function AdminPortal() {
             {now.toLocaleTimeString()}
           </time>
         </p>
-        <p>
-          Need help? Visit our{" "}
-          <a
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline"
-          >
-            Help Center
-          </a>
-          .
-        </p>
       </div>
+      </FadeIn>
     </div>
   );
 }

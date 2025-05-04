@@ -7,19 +7,16 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           {/* Texto o logo */}
           <p className="text-sm text-gray-600">
-            © 2025 Fairplay360. Todos los derechos reservados.
+            © 2025 Fairplay360. All rights reserved.
           </p>
 
           {/* Enlaces */}
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <a href="#" className="text-gray-600 hover:text-gray-900 text-sm">
-              Términos
+            <a href="https://www.freeprivacypolicy.com/live/71ee38ba-fd54-43ff-a3fe-64f616041573" className="text-gray-600 hover:text-gray-900 text-sm">
+              Privacity Policy
             </a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 text-sm">
-              Privacidad
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 text-sm">
-              Contacto
+            <a href="/contact" className="text-gray-600 hover:text-gray-900 text-sm">
+              Contact
             </a>
           </div>
         </div>

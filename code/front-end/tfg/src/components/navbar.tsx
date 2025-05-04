@@ -32,12 +32,36 @@ import {
 
 // Sub-elementos para el menú de "Documentación"
 const docComponents = [
-  { title: "Modelo de lenguaje", href: "*", description: "Usamos *" },
-  { title: "OCR", href: "*", description: "La trascripción de imagen a texto con *" },
-  { title: "Front-end", href: "*", description: "Next.js como tecnología de presentación" },
-  { title: "Back-end", href: "*", description: "Fast-API como tecnología de *" },
-  { title: "Arquitectura", href: "*", description: "Arquitectura en microservicios" },
-  { title: "Base de datos", href: "*", description: "MongoDB como base de datos" },
+  {
+    title: "LLM",
+    href: "https://api-docs.deepseek.com/news/news250120",
+    description: "We use the DeepSeek R1 API to analyze content and detect hate speech.",
+  },
+  {
+    title: "OCR",
+    href: "https://cloud.google.com/vision/docs?hl=es-419",
+    description: "We rely on the Google Vision API for optical character recognition.",
+  },
+  {
+    title: "Front-end",
+    href: "https://nextjs.org/docs",
+    description: "Next.js powers our front-end, with key functionality provided by its built-in server.",
+  },
+  {
+    title: "Back-end",
+    href: "https://flask.palletsprojects.com/en/stable/",
+    description: "Flask serves as our back-end framework.",
+  },
+  {
+    title: "ORM",
+    href: "https://docs.mongoengine.org/",
+    description: "MongoEngine offers powerful ORM features, making data modeling simple.",
+  },
+  {
+    title: "Database",
+    href: "https://www.mongodb.com/docs/",
+    description: "We use MongoDB for its flexibility and scalability.",
+  },
 ];
 
 
@@ -104,7 +128,7 @@ export default function NavBar() {
               {/* Contacto: enlace simple */}
               <NavigationMenuItem>
                 <Link href="/contact" className={navigationMenuTriggerStyle()}>
-                  Contacto
+                  Contact
                 </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -187,7 +211,7 @@ export default function NavBar() {
                 onClick={() => setDocOpen((prev) => !prev)}
                 className="w-full text-left block p-2 hover:bg-gray-100 rounded"
               >
-                Documentación
+                Docs
               </button>
               {docOpen && (
                 <ul className="pl-4 mt-1 space-y-1">
@@ -212,7 +236,7 @@ export default function NavBar() {
                 onClick={() => setMenuOpen(false)}
                 className="block p-2 hover:bg-gray-100 rounded"
               >
-                Contacto
+                Contact
               </Link>
             </li>
           </ul>
