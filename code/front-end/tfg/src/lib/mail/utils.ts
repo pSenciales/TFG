@@ -4,6 +4,7 @@ import welcomeTemplate from "@/lib/mail/templates/welcome";
 import otpTemplate from "@/lib/mail/templates/otp";
 import statusTemplate from "@/lib/mail/templates/status";
 import pdfReportTemplate from "@/lib/mail/templates/pdfReport";
+import resetPasswordTemplete from "@/lib/mail/templates/resetPassword";
 import otpGenerator from "otp-generator";
 import jwt from "jsonwebtoken";
 
@@ -11,7 +12,8 @@ const templates: Record<string, string> = {
     welcome: welcomeTemplate,
     otp: otpTemplate,
     status: statusTemplate,
-    pdfReport: pdfReportTemplate
+    pdfReport: pdfReportTemplate,
+    resetPassword: resetPasswordTemplete
 };
 
 export function compileTemplate(templateName: string, params: Record<string, unknown>) {

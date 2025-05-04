@@ -59,7 +59,7 @@ export default function Step2({
       >
         <Image src="/left-arrow.svg" alt="Back" width="20" height="20" /> All sign up options
       </Button>
-      <div className="grid gap-5">
+      <form className="grid gap-5">
         <div>
           <Label>Email</Label>
           <Input
@@ -140,7 +140,7 @@ export default function Step2({
             {password !== repeatPassword && <p>Passwords do not match.</p>}
           </Button>
         )}
-      </div>
+      </form>
     </div>
   );
 }

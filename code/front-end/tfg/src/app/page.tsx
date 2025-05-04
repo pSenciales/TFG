@@ -65,7 +65,7 @@ export default function Home() {
               perspective={10}
             >
               <RotatingText
-                texts={["Analize", "Report", "Fairplay"]}
+                texts={["Analyze", "Report", "Fairplay"]}
                 mainClassName="w-full text-black text-3xl font-bold overflow-hidden py-1 text-center"
                 staggerFrom="last"
                 initial={{ y: "100%" }}

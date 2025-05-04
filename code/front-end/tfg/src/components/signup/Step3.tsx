@@ -7,11 +7,12 @@ type Step3Props = {
     error: string;
     setOtp: (otp: string) => void;
     handleVerify: () => void;
+    loading: boolean;
 };
 
-export default function Step3({ error, setOtp, handleVerify }: Step3Props) {
+export default function Step3({ error, setOtp, handleVerify, loading }: Step3Props) {
     return (
-        <div className="grid justify-center">
+        <form className="grid justify-center">
             <h1 className="text-md">You should have received a code in your mail!</h1>
             <div className="grid justify-center mt-20 mb-10">
                 <InputOTP
@@ -33,7 +34,7 @@ export default function Step3({ error, setOtp, handleVerify }: Step3Props) {
                 </InputOTP>
             </div>
             {error && <div className="text-red-500 text-center mb-2">{error}</div>}
-            <Button onClick={handleVerify}>Verify</Button>
-        </div>
+            <Button disabled={loading} onClick={handleVerify} >Verify</Button>
+        </form>
     );
 }

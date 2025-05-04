@@ -28,36 +28,36 @@ export default function Login() {
             </FadeIn>
             <FadeIn key={step} duration={0.5}>
                 <div className="mx-2">
-                <Card className="max-w-xl mx-auto mt-10">
-                    <MagicCard gradientColor="#D9D9D955">
-                        <CardHeader />
-                        <CardContent>
-                            {step === 1 && (
-                                <Step1
-                                    setStep={setStep}
-                                    setEmail={setEmail}
-                                    setPassword={setPassword}
-                                />
-                            )}
-                            {step === 2 && (
-                                <Step2
-                                    setStep={setStep}
-                                    setEmail={setEmail}
-                                    setPassword={setPassword}
-                                    email={email}
-                                    password={password}
-                                    handleLogin={handleLogin}
-                                    errorLogin={errorLogin}
-                                    disabled={disabled}
-                                    loading={loading}
-                                />
-                            )}
-                        </CardContent>
-                        <CardFooter className="grid">
-                            <LoginFooter />
-                        </CardFooter>
-                    </MagicCard>
-                </Card>
+                    <Card className="max-w-xl mx-auto mt-10">
+                        <MagicCard gradientColor="#D9D9D955">
+                            <CardHeader />
+                            <CardContent>
+                                {step === 1 && (
+                                    <Step1
+                                        setStep={setStep}
+                                        setEmail={setEmail}
+                                        setPassword={setPassword}
+                                    />
+                                )}
+                                {step === 2 && (
+                                    <Step2
+                                        setStep={setStep}
+                                        setEmail={setEmail}
+                                        setPassword={setPassword}
+                                        email={email}
+                                        password={password}
+                                        handleLogin={handleLogin}
+                                        errorLogin={errorLogin}
+                                        disabled={disabled}
+                                        loading={loading}
+                                    />
+                                )}
+                            </CardContent>
+                            <CardFooter className="grid">
+                                <LoginFooter />
+                            </CardFooter>
+                        </MagicCard>
+                    </Card>
                 </div>
             </FadeIn>
         </div>

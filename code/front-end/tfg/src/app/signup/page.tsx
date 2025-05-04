@@ -92,7 +92,7 @@ export default function Register() {
                                     />
                                 )}
                                 {step === 3 && (
-                                    <Step3 error={error} setOtp={setOtp} handleVerify={handleVerify} />
+                                    <Step3 error={error} setOtp={setOtp} handleVerify={handleVerify} loading={loading}/>
                                 )}
                                 {step === 4 && (
                                     <Step4
@@ -102,6 +102,7 @@ export default function Register() {
                                         birthday={birthday}
                                         isOldEnough={isOldEnough}
                                         handleCreateAccount={handleCreateAccount}
+                                        loading={loading}
                                     />
                                 )}
                             </CardContent>

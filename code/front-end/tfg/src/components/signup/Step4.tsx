@@ -10,6 +10,7 @@ type Step4Props = {
   birthday: string;
   isOldEnough: boolean;
   handleCreateAccount: () => void;
+  loading: boolean;
 };
 
 export default function Step4({
@@ -19,9 +20,10 @@ export default function Step4({
   birthday,
   isOldEnough,
   handleCreateAccount,
+  loading
 }: Step4Props) {
   return (
-    <div className="grid gap-4">
+    <form className="grid gap-4">
       <h1 className="text-md mb-5">Complete your profile</h1>
       <Label>Name</Label>
       <Input
@@ -39,11 +41,11 @@ export default function Step4({
       )}
       <Button
         className="mt-10"
-        disabled={!isOldEnough || birthday === "" || name === ""}
+        disabled={!isOldEnough || birthday === "" || name === "" || loading}
         onClick={handleCreateAccount}
       >
         Create account
-      </Button>
-    </div>
+      </Button >
+    </form>
   );
 }

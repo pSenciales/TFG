@@ -5,7 +5,7 @@ import os
 import jwt
 
 
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+JWT_SECRET_KEY = os.environ["JWT_SECRET"]
 
 user_bp = Blueprint('user_routes', __name__, url_prefix='/users')
 
@@ -89,12 +89,12 @@ def reset_password():
         return missing
 
     jwt_recibed = data.get('jwt', '')
-
+    email = ""
     try:
         decoded = jwt.decode(jwt_recibed, JWT_SECRET_KEY, algorithms=["HS256"])
         if not isinstance(decoded, dict):
             raise ValueError("Invalid token")
-        return decoded.get("mail")
+        email = decoded.get("email")
     except jwt.ExpiredSignatureError:
         return jsonify({"error": "Token expired"}), 401
     except jwt.InvalidTokenError:
@@ -113,7 +113,7 @@ def reset_password():
 
 @user_bp.route('/email/<user_email>', methods=['GET'])
 def get_user_by_email(user_email):
-    user = User.objects(email=user_email).first()
+    user = User.objects(email=user_email, provider='credentials').first()
     blacklisted = Blacklist.objects(email=user_email).first()
     if blacklisted:
         return success("User banned", 200)

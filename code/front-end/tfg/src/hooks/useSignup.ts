@@ -30,7 +30,7 @@ export function useSignup() {
   const [disabledPw, setDisabledPw] = useState(true);
   const [passwordCheck, setPasswordCheck] = useState("");
   const [emailCheck, setEmailCheck] = useState("");
-  
+
 
   // Estados para loading y error
   const [loading, setLoading] = useState(false);
@@ -60,14 +60,14 @@ export function useSignup() {
     const newEmail = e.target.value;
     setEmail(newEmail);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(emailRegex.test(newEmail)){
+    if (emailRegex.test(newEmail)) {
       setDisabledEmail(false);
       setEmailCheck("")
-    }else{
+    } else {
       setEmailCheck("This is not a valid email");
       setDisabledEmail(true);
     }
-    
+
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,17 +124,17 @@ export function useSignup() {
     setCaptchaToken("");
     recaptchaRef.current?.reset();
   };
-  
+
   const handleContinue = async (captchaTokenGenerated: string | null) => {
     setDisabled(true);
     setLoading(true);
     try {
       const response = await axios.get(`${FLASK_URL}/users/email/${email}`);
       console.log(response.data);
-     
-      
+
+
       const { success } = response.data;
-      
+
       switch (success) {
         case "User found": {
           toast.warning("Email already in use", {
@@ -147,7 +147,7 @@ export function useSignup() {
           resetVerification();
           break;
         }
-      
+
         case "User banned": {
           toast.error("Email not allowed", {
             description: `${email} is banned`,
@@ -155,13 +155,13 @@ export function useSignup() {
           resetVerification();
           break;
         }
-      
+
         case "User not found": {
           await handleSendEmail(captchaTokenGenerated, null);
           setStep(3);
           break;
         }
-      
+
         default:
           console.warn("Unhandled response:", success);
       }
@@ -174,6 +174,7 @@ export function useSignup() {
 
   const handleVerify = async () => {
     try {
+      setLoading(true);
       const { status } = await axios.post("/api/send-email/otp/verify", {
         token: otpToken,
         mail: email,
@@ -190,27 +191,42 @@ export function useSignup() {
       } else {
         setError("An error occurred. Please try again later.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleCreateAccount = async () => {
-    await axios.post(`${FLASK_URL}/users`, {
-      name,
-      password,
-      email,
-      provider: "credentials",
-      captchaJWT,
-      captchaToken,
-    },{
-      headers: {
-        "Content-Type": "application/json",
+    setLoading(true);
+    try {
+      await axios.post(`${FLASK_URL}/users`, {
+        name,
+        password,
+        email,
+        provider: "credentials",
+        captchaJWT,
+        captchaToken,
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+
+      signIn("credentials", {
+        email: email,
+        password: password,
+      });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Error response:", error.response.data);
+        toast.error("An error occurred. Please try again later.");
+      } else {
+        console.error("Unexpected error:", error);
+        toast.error("An unexpected error occurred. Please try again later.");
       }
-    });
-    
-    signIn("credentials", {
-      email: email,
-      password: password,
-    });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChangeRecaptcha = (token: string | null) => {
