@@ -36,6 +36,7 @@ export default function ResetPasswordPage() {
         const { data } = await axios.get(`/api/check-jwt?jwt=${jwt}`)
         return data.status === "ok"
       } catch (error) {
+        console.log(error)
         return false
       }
     }
