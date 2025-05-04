@@ -104,7 +104,7 @@ def verify():
 
 @app.before_request
 def check_access_token():
-    if request.path == "/login" or request.path.startswith("/users/email") or request.method == "OPTIONS":
+    if request.path == "/login" or request.path.startswith("/users/email") or request.method == "OPTIONS" or request.path.startswith("/users/reset-password"):
         return
     print(request.method)
     data = {}
