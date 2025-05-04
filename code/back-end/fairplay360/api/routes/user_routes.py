@@ -1,6 +1,12 @@
 from flask import Blueprint, request
 from api.model import User, Report, Blacklist
 from api.utils import *
+import os
+import jwt
+
+
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+
 user_bp = Blueprint('user_routes', __name__, url_prefix='/users')
 
 @user_bp.route('/', methods=['POST'])
@@ -74,6 +80,36 @@ def update_user(user_id):
 
     user.save()
     return success("User updated", 200)
+
+@user_bp.route('/reset-password', methods=['PUT'])
+def reset_password():
+
+    data = request.get_json()
+    if missing := missing_fields(['password', 'jwt'], data):
+        return missing
+
+    jwt_recibed = data.get('jwt', '')
+
+    try:
+        decoded = jwt.decode(jwt_recibed, JWT_SECRET_KEY, algorithms=["HS256"])
+        if not isinstance(decoded, dict):
+            raise ValueError("Invalid token")
+        return decoded.get("mail")
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "Token expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"error": f"Invalid token"}), 400
+
+    user = User.objects(email=email, provider="credentials").first()
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    new_password = data.get('password', '')
+    user.set_password(new_password)
+    user.save()
+
+    return success("User updated", 200)
+
 
 @user_bp.route('/email/<user_email>', methods=['GET'])
 def get_user_by_email(user_email):

@@ -24,7 +24,6 @@ app.register_blueprint(log_bp)
 app.register_blueprint(blacklist_bp)
 
 
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
