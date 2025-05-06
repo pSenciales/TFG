@@ -42,9 +42,10 @@ export default function ProfilePage() {
     const email = user.email ?? "No Email";
 
     return (
-        <main className="min-h-screen flex items-center justify-center p-6">
+        <main className="flex items-center justify-center p-6">
             <FadeIn>
-                <Card className="w-full max-w-sm shadow-xl rounded-xl">
+                <h1 className="text-center text-3xl font-bold my-10">Profile</h1>
+                <Card className="w-full mx-auto max-w-sm shadow-xl rounded-xl">
                     <CardHeader className="flex flex-col items-center pt-6">
                         <Avatar className="w-24 h-24 ring-2 ring-primary ring-offset-2">
                             {user.image ? (
@@ -105,7 +106,7 @@ export default function ProfilePage() {
 
                     </CardFooter>
                 </Card>
-                </FadeIn>
+            </FadeIn>
         </main>
     );
 }

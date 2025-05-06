@@ -169,10 +169,7 @@ export default function NavBar() {
                     </>
                   )}
                 <DropdownMenuItem>
-                  Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Settings
+                <Link href={"/profile"}>Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()}>
