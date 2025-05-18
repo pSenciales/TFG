@@ -119,7 +119,7 @@ export async function handleAnalyzePost(formData: FormData): Promise<NextRespons
         const img = scrape?.data?.img as string;
         if (img) {
             const img_captioned = await caption(img) as unknown as { generated_text: string }[];
-            context += ` Also, an image captioned as: ${img_captioned[0]?.generated_text}`;
+            context += ` Also, an image captioned as: ${img_captioned}`;
         }
         try {
             const analyze = await analyzeHateSpeech(tweet, context);

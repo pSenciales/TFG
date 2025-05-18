@@ -66,25 +66,26 @@ export const ocr = async (url: string): Promise<JSON> => {
   });
 };
 
-export const caption = async (url: string): Promise<JSON> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { data } = await axios.post(
-        "https://router.huggingface.co/hf-inference/models/Salesforce/blip-image-captioning-base",
-        { image: url },
-        {
-          headers: {
-            'Content-Type': "application/json",
-            'Authorization': `Bearer ${process.env.HF_API_KEY}`
-          }
-        }
-      );
-      resolve(data as JSON);
-    } catch (error) {
-      console.error("Error in caption:", error);
-      reject(error);
-    }
-  });
+
+export const caption = async (url: string): Promise<string> => {
+  try {
+    const { data } = await axios.post(
+      "https://fairplay360-image-caption.cognitiveservices.azure.com/vision/v3.2/describe?maxCandidates=1",
+      { url: url }, 
+      {
+        headers: {
+          "Ocp-Apim-Subscription-Key": process.env.AZURE_VISION_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const caps = data.description.captions;
+    return caps.length > 0 ? caps[0].text : "";
+  } catch (err) {
+    console.error("❌ error calling HF image-to-text pipeline:", err);
+    throw err;
+  }
 };
+
 
 
