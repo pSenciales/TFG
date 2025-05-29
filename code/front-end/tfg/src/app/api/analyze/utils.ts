@@ -168,12 +168,17 @@ export async function checkBanned(email: string): Promise<boolean> {
     if (!email) {
         throw new Error("Email is required to check banned status");
     }
-
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/blacklist/email/${email}`);
-
-    const { success } = res.data;
-
-    return success === "User found" ? true : false;
+    try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/blacklist/email/${email}`);
+        const { success } = res.data;
+        return success === "User found" ? true : false;
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.error("Error checking banned status:", error.message);
+            throw new Error("Failed to check banned status");
+        }
+        throw error;
+    }
 }
 
 
