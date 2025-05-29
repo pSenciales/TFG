@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handleAnalyzeImage, handleAnalyzePost, handleAnalyzeText } from "./utils";
+import { handleAnalyzeImage, handleAnalyzePost, handleAnalyzeText, checkBanned } from "./utils";
 import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import verifySession, {verifyCaptchaToken} from "../middleware";
@@ -11,13 +11,19 @@ import jwt from "jsonwebtoken";
 
 export async function POST(req: NextRequest) {
     try {
-        
         const formData = await req.formData();
         const captchaToken = formData.get("captchaToken")
         const session = await getServerSession(authOptions);
         const token = await getToken({ req });
         let verified = {verification:false, error:""};	
+        
         if (captchaToken) {
+            const banned = await checkBanned(formData.get("email") as string);
+            
+            if (banned) {
+                return NextResponse.json({ error: "Email is banned" }, { status: 403 });
+            }
+
             verified = await verifyCaptchaToken(captchaToken as string);
         } else {
             verified = await verifySession(session, { ...token, exp: (token as JWTType)?.exp ?? 0 } as JWTType & { exp: number });
@@ -38,6 +44,8 @@ export async function POST(req: NextRequest) {
         );
         formData.append("captchaJWT", captchaJWT);
     }
+
+        
         switch (type) {
             case 'image': return await handleAnalyzeImage(formData);
             case 'text': return await handleAnalyzeText(formData);

@@ -163,5 +163,18 @@ async function createReport(content: string, context: string, source: string, re
     return res;
 }
 
+export async function checkBanned(email: string): Promise<Boolean> {
+
+    if (!email) {
+        throw new Error("Email is required to check banned status");
+    }
+
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/blacklist/email/${email}`);
+
+    const { success } = res.data;
+
+    return success === "User found" ? true : false;
+}
+
 
 

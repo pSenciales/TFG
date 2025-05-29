@@ -59,12 +59,11 @@ def delete_blacklist(email):
     blacklist.delete()
     return success("Blacklist deleted", 200)
 
-@blacklist_bp.route('/<email>', methods=['GET'])
+@blacklist_bp.route('/email/<email>', methods=['GET'])
 def get_one(email):
     blacklist = Blacklist.objects(email=email).first()
+    if not blacklist:
+        return success("User not found", 200)
+    return success("User found", 200)
 
-    if not_found := element_not_found(blacklist, "Blacklist not found"):
-        return not_found
-
-    return jsonify(blacklist), 200
 
