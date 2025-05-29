@@ -108,7 +108,6 @@ def check_access_token():
             or request.path.startswith("/blacklist/email") or
             request.method == "OPTIONS" or request.path.startswith("/users/reset-password")):
         return
-    print(request.method)
     data = {}
     if request.method != "GET" and request.method != "DELETE":
         data = request.json

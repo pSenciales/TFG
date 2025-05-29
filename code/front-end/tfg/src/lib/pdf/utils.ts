@@ -99,9 +99,9 @@ export async function generateReportPdf(
   const fontSize = 10;
 
   const marginLeft = 50;
-  const marginRightLogo = 150; 
+  const marginRightLogo = 150;
   const marginTop = 25;
-  
+
   const MarginRightText = 50;
   const availableWidthText = width - marginLeft - MarginRightText;
 
@@ -181,7 +181,7 @@ The Fairplay360 Team`;
     { label: "Result", value: result },
     { label: "Reasoning", value: reasoning },
   ];
-    y-=30;
+  y -= 30;
   for (const field of fields) {
     if (field.value.trim() !== "") {
       const headerSize = fontSize + 2;
@@ -196,12 +196,12 @@ The Fairplay360 Team`;
   const pdfBytes = await pdfDoc.save();
   /*
   * ----VERCEL---
-  const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
-  */ 
- /* ---LOCAL---
-  * 
   */
- const tempFilePath = path.join(process.cwd(), `temp_report_${Date.now()}.pdf`);
+  const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
+  /* ---LOCAL---
+   * 
+  const tempFilePath = path.join(process.cwd(), `temp_report_${Date.now()}.pdf`);
+  */
   fs.writeFileSync(tempFilePath, pdfBytes);
   return tempFilePath;
 }
@@ -233,8 +233,8 @@ export default async function generateAndSendPDF(
 
 
     );
-    return {message:"success", link: linkToPDF};
+    return { message: "success", link: linkToPDF };
   } catch (error) {
-    return {error:"Error al generar y enviar el PDF: " + error};
+    return { error: "Error al generar y enviar el PDF: " + error };
   }
 }

@@ -109,23 +109,7 @@ export function useReport() {
         })
       }
     } catch (error) {
-      if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
-        {
-          Swal.fire({
-            title: 'The session has expired!',
-            text: 'please log in again',
-            icon: 'warning'
-          })
-          signOut();
-          window.location.href = "/login";
-        }
-      } else {
-        Swal.fire({
-          title: 'Error!',
-          text: 'An error occurred while sending the analysis. Please try again later.',
-          icon: 'error'
-        })
-      }
+      showAlert(error);
     } finally {
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -160,28 +144,7 @@ export function useReport() {
         })
       }
     } catch (error) {
-      if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
-        Swal.fire({
-          title: 'The session has expired!',
-          text: 'please log in again',
-          icon: 'warning'
-        });
-        signOut();
-        window.location.href = "/login";
-      } else if (error instanceof AxiosError && error.status === 403 && error.response?.data.error === "Email is banned") {
-        Swal.fire({
-          title: 'Email is banned!',
-          text: 'Please contact support for more information.',
-          icon: 'error'
-        });
-      } else {
-        console.log(error);
-        Swal.fire({
-          title: 'Error!',
-          text: 'An error occurred while sending the analysis. Please try again later.',
-          icon: 'error'
-        });
-      }
+      showAlert(error);
     } finally {
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -218,23 +181,9 @@ export function useReport() {
 
       }
     } catch (error) {
-      if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
-        {
-          Swal.fire({
-            title: 'The session has expired!',
-            text: 'please log in again',
-            icon: 'warning'
-          })
-          signOut();
-          window.location.href = "/login";
-        }
-      } else {
-        Swal.fire({
-          title: 'Error!',
-          text: 'An error occurred while sending the analysis. Please try again later.',
-          icon: 'error'
-        })
-      }
+
+      showAlert(error);
+
     } finally {
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -242,6 +191,31 @@ export function useReport() {
       setLoading(false);
     }
   };
+
+  const showAlert = (error: unknown) => {
+    if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
+      Swal.fire({
+        title: 'The session has expired!',
+        text: 'please log in again',
+        icon: 'warning'
+      });
+      signOut();
+      window.location.href = "/login";
+    } else if (error instanceof AxiosError && error.status === 403 && error.response?.data.error === "Email is banned") {
+      Swal.fire({
+        title: 'Email is banned!',
+        text: 'Please contact support for more information.',
+        icon: 'warning'
+      });
+    } else {
+      console.log(error);
+      Swal.fire({
+        title: 'Error!',
+        text: 'An error occurred while sending the analysis. Please try again later.',
+        icon: 'error'
+      });
+    }
+  }
 
 
 
