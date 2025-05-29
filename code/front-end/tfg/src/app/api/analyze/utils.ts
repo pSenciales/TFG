@@ -163,7 +163,7 @@ async function createReport(content: string, context: string, source: string, re
     return res;
 }
 
-export async function checkBanned(email: string): Promise<Boolean> {
+export async function checkBanned(email: string): Promise<boolean> {
 
     if (!email) {
         throw new Error("Email is required to check banned status");
