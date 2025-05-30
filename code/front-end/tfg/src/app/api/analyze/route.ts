@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
         );
         formData.append("captchaJWT", captchaJWT);
     }
-
         
         switch (type) {
             case 'image': return await handleAnalyzeImage(formData);

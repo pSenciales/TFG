@@ -11,11 +11,18 @@ import { compileTemplate, sendMail } from "@/lib/mail/utils";
 export async function POST(req: NextRequest) {
     try {
 
-        console.log("POST /api/resolve")
+        
         const { resolution, reportId, state, email } = await req.json();
         const session = await getServerSession(authOptions);
         const token = await getToken({ req })
 
+        if(session?.role !== "admin") {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+        }
+        if(!resolution || !reportId || !state || !email) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
+        
         const verification = await verifySession(session, { ...token, exp: (token as JWTType)?.exp ?? 0 } as JWTType & { exp: number });
         if (!verification.verification) {
             return NextResponse.json({ error: verification.error }, { status: 401 });
