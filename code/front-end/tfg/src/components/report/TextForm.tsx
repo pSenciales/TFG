@@ -10,7 +10,10 @@ import FullScreenLoader from "./FullScreenLoader";
 import EmailDialog from "./EmailDialog";
 import FadeIn from "../fadeIn";
 
+import { useTranslations } from "next-intl";
+
 export default function TextForm() {
+  const t = useTranslations('reports');
 
   const {
     loading,
@@ -35,7 +38,7 @@ export default function TextForm() {
   return (
     <Card className="max-w-7xl">
       {loading && (
-        <FullScreenLoader words={["Adding context...", "Analyzing text...", "Generating report..."]} />
+        <FullScreenLoader words={[t('tabs.text.loading.text1'), t('tabs.text.loading.text2'), t('tabs.text.loading.text3')]} />
       )}
 
       <MagicCard gradientColor="#D9D9D955">
@@ -43,29 +46,29 @@ export default function TextForm() {
         <CardContent>
           <div>
             <Label>
-              Content <span className="text-red-500">&#42;</span>
+              {t('content.label')} <span className="text-red-500">&#42;</span>
             </Label>
             <Textarea
-              placeholder="Write your report here"
+              placeholder={t('content.placeholder')}
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
             <p className="text-sm text-muted-foreground">
-              This text will be analyzed and added to the report
+              {t('content.description')}
             </p>
           </div>
 
           <div className="mt-10">
             <Label>
-              Source <span className="text-red-500">&#42;</span>
+              {t('source.label')} <span className="text-red-500">&#42;</span>
             </Label>
             <Input
-              placeholder="e.g https://example.com"
+              placeholder={t('source.placeholder')}
               value={source}
               onChange={handleSourceChange}
             />
             <p className="text-sm text-muted-foreground">
-              This is the original source of the content, for example an URL
+              {t('source.description')}
             </p>
             {sourceCheck !== "" && (
               <FadeIn>
@@ -74,15 +77,15 @@ export default function TextForm() {
             )}
           </div>
 
-          <Label className="mt-10">Context</Label>
+          <Label className="mt-10">{t('context.label')}</Label>
           <Textarea
-            placeholder="Write the context here"
+            placeholder={t('context.placeholder')}
             className="peer-disabled:bg-gray-100"
             value={context}
             onChange={(e) => setContext(e.target.value)}
           />
           <p className="text-sm text-muted-foreground">
-            This text will be added as context to the report, making the result more accurate
+            {t('context.description')}
           </p>
           {!session ? (
             <EmailDialog
@@ -105,7 +108,7 @@ export default function TextForm() {
               className="mt-10"
               onClick={handleAnalyzeText}
             >
-              Analyze
+              {t('analyze')}
             </Button>
           )}
         </CardContent>

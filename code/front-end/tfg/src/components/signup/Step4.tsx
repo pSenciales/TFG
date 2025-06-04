@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+import { useTranslations } from "next-intl";
+
 type Step4Props = {
   setName: (name: string) => void;
   handleBirthdayChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -22,21 +24,22 @@ export default function Step4({
   handleCreateAccount,
   loading
 }: Step4Props) {
+  const t = useTranslations("signup.step4");
   return (
     <form className="grid gap-4">
-      <h1 className="text-md mb-5">Complete your profile</h1>
-      <Label>Name</Label>
+      <h1 className="text-md mb-5">{t('header')}</h1>
+      <Label>{t('name')}</Label>
       <Input
         required
         type="text"
         placeholder="Jhon Smith"
         onChange={(e) => setName(e.target.value)}
       />
-      <Label>Date of birth</Label>
+      <Label>{t('birthday')}</Label>
       <Input required type="date" onChange={handleBirthdayChange} />
       {!isOldEnough && birthday && (
         <div className="text-red-500 text-sm">
-          You must be at least 16 years old.
+          {t('age')}
         </div>
       )}
       <Button
@@ -44,7 +47,7 @@ export default function Step4({
         disabled={!isOldEnough || birthday === "" || name === "" || loading}
         onClick={handleCreateAccount}
       >
-        Create account
+        {t('create')}
       </Button >
     </form>
   );

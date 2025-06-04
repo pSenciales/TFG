@@ -43,14 +43,14 @@ export default function RegisterFooter({
       )}
       {step === 3 && (
         <span className="text-silver">
-          The code can take a few minutes to send.{" "}
+          {t('step3.footer.text')+" "}
           <Button
             variant="ghost"
             className="w-min ml-0 text-blue"
             disabled={disabled}
             onClick={() => handleSendEmail(captchaToken, captchaJWT)}
           >
-            Resend code? {disabled && `(${counter}s)`}
+            {t('step3.footer.link')} {disabled && `(${counter}s)`}
           </Button>
         </span>
       )}

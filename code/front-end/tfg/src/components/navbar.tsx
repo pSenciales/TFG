@@ -138,8 +138,10 @@ export default function NavBar() {
         </div>
 
         {/* Botones de sesión */}
-        <div className="flex items-center">
-
+        <div className="flex items-center gap-4">
+          <div className="hidden md:block">
+            <LanguageSwitcher />
+          </div>
 
           {session ? (
             <DropdownMenu>
@@ -187,9 +189,7 @@ export default function NavBar() {
           ) : (
             <div className="flex items-center gap-4">
               {/* Se muestra solo en md y arriba */}
-              <div className="hidden md:block">
-                <LanguageSwitcher />
-              </div>
+
 
               <Button variant="outline">
                 <Link href="/login">

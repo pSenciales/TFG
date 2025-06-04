@@ -11,7 +11,10 @@ import FullScreenLoader from "./FullScreenLoader"
 import EmailDialog from "./EmailDialog"
 import FadeIn from "../fadeIn"
 
+import { useTranslations } from "next-intl"
+
 export default function PostForm() {
+  const t = useTranslations('reports');
   const { data: session } = useSession()
   const {
     url,
@@ -34,9 +37,9 @@ export default function PostForm() {
         <FullScreenLoader
           words={[
             "Scraping tweet...",
-            "Adding context...",
-            "Analyzing text...",
-            "Generating report...",
+            t("tabs.post.loading.text1"),
+            t("tabs.post.loading.text2"),
+            t("tabs.post.loading.text3"),
           ]}
         />
       )}
@@ -45,17 +48,16 @@ export default function PostForm() {
         <CardHeader />
         <CardContent>
           <Label>
-            URL <span className="text-red-500">&#42;</span>
+            {t('url.label')} <span className="text-red-500">&#42;</span>
           </Label>
           <Input
-            placeholder="e.g https://x.com/user/status/1234567890"
+            placeholder={t('url.placeholder')}
             onChange={handleUrlChange}
             required
             className="w-[50%]"
           />
           <p className="text-sm text-muted-foreground">
-            The text in this post will be analyzed. If the post has images, the first one
-            will be used as context.
+            {t('url.description')}
           </p>
           {urlCheck !== "" && (
             <FadeIn>
@@ -64,14 +66,14 @@ export default function PostForm() {
 
           )}
 
-          <Label className="mt-10">Context</Label>
+          <Label className="mt-10">{t('context.label')}</Label>
           <Textarea
-            placeholder="Write the context here"
+            placeholder={t('context.placeholder')}
             className="peer-disabled:bg-gray-100"
             onChange={(e) => setContext(e.target.value)}
           />
           <p className="text-sm text-muted-foreground">
-            This text will be added as context to the report, making the report more accurate.
+            {t('context.description')}
           </p>
 
           {!session ? (
@@ -91,7 +93,7 @@ export default function PostForm() {
             />
           ) : (
             <Button className="mt-10" disabled={url === "" || urlCheck !== "" || loading} onClick={handleAnalyzePost}>
-              Analyze
+              {t('analyze')}
             </Button>
           )}
         </CardContent>

@@ -129,10 +129,95 @@
       "buttontext": "Continue with email",
       "emaildonotmatch": "Emails do not match.",
       "passworddonotmatch": "Password do not match."
+    },
+    "step3":{
+      "header": "You should have received a code in your mail!",
+      "verify": "Verify",
+      "errorCode": "The code entered is incorrect or expired.",
+      "error": "An error occurred. Please try again later.",
+      "footer": {
+          "text": "The code can take a few minutes to send.",
+          "link": "Resend code?"
+      }
+    },
+    "step4":{
+      "header": "Complete your profile",
+      "name": "Name",
+      "birthday": "Date of birth",
+      "create": "Create account",
+      "age": "You must be at least 16 years old.",
+      "toast":{
+        "error":"An error occurred. Please try again later.",
+        "unexpectederror":"An unexpected error occurred. Please try again later."
+      }
+    }
+  },
+  "reports":{
+    "title": "Create a report from this different media",
+    "analyze": "Analyze",
+    "tabs":{
+      "image":{
+        "title": "Image",
+        "loading":{
+          "text1":"Extracting text...",
+          "text2":"Analyzing text...",
+          "text3":"Adding context...",
+          "text4":"Generating report..."
+        }
+      },
+      "text":{
+        "title": "Text",
+        "loading":{
+          "text1":"Analyzing text...",
+          "text2":"Adding context...",
+          "text3":"Generating report..."
+        }
+      },
+      "post":{
+        "title": "X's post",
+        "loading":{
+          "text1":"Analyzing text...",
+          "text2":"Adding context...",
+          "text3":"Generating report..."
+        }
+      }
+    },
+    "content":{
+      "label": "Content",
+      "placeholder": "Write your report here",
+      "description": "This text will be analyzed and added to the report"
+    },
+    "context":{
+      "label": "Context",
+      "placeholder": "Write the context here",
+      "description": "This text will be added as context to the report, making the result more accurate Analyze"
+    },
+    "source":{
+      "label": "Source",
+      "placeholder": "e.g https://example.com",
+      "description": "This is the original source of the content, for example an URL"
+    },
+    "uploadimage":{
+      "label": "Upload an image",
+      "description": "Drag and drop your image here or click to upload",
+      "footer": "This image must be mainly text"
+    },
+    "url":{
+      "label": "URL",
+      "placeholder": "e.g https://x.com/user/status/123456790",
+      "description": "The text in this post will be analyzed. If the post has images, the first one will be used as context."
+    },
+    "alerts":{
+      "success":{
+        "tittle": "Report created",
+        "text": "El analisis se enviará a tu email"
+      }
     }
   },
   "checks":{
     "emailcheck": "This is not a valid email",
-    "passwordcheck": "At least 8 characters.\nAt least one uppercase letter.\nAt least one lowercase letter.\nAt least one special character (e.g., !@#$%^&*)."
+    "passwordcheck": "At least 8 characters.\nAt least one uppercase letter.\nAt least one lowercase letter.\nAt least one special character (e.g., !@#$%^&*).",
+    "sourcecheck": "This is not a valid URL",
+    "urlcheck": "This is not a valid X URL"
   }
 }
