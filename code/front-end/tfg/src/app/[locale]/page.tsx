@@ -11,9 +11,14 @@ import { WarpBackground } from '@/components/magicui/warp-background';
 import Stepper, { Step } from '@/components/bits/Stepper';
 import Image from 'next/image'
 import FadeIn from '@/components/fadeIn';
+
+import { useTranslations } from 'next-intl';
+
+
 export default function Home() {
   const stepperRef = useRef(null);
   const isInView = useInView(stepperRef, { once: true, margin: "0px 0px -20% 0px" });
+  const t = useTranslations();
 
   return (
     <div className='flex-col justify-center items-center'>
@@ -37,10 +42,10 @@ export default function Home() {
               height={100}
             />
             <h1 className="text-lg sm:text-2xl font-bold text-black mt-4">
-              Introducing Fairplay360
+              {t('home.title')}
             </h1>
             <p className="text-xs sm:text-md font-bold text-black mt-2">
-              A platform to report and document human rights violations
+              {t('home.subtitle')}
             </p>
             <SplitText
               text="AI powered"
@@ -118,10 +123,10 @@ export default function Home() {
                   height={150}
                 />
                 <h1 className="text-5xl font-bold text-black mt-4">
-                  Introducing Fairplay360
+                  {t('home.title')}
                 </h1>
                 <p className="text-lg font-bold text-black mt-2">
-                  A platform to report and document human rights violations
+                  {t('home.subtitle')}
                 </p>
                 <SplitText
                   text="AI powered"
@@ -153,7 +158,7 @@ export default function Home() {
                 >
                   <div className="bg-white min-w-64 flex justify-center">
                     <RotatingText
-                      texts={["Analize", "Report", "Fairplay"]}
+                      texts={[t('home.rotatingtext.text1'), t('home.rotatingtext.text2'), "Fairplay"]}
                       mainClassName="w-full text-black text-5xl font-bold overflow-hidden py-1 justify-center text-center"
                       staggerFrom="last"
                       initial={{ y: "100%" }}
@@ -172,11 +177,10 @@ export default function Home() {
               <div className="col-start-3 border-x border-b border-silver bg-white flex items-center justify-center rounded-br-xl shadow-lg">
                 <div className="w-full h-full bg-white rounded-br-xl flex flex-col p-4">
                   <h1 className="text-md text-gray-600 mb-2">
-                    Fairplay360 aims to combat hate speech through AI-driven moderation.
-                    We seek to create a safer digital space for fans, players, and organizations.
+                    {t('home.description')}
                   </h1>
                   <p className="text-lg font-bold text-black mt-2">
-                    Start now
+                    {t('home.startnow')}
                   </p>
                   <button
                     onClick={() => (window.location.href = "/report")}
@@ -185,7 +189,7 @@ export default function Home() {
                     <AnimatedShinyText
                       className="w-[80%] shadow-s mb-5 border-2 rounded-xl inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300"
                     >
-                      <span>📝 Report here</span>
+                      <span>📝 {t('home.reporthere')}</span>
                       <ArrowRightIcon className="ml-1 transition-transform duration-300 ease-in-out" />
                     </AnimatedShinyText>
                   </button>
@@ -213,7 +217,7 @@ export default function Home() {
             stagger={0.03}
             textClassName='text-7xl font-bold'
           >
-            Steps to follow:
+            {t('home.stepper.title')}
           </ScrollFloat>
 
         </div>
@@ -223,35 +227,35 @@ export default function Home() {
             initialStep={1}
             stepCircleContainerClassName="justify-center items-center rounded-xl mt-20"
             contentClassName="h-full"
-            backButtonText="Previous"
-            nextButtonText="Next"
+            backButtonText={t('home.stepper.previous')}
+            nextButtonText={t('home.stepper.next')}
             nextButtonProps={{ className: "bg-black rounded-xl text-white w-[30%] sm:w-[10%] h-[80%]" }}
           >
             <Step>
               <h1 className="text-2xl font-semibold">
-                Upload the content you want to analyze:
+                {t('home.stepper.step1.header')}
               </h1>
               <ul className="my-2">
-                <li>- Upload a picture</li>
-                <li>- Upload text</li>
-                <li>- Or even an X&apos;s post</li>
+                <li>- {t('home.stepper.step1.list1')}</li>
+                <li>- {t('home.stepper.step1.list2')}</li>
+                <li>- {t('home.stepper.step1.list3')}</li>
               </ul>
             </Step>
             <Step>
               <h1 className="text-2xl font-semibold">
-                (Optionally) You can add some context so the result is more accurate
+              {t('home.stepper.step2.header')}
               </h1>
             </Step>
             <Step>
               <h1 className="text-2xl font-semibold">
-                Just analyze and wait for the results!
+              {t('home.stepper.step3.header')}
               </h1>
             </Step>
             <Step>
               <h1 className="text-2xl font-semibold">
-                You just have made your first report
+              {t('home.stepper.step4.header')}
               </h1>
-              <p>Thank you for your help!</p>
+              <p>{t('home.stepper.step4.footer')}</p>
             </Step>
           </Stepper>
         </div>

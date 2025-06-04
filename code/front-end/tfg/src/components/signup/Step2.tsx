@@ -5,6 +5,8 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import ReCAPTCHA from "react-google-recaptcha";
 
+import { useTranslations } from "next-intl";
+
 type Step2Props = {
   setStep: (step: number) => void;
   handleEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -50,6 +52,9 @@ export default function Step2({
   captchaToken,
   handleContinue,
 }: Step2Props) {
+
+  const t = useTranslations("signup");
+  
   return (
     <div>
       <Button
@@ -57,7 +62,7 @@ export default function Step2({
         className="pl-0 mb-5 text-md"
         onClick={() => setStep(1)}
       >
-        <Image src="/left-arrow.svg" alt="Back" width="20" height="20" /> All sign up options
+        <Image src="/left-arrow.svg" alt="Back" width="20" height="20" /> {t('step2.optiontext')}
       </Button>
       <form className="grid gap-5">
         <div>
@@ -70,7 +75,7 @@ export default function Step2({
            <span className="text-red-500 text-xs">{emailCheck}</span>
         </div>
         <div>
-          <Label>Repeat email</Label>
+          <Label>{t('step2.repeatemail')}</Label>
           <Input
             type="email"
             placeholder="example@mail.com"
@@ -78,7 +83,7 @@ export default function Step2({
           />
         </div>
         <div>
-          <Label>Password</Label>
+          <Label>{t('step2.password')}</Label>
           <Input
             type="password"
             placeholder="password"
@@ -87,7 +92,7 @@ export default function Step2({
           <span className="text-red-500 text-xs">{passwordCheck}</span>
         </div>
         <div>
-          <Label>Repeat password</Label>
+          <Label>{t('step2.repeatpassword')}</Label>
           <Input
             type="password"
             placeholder="password"
@@ -136,8 +141,8 @@ export default function Step2({
           </Button>
         ) : (
           <Button disabled variant="destructive" className="mt-5">
-            {email !== repeatEmail && <p>Emails do not match.</p>}
-            {password !== repeatPassword && <p>Passwords do not match.</p>}
+            {email !== repeatEmail && <p>{t('step2.emaildonotmatch')}</p>}
+            {password !== repeatPassword && <p>{t('step2.passworddonotmatch')}</p>}
           </Button>
         )}
       </form>

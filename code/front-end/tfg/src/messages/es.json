@@ -1,0 +1,137 @@
+{
+  "navbar": {
+    "report": "Denunciar",
+    "docs": "Documentación",
+    "contact": "Contacto",
+    "login": "Log In",
+    "signup": "Sign up",
+    "myReports": "Mis Denuncias",
+    "adminPortal": "Portal de Administración",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "hello": "Hola, {name}",
+    "guest": "Invitado"
+  },
+  "footer": {
+    "rights": "© 2025 Fairplay360. Todos los derechos reservados.",
+    "privacyPolicy": "Política de Privacidad",
+    "contact": "Contacto"
+  },
+  "docComponents": {
+    "llm": {
+      "title": "LLM",
+      "description": "Utilizamos la API DeepSeek R1 para analizar contenido y detectar discursos de odio."
+    },
+    "ocr": {
+      "title": "OCR",
+      "description": "Confiamos en la API de Google Vision para el reconocimiento óptico de caracteres."
+    },
+    "frontend": {
+      "title": "Front-end",
+      "description": "Next.js impulsa nuestro front-end, con funcionalidades clave proporcionadas por su servidor integrado."
+    },
+    "backend": {
+      "title": "Back-end",
+      "description": "Flask sirve como nuestro framework de back-end."
+    },
+    "orm": {
+      "title": "ORM",
+      "description": "MongoEngine ofrece potentes características de ORM, haciendo el modelado de datos simple."
+    },
+    "database": {
+      "title": "Base de datos",
+      "description": "Usamos MongoDB por su flexibilidad y escalabilidad."
+    }
+  },
+  "home": {
+    "title": "Introduciendo Fairplay360",
+    "subtitle": "Una plataforma para denunciar y analizar discurso de odio",
+    "rotatingtext": {
+      "text1": "Analizar",
+      "text2": "Denunciar"
+    },
+    "description": "Fairplay360 pretende combatir el discurso de odio a través de moderación basada en IA. Buscamos crear un espacio digital más seguro para aficionados, jugadores y organizaciones.",
+    "startnow": "Comienza ahora",
+    "reporthere": "Denuncia aquí",
+    "stepper": {
+      "title": "Pasos a seguir",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "step1": {
+        "header": "Sube el contenido que quieras analizar:",
+        "list1": "Sube una imagen",
+        "list2": "Sube texto",
+        "list3": "O incluso un post de X"
+      },
+      "step2": {
+        "header": "(Opcionalmente) Puedes añadir algún contexto para que el resultado sea más preciso"
+      },
+      "step3": {
+        "header": "¡Solo analiza y espera los resultados!"
+      },
+      "step4": {
+        "header": "Acabas de hacer tu primera denuncia",
+        "footer": "¡Gracias por tu ayuda!"
+      }
+    }
+  },
+  "login": {
+    "title": "Inicia sesión en Fairplay360",
+    "options": {
+      "google": "Inicia sesión con Google",
+      "github": "Inicia sesión con GitHub",
+      "separator": "O",
+      "email": "Inicia sesión con email"
+    },
+    "footer": {
+      "noaccount": "¿No tienes una cuenta?",
+      "signuphere": "¡Regístrate aquí!",
+      "forgotpassword": {
+        "title": "¿Olvidaste tu contraseña?",
+        "dialog": {
+          "title": "Añade un email",
+          "description": "Escribe tu email y te enviaremos un enlace para restablecer tu contraseña",
+          "submit": "Enviar"
+        },
+        "alert": {
+          "title": "Correo enviado",
+          "text": "Comprueba tu email para restablecer tu contraseña"
+        }
+      }
+    },
+    "step2": {
+      "optiontext": "Todas las opciones de inicio de sesión",
+      "password": "Contraseña",
+      "buttontext": "Iniciar sesión con email"
+    }
+  },
+  "signup": {
+    "title": "Regístrate en Fairplay360",
+    "options": {
+      "google": "Regístrate con Google",
+      "github": "Regístrate con GitHub",
+      "separator": "O",
+      "email": "Regístrate con email"
+    },
+    "footer": {
+      "alreadyaccount": "¿Ya tienes una cuenta?",
+      "loginhere": "¡Inicia sesión aquí!",
+      "bycontinuing": "Al continuar, aceptas nuestro",
+      "terms": "Acuerdo de uso"
+    },
+    "step2":{
+      "optiontext": "Todas las opciones de registro",
+      "password": "Contraseña",
+      "repeatpassword": "Repetir contraseña",
+      "repeatemail": "Repetir email",
+      "buttontext": "Continuar con email",
+      "emaildonotmatch": "Emails no coinciden",
+      "passworddonotmatch": "Contraseñas no coinciden"
+    }
+  },
+  "checks":{
+    "emailcheck": "Este email no es válido",
+    "passwordcheck": "Al menos 8 letras. Al menos una letra mayúscula. Al menos una letra minúscula. Al menos un carácter especial (p.e., !@#$%^&*)"
+
+  }
+  }

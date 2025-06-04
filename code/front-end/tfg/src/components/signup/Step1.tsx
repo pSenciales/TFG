@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Divider from "@mui/material/Divider";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 type Step1Props = {
   setStep: (step: number) => void;
@@ -17,6 +18,8 @@ export default function Step1({
   setRepeatEmail,
   setRepeatPassword,
 }: Step1Props) {
+
+  const t = useTranslations("signup");
   return (
     <div className="grid gap-4">
       <Button
@@ -25,7 +28,7 @@ export default function Step1({
         className="flex items-center justify-center gap-2 text-lg"
       >
         <Image src="/google-icon.svg" alt="Google Logo" width="24" height="24" />
-        Sign up with Google
+        {t('options.google')}
       </Button>
       <Button
         variant="outline"
@@ -33,9 +36,9 @@ export default function Step1({
         className="flex items-center justify-center gap-2 text-lg my-5"
       >
         <Image src="/github-mark.svg" alt="GitHub Logo" width="24" height="24" />
-        Sign up with GitHub
+        {t('options.github')}
       </Button>
-      <Divider>OR</Divider>
+      <Divider>{t('options.separator')}</Divider>
       <Button
         className="flex items-center justify-center gap-2 text-lg mt-5"
         onClick={() => {
@@ -47,7 +50,7 @@ export default function Step1({
         }}
       >
         <Image src="/email.png" alt="Email logo" width="24" height="24" />
-        Sign up with email
+        {t('options.email')}
       </Button>
     </div>
   );

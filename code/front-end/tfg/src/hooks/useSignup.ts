@@ -6,7 +6,12 @@ import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import ReCAPTCHA from "react-google-recaptcha";
 
+
+import { useTranslations } from 'next-intl';
+
 export function useSignup() {
+  const t = useTranslations();
+
   const FLASK_URL = process.env.NEXT_PUBLIC_FLASK_API_URL;
 
   // Estados del formulario
@@ -64,7 +69,7 @@ export function useSignup() {
       setDisabledEmail(false);
       setEmailCheck("")
     } else {
-      setEmailCheck("This is not a valid email");
+      setEmailCheck(t('checks.emailcheck'));
       setDisabledEmail(true);
     }
 
@@ -80,7 +85,7 @@ export function useSignup() {
     } else {
       setDisabledPw(true);
       setPasswordCheck(
-        "At least 8 characters.\nAt least one uppercase letter.\nAt least one lowercase letter.\nAt least one special character (e.g., !@#$%^&*)."
+        t('checks.passwordcheck')
       );
     }
   };

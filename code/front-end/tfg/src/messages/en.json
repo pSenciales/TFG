@@ -1,0 +1,138 @@
+{
+  "navbar": {
+    "report": "Report",
+    "docs": "Docs",
+    "contact": "Contact",
+    "login": "Log In",
+    "signup": "Sign up",
+    "myReports": "My Reports",
+    "adminPortal": "Admin Portal",
+    "profile": "Profile",
+    "logout": "Log out",
+    "hello": "Hello, {name}",
+    "guest": "Guest"
+  },
+  "footer": {
+    "rights": "© 2025 Fairplay360. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "contact": "Contact"
+  },
+  "docComponents": {
+    "llm": {
+      "title": "LLM",
+      "description": "We use the DeepSeek R1 API to analyze content and detect hate speech."
+    },
+    "ocr": {
+      "title": "OCR",
+      "description": "We rely on the Google Vision API for optical character recognition."
+    },
+    "frontend": {
+      "title": "Front-end",
+      "description": "Next.js powers our front-end, with key functionality provided by its built-in server."
+    },
+    "backend": {
+      "title": "Back-end",
+      "description": "Flask serves as our back-end framework."
+    },
+    "orm": {
+      "title": "ORM",
+      "description": "MongoEngine offers powerful ORM features, making data modeling simple."
+    },
+    "database": {
+      "title": "Database",
+      "description": "We use MongoDB for its flexibility and scalability."
+    }
+  },
+  "home":{
+    "title":"Introducing Fairplay360",
+    "subtitle":"A platform to report and analyze hate speech",
+    "rotatingtext":{
+      "text1":"Analize",
+      "text2":"Report"
+    },
+    "description": "Fairplay360 aims to combat hate speech through AI-driven moderation. We seek to create a safer digital space for fans, players, and organizations."
+    ,
+    "startnow": "Start now",
+    "reporthere": "Report here",
+    "stepper": {
+      "title": "Steps to follow",
+      "previous": "Previous",
+      "next": "Next",
+      "step1":{
+        "header": "Upload the content you want to analyze:",
+        "list1": "Upload a picture",
+        "list2": "Upload text",
+        "list3": "Or even an X's post"
+      },
+      "step2":{
+        "header": "(Optionally) You can add some context so the result is more accurate"
+      },
+      "step3":{
+        "header": "Just analyze and wait for the results!"
+      },
+      "step4":{
+        "header": "You just have made your first report",
+        "footer": "Thank you for your help!"
+      }
+    }
+  },
+  "login":{
+    "title": "Log In to Fairplay360",
+    "options": {
+      "google": "Log in with Google",
+      "github": "Log in with GitHub",
+      "separator": "or",
+      "email": "Log in with email"
+    },
+    "footer":{
+      "noaccount": "Don't have an account?",
+      "signuphere": "Sign up here!",
+      "forgotpassword": {
+        "title":"Forgot your password?",
+        "dialog":{
+          "title": "Add an email",
+          "description": "Write your email and we will send you a link to reset your password",
+          "submit": "Send"
+        },
+        "alert":{
+          "title": "Email sent",
+          "text": "Check your email to reset your password"
+        }
+
+      }
+    },
+    "step2":{
+      "optiontext": "All log in options",
+      "password": "Password",
+      "buttontext": "Log in with email"
+    }
+  },
+  "signup": {
+    "title": "Sign Up to Fairplay360",
+    "options": {
+      "google": "Sign up with Google",
+      "github": "Sign up with GitHub",
+      "separator": "OR",
+      "email": "Sign up with email"
+    },
+    "footer": {
+      "alreadyaccount": "Already have an account?",
+      "loginhere": "Log in here!",
+      "bycontinuing": "By continuing, you agree to our",
+      "terms": "Terms of Use"
+    },
+    "step2":{
+      "optiontext": "All sign up options",
+      "password": "Password",
+      "repeatpassword": "Repeat password",
+      "repeatemail": "Repeat email",
+      "buttontext": "Continue with email",
+      "emaildonotmatch": "Emails do not match.",
+      "passworddonotmatch": "Password do not match."
+    }
+  },
+  "checks":{
+    "emailcheck": "This is not a valid email",
+    "passwordcheck": "At least 8 characters.\nAt least one uppercase letter.\nAt least one lowercase letter.\nAt least one special character (e.g., !@#$%^&*)."
+  }
+}

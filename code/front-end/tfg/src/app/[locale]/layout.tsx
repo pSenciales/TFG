@@ -3,10 +3,12 @@
 import localFont from "next/font/local";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NextIntlClientProvider } from 'next-intl';
+import { use } from 'react';
 
 import "./globals.css";
-import NavBar from "../components/navbar";
-import Footer from "../components/footer";
+import NavBar from "../../components/navbar";
+import Footer from "../../components/footer";
 import { Toaster } from "@/components/ui/sonner";
 
 const queryClient = new QueryClient();
@@ -24,19 +26,27 @@ const geistMono = localFont({
 
 export default function RootLayout({
   children,
+  params
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  // Use React.use() to unwrap the params Promise
+  const { locale } = use(params);
+  
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <SessionProvider>
           <QueryClientProvider client={queryClient}>
-            <NavBar />
-            <main className="flex-grow">{children}</main>
-            <Footer />
+            {/* Wrap components with NextIntlClientProvider */}
+            <NextIntlClientProvider locale={locale} messages={require(`../../messages/${locale}.json`)}>
+              <NavBar />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </NextIntlClientProvider>
           </QueryClientProvider>
         </SessionProvider>
         <Toaster richColors closeButton />
