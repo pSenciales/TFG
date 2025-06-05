@@ -125,7 +125,7 @@ export default function MyReports() {
     return null;
   }
   if (isError) {
-    return <div>t('errorloading')</div>;
+    return <div>{t('errorloading')}</div>;
   }
 
   // @ts-expect-error typescript no typea correctamente data
@@ -204,7 +204,7 @@ export default function MyReports() {
       {isFetchingNextPage && (
         <p style={{ textAlign: "center" }} className="text-black">
 
-          Loading <ThreeDot color="#000000" size="large" />
+          {t('loading')} <ThreeDot color="#000000" size="large" />
         </p>
       )}
     </div>

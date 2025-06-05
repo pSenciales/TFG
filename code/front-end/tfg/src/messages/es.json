@@ -238,21 +238,69 @@
     "empty": "¡Vaya! Parece que no tienes ninguna denuncia ahora mismo...",
     "loading": "Cargando tus denuncias",
     "errorloading": "Error cargando tus denuncias",
-    "reporthere": "Denuncia aquí ahora!",
+    "reporthere": "¡Denuncia aquí ahora!",
     "table": {
-      "date": "Fecha",
-      "content": "Contenido",
-      "context": "Contexto",
-      "source": "Fuente",
-      "status": "Estado",
-      "actions": "Acciones"
+      "content": "Contenido: ",
+      "source": "Fuente: "
     },
     "status": {
-      "pending": "Pendiente",
-      "analyzed": "Analizado",
+      "processing": "Procesando",
+      "accepted": "Aceptado",
       "rejected": "Rechazado"
     },
-    "viewReport": "Ver Denuncia"
+    "hate":{
+      "true": "Odio",
+      "false": "No odio"
+    },
+    "dropdownmenu":{
+      "report": "Denuncia ",
+      "view": "Visualizar",
+      "delete": "Eliminar",
+      "alertdelete":{
+        "title": "¿Estás seguro de que quieres eliminar esta denuncia?",
+        "text": "Esta acción la eliminará permanentemente.",
+        "buttonaccept": "Sí, eliminar",
+        "buttoncancel": "Cancelar"
+      }
+    },
+    "sortandfilter":{
+      "buttontext": "Ordena y fitra",
+      "title": "Ordena y filtra las denuncias",
+      "select": {
+          "title":"Elige el método de ordenación",
+          "options":{
+            "date": "Fecha",
+            "content": "Contenido"
+          }
+        
+        },
+      "filter":{
+        "hate": {
+          "title": "¿Es odio?",
+          "options": {
+            "true": "Odio",
+            "false": "No odio"
+          }
+        },
+        "status":{
+          "title": "Estado",
+          "options": {
+            "processing": "Procesando",
+            "accepted": "Aceptado",
+            "rejected": "Rechazado"
+          }
+        },
+        "filtersapplied": "Filtros aplicados",
+        "filterapplied": "Filtro aplicado"
+      }
+    }
+  },
+  "reportsadmin":{
+    
+    "searchbar":{
+      "searchbyemail": "Buscar por email"
+    }
+  
   },
   "contact":{
     "title": "¡Gracias por pasar!",

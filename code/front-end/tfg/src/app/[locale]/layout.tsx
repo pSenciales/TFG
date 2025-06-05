@@ -42,7 +42,7 @@ export default function RootLayout({
         <SessionProvider>
           <QueryClientProvider client={queryClient}>
             {/* Wrap components with NextIntlClientProvider */}
-            <NextIntlClientProvider locale={locale} messages={require(`../../messages/${locale}.json`)}>
+            <NextIntlClientProvider locale={locale} messages={use(import(`../../messages/${locale}.json`))}>
               <NavBar />
               <main className="flex-grow">{children}</main>
               <Footer />

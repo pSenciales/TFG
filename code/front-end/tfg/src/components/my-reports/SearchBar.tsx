@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { useTranslations } from "next-intl";
 
 interface SearchBarProps {
     filterEmail: string;
@@ -14,6 +14,7 @@ export default function SearchBar({
     setFilterEmail,
     applyFilters
 }: SearchBarProps) {
+    const t = useTranslations("myreports.searchbar");
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -24,7 +25,7 @@ export default function SearchBar({
 
     return (
         <form className="flex-1 md:flex-none" onSubmit={handleSubmit}>
-            <Label><p>Search by email</p></Label>
+            <Label><p>{t('searchbyemail')}</p></Label>
             <div className="relative w-full mt-1">
                 <Input
                     value={filterEmail}

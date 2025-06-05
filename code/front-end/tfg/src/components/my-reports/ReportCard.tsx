@@ -19,6 +19,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+import { useTranslations } from "next-intl";
+
 import Swal from "sweetalert2"
 
 interface ReportCardProps {
@@ -29,13 +31,15 @@ interface ReportCardProps {
 
 export default function ReportCard({ report, onDelete, openPDF }: ReportCardProps) {
 
+  const t = useTranslations("myreports");  
 
-
-  const dateString = new Date(report.created_at.$date).toDateString();
+  const dateString = new Date(report.created_at.$date).toLocaleDateString();
   const stateColor = report.state === "processing" ? "bg-yellow-600" : report.state === "accepted" ? "bg-green-600" : "bg-red-600";
+  const state = report.state === "processing" ? t('status.processing') : report.state === "accepted" ? t('status.accepted') : t('status.rejected');
+
 
   const hateColor = String(report.is_hate) === "true" ? "bg-red-600" : "bg-green-600";
-  const hateText = String(report.is_hate) === "true" ? "Is hate" : "Not hate";
+  const hateText = String(report.is_hate) === "true" ? t('hate.true') : t('hate.false');
 
   const source = report.source;
 
@@ -53,7 +57,7 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
                 aria-label="More options"
                 className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <svg
+                <svg  
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
@@ -65,7 +69,7 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>{"Report #" + report._id.$oid.slice(0, 15)}</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('dropdownmenu.report') +"#" + report._id.$oid.slice(0, 15)}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={
                 () => {
@@ -74,7 +78,7 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
               }>
                 <div className="flex justify-between items-center w-full">
 
-                  <span> View</span>
+                  <span> {t('dropdownmenu.view')}</span>
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
                     <circle cx="12" cy="12" r="3.5" stroke="#000000"></circle>
                     <path d="M21 12C21 12 20 4 12 4C4 4 3 12 3 12" stroke="#000000"></path></svg>
@@ -83,11 +87,12 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
               <DropdownMenuItem
                 onClick={async () => {
                   const confirmed = await Swal.fire({
-                    title: "Are you sure?",
-                    text: "This will delete the report permanently.",
+                    title: t('dropdownmenu.alertdelete.title'),
+                    text: t('dropdownmenu.alertdelete.text'),
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonText: "Yes, delete it!",
+                    confirmButtonText: t('dropdownmenu.alertdelete.buttonaccept'),
+                    cancelButtonText: t('dropdownmenu.alertdelete.buttoncancel'),
                   });
 
                   if (confirmed.isConfirmed) {
@@ -96,7 +101,7 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
                 }}
               >
                 <div className="flex justify-between items-center w-full">
-                  <span>Delete</span>
+                  <span>{t('dropdownmenu.delete')}</span>
                   <svg width="20" height="20" className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" strokeWidth="0.00024000000000000003">
                     <path d="M12 2.75C11.0215 2.75 10.1871 3.37503 9.87787 4.24993C9.73983 
                                           4.64047 9.31134 4.84517 8.9208 4.70713C8.53026 4.56909 8.32557 4.1406 8.46361 
@@ -139,7 +144,7 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
 
         {/* Texto del reporte */}
         <p className="text-sm text-gray-800 font-medium mt-1">
-          {"Content: "}
+          {t('table.content')}
           <TruncateText text={report.content} />
         </p>
 
@@ -147,7 +152,7 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
           <Tooltip >
             <TooltipTrigger asChild>
               <p className="text-sm text-gray-800 font-medium mt-1">
-                {"Source: "} <a href={source}>
+                {t('table.source')} <a href={source}>
                   <TruncateText text={source} />
                 </a>
               </p>
@@ -176,7 +181,7 @@ export default function ReportCard({ report, onDelete, openPDF }: ReportCardProp
         className={`absolute bottom-3 right-1 text-white text-xs font-semibold py-1 px-2 rounded-full ${stateColor}`}
         title="Current State"
       >
-        {report.state}
+        {state}
       </span>
     </div>
   );
