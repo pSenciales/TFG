@@ -199,23 +199,23 @@ export function useReport() {
   const showAlert = (error: unknown) => {
     if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
       Swal.fire({
-        title: 'The session has expired!',
-        text: 'please log in again',
+        title: t('alerts.sessionexpired.title'),
+        text:  t('alerts.sessionexpired.text'),
         icon: 'warning'
       });
       signOut();
       window.location.href = "/login";
     } else if (error instanceof AxiosError && error.status === 403 && error.response?.data.error === "Email is banned") {
       Swal.fire({
-        title: 'Email is banned!',
-        text: 'Please contact support for more information.',
+        title:  t('alerts.userbanned.title'),
+        text: t('alerts.userbanned.text'),
         icon: 'warning'
       });
     } else {
       console.log(error);
       Swal.fire({
-        title: 'Error!',
-        text: 'An error occurred while sending the analysis. Please try again later.',
+        title: t('alerts.unexpectederror.title'),
+        text: t('alerts.unexpectederror.text'),
         icon: 'error'
       });
     }

@@ -105,6 +105,11 @@
       "optiontext": "All log in options",
       "password": "Password",
       "buttontext": "Log in with email"
+    },
+    "error":{
+      "wrongcredentials":"Wrong password or email.",
+      "userbanned": "User banned.",
+      "unexpectederror": "An unexpected error occurred. Please try again later."
     }
   },
   "signup": {
@@ -214,10 +219,33 @@
       }
     }
   },
+  "contact":{
+    "title": "Thanks for stopping by!",
+    "subtitle": "If you like this project, you can find the source code and leave a ",
+    "subtitle2": " on GitHub:",
+    "repository": "GitHub Repository",
+    "star": "Star this repo",
+    "footer": "You can also reach me at ",
+    "footer2": " if you have any questions or suggestions."
+  },
   "checks":{
     "emailcheck": "This is not a valid email",
     "passwordcheck": "At least 8 characters.\nAt least one uppercase letter.\nAt least one lowercase letter.\nAt least one special character (e.g., !@#$%^&*).",
     "sourcecheck": "This is not a valid URL",
     "urlcheck": "This is not a valid X URL"
+  },
+  "alerts": {
+    "sessionexpired": {
+      "title": "Session expired!",
+      "text": "Please log in again to continue."
+    },
+    "emailbanned": {
+      "title": "Email banned!",
+      "text": "Please contact support for more information."
+    },
+    "unexpectederror": {
+      "title": "Error!",
+      "text": "An error has occurred. Please try again later."
+    }
   }
 }

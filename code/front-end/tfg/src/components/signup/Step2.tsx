@@ -136,7 +136,7 @@ export default function Step2({
                 </svg>
               </span>
             ) : (
-              "Continue with email"
+              t('step2.buttontext')
             )}
           </Button>
         ) : (

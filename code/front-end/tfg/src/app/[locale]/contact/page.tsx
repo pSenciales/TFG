@@ -6,23 +6,28 @@ import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import FadeIn from "@/components/fadeIn";
+
+import { useTranslations } from "next-intl";
+
 export default function ContactPage() {
   const GITHUB_REPO = "https://github.com/pSenciales/TFG";
+
+  const t = useTranslations("contact");
 
   return (
     <FadeIn>
       <main className="max-w-xl mx-auto p-8 space-y-6">
         <section className="text-center space-y-2">
 
-          <h1 className="text-4xl font-bold">Thanks for stopping by!</h1>
+          <h1 className="text-4xl font-bold">{t('title')}</h1>
           <p className="text-muted-foreground">
-            If you like this project, you can find the source code and leave a ⭐ on GitHub:
+          {t('subtitle')} ⭐ {t('subtitle2')}
           </p>
         </section>
 
         <Card className="p-6 flex flex-col items-center space-y-4">
           <Image src="/github-mark.svg" alt="GitHub Logo" width={48} height={48} />
-          <CardTitle className="text-lg">GitHub Repository</CardTitle>
+          <CardTitle className="text-lg">{t('repository')}</CardTitle>
           <CardContent className="text-center text-sm text-muted-foreground">
             {GITHUB_REPO}
           </CardContent>
@@ -32,21 +37,21 @@ export default function ContactPage() {
             className="flex items-center space-x-2"
           >
             <Link href={GITHUB_REPO} target="_blank" rel="noopener">
-              <Star size={16} /> Star this repo
+              <Star size={16} /> {t('star')}
             </Link>
           </Button>
         </Card>
 
         <section className="text-center text-sm text-muted-foreground">
           <p>
-            You can also reach me at{" "}
+            {t('footer')}
             <a
               href="mailto:fairplay360app@gmail.com"
               className="underline hover:text-foreground"
             >
               fairplay360app@gmail.com
-            </a>{" "}
-            if you have any questions or suggestions.
+            </a>
+              {t('footer2')}
           </p>
         </section>
       </main>

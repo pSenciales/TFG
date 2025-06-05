@@ -103,6 +103,11 @@
       "optiontext": "Todas las opciones de inicio de sesión",
       "password": "Contraseña",
       "buttontext": "Iniciar sesión con email"
+    },
+    "error":{
+      "wrongcredentials":"Contraseña o email incorrectos.",
+      "userbanned": "Usuario no permitido.",
+      "unexpectederror": "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
     }
   },
   "signup": {
@@ -119,7 +124,7 @@
       "bycontinuing": "Al continuar, aceptas nuestro",
       "terms": "Acuerdo de uso"
     },
-    "step2":{
+    "step2": {
       "optiontext": "Todas las opciones de registro",
       "password": "Contraseña",
       "repeatpassword": "Repetir contraseña",
@@ -127,107 +132,155 @@
       "buttontext": "Continuar con email",
       "emaildonotmatch": "Emails no coinciden",
       "passworddonotmatch": "Contraseñas no coinciden",
-      "toast":{
-        "userbanned":{
-          "title":"Email no permitido",
-           "description":"está suspendido"
+      "toast": {
+        "userbanned": {
+          "title": "Email no permitido",
+          "description": "está suspendido"
         },
-        "useralreadyexists":{
+        "useralreadyexists": {
           "title": "Email en uso",
-          "description":"ya está en uso, intenta iniciar sesión aquí"
-
+          "description": "ya está en uso, intenta iniciar sesión aquí"
         }
       }
     },
-    "step3":{
+    "step3": {
       "header": "¡Deberías de haber recibido un código en tu email!",
       "verify": "Verificar",
       "errorcode": "El código ingresado es incorrecto o está expirado.",
       "error": "Ha ocurrido un error. Inténtalo de nuevo más tarde.",
       "footer": {
-          "text": "El código puede tardar unos minutos en llegar.",
-          "link": "Reenviar el código?"
+        "text": "El código puede tardar unos minutos en llegar.",
+        "link": "Reenviar el código?"
       }
     },
-    "step4":{
+    "step4": {
       "header": "Completa tu perfil",
       "name": "Nombre",
       "birthday": "Fecha de nacimiento",
       "create": "Crear cuenta",
       "age": "Debes ser mayor de 16 años.",
-      "toast":{
-        "error":"Ha ocurrido un error. Inténtalo de nuevo más tarde.",
-        "unexpectederror":"Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      "toast": {
+        "error": "Ha ocurrido un error. Inténtalo de nuevo más tarde.",
+        "unexpectederror": "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
       }
     }
   },
-  "reports":{
+  "reports": {
     "title": "Crea una denuncia a partir de estos medios",
     "analyze": "Analizar",
-    "tabs":{
-      "image":{
+    "tabs": {
+      "image": {
         "title": "Imagen",
-        "loading":{
-          "text1":"Extrayendo texto...",
-          "text2":"Analizando contenido...",
-          "text3":"Añadiendo contexto...",
-          "text4":"Generando denuncia..."
+        "loading": {
+          "text1": "Extrayendo texto...",
+          "text2": "Analizando contenido...",
+          "text3": "Añadiendo contexto...",
+          "text4": "Generando denuncia..."
         }
       },
-      "text":{
+      "text": {
         "title": "Texto",
-        "loading":{
-          "text1":"Analizando contenido...",
-          "text2":"Añadiendo contexto...",
-          "text3":"Generando denuncia..."
+        "loading": {
+          "text1": "Analizando contenido...",
+          "text2": "Añadiendo contexto...",
+          "text3": "Generando denuncia..."
         }
       },
-      "post":{
+      "post": {
         "title": "Post de X",
-        "loading":{
-          "text1":"Analizando contenido...",
-          "text2":"Añadiendo contexto...",
-          "text3":"Generando denuncia..."
+        "loading": {
+          "text1": "Analizando contenido...",
+          "text2": "Añadiendo contexto...",
+          "text3": "Generando denuncia..."
         }
       }
     },
-    "content":{
+    "content": {
       "label": "Contenido",
       "placeholder": "Escribe tu denuncia aquí",
       "description": "Este contenido será analizado y añadido a la denuncia"
     },
-    "context":{
+    "context": {
       "label": "Contexto",
       "placeholder": "Añade el contexto aquí",
       "description": "Este contexto se le añadirá a la denuncia, haciendo el resultado más preciso"
     },
-    "source":{
+    "source": {
       "label": "Fuente",
       "placeholder": "p.j https://ejemplo.com",
       "description": "Esta es la fuente original del contenido, una URL"
     },
-    "uploadimage":{
+    "uploadimage": {
       "label": "Subir una imagen",
       "description": "Arrastra y suelta aquí o haz clic para seleccionar",
       "footer": "Esta imagen debe ser mayormente texto"
     },
-    "url":{
+    "url": {
       "label": "URL",
       "placeholder": "p.j https://x.com/user/status/123456790",
       "description": "El texto de este post se analizará. Si tiene imágenes, la primera será añadida como contexto"
     },
-    "alerts":{
-      "success":{
+    "alerts": {
+      "success": {
         "tittle": "Denuncia creada",
         "text": "El analisis se enviará a tu email"
       }
+    },
+    "dialog":{
+      "title": "Añade un email",
+      "description": "Necesitas añadir un email para recibir notificaciones o ¡inicia sesión ",
+      "description2": "aquí!",
+      "continue": "Continuar"
     }
   },
-  "checks":{
+  "myreports": {
+    "title": "Mis Denuncias",
+    "empty": "¡Vaya! Parece que no tienes ninguna denuncia ahora mismo...",
+    "loading": "Cargando tus denuncias",
+    "errorloading": "Error cargando tus denuncias",
+    "reporthere": "Denuncia aquí ahora!",
+    "table": {
+      "date": "Fecha",
+      "content": "Contenido",
+      "context": "Contexto",
+      "source": "Fuente",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "analyzed": "Analizado",
+      "rejected": "Rechazado"
+    },
+    "viewReport": "Ver Denuncia"
+  },
+  "contact":{
+    "title": "¡Gracias por pasar!",
+    "subtitle": "Si te gusta este proyecto, puedes encontrar el código fuente y deja una ",
+    "subtitle2": " en GitHub:",
+    "repository": "Repositorio GitHub",
+    "star": "¡Dale una estrella!",
+    "footer": "También puedes contactarme a través de ",
+    "footer2": " si tienes alguna pregunta o sugerencia."
+  },
+  "checks": {
     "emailcheck": "Este email no es válido",
     "passwordcheck": "Al menos 8 letras. Al menos una letra mayúscula. Al menos una letra minúscula. Al menos un carácter especial (p.e., !@#$%^&*)",
     "sourcecheck": "Esta URL no es válida",
     "urlcheck": "Esta no es una URL de X"
-
+  },
+  "alerts": {
+    "sessionexpired": {
+      "title": "¡Sesión expirada!",
+      "text": "Por favor, inicia sesión de nuevo."
+    },
+    "emailbanned": {
+      "title": "¡Email suspendido!",
+      "text": "Contacta con la administración para más información."
+    },
+    "unexpectederror": {
+      "title": "¡Error inesperado!",
+      "text": "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+    }
   }
   }

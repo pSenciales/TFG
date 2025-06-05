@@ -11,11 +11,15 @@ import { useMyReports } from "@/hooks/useMyReports";
 import SortAndFilterButton from "@/components/my-reports/SortAndFilterButton";
 import ReportCard from "@/components/my-reports/ReportCard";
 
+import { useTranslations } from "next-intl";
 
+import { Link } from '@/i18n/navigation';
 // Función de fetch para useInfiniteQuery
 
 
 export default function MyReports() {
+
+  const t = useTranslations("myreports");
 
   const {
     toggleCheckbox,
@@ -110,17 +114,18 @@ export default function MyReports() {
   if (status === "loading" || isLoading) {
     return <FadeIn><div className="mt-20"><p style={{ textAlign: "center" }} className="text-black">
 
-      Loading reports <ThreeDot color="#000000" size="small" />
+      {t('loading')} <ThreeDot color="#000000" size="small" />
     </p></div> </FadeIn>;
   }
   if (!session || session.role != "admin") {
     if (typeof window !== "undefined") {
-      window.location.href = "/login";
+      const locale = window.location.pathname.split("/")[1];
+      window.location.href = `${locale}/login`;
     }
     return null;
   }
   if (isError) {
-    return <div>Error loading reports</div>;
+    return <div>t('errorloading')</div>;
   }
 
   // @ts-expect-error typescript no typea correctamente data
@@ -131,7 +136,7 @@ export default function MyReports() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
       <FadeIn duration={0.5}>
-        <h1 className="text-center text-3xl font-bold mt-10">My Reports</h1>
+        <h1 className="text-center text-3xl font-bold mt-10">{t('title')}</h1>
       </FadeIn>
       <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
         <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
@@ -179,8 +184,8 @@ export default function MyReports() {
         ) : (
           <FadeIn>
             <div className="text-center">
-              <h1 className="font-bold text-xl w-full">Oops! It looks like you do not have any reports righ now...😅</h1>
-              <h1 className="font-bold text-xl w-full">Report <a className="text-blue underline decoration-wavy" href="/report">here</a> now!</h1>
+              <h1 className="font-bold text-xl w-full">{t('empty')}😅</h1>
+              <h1 className="font-bold text-xl w-full">{t('reporthere').split(" ")[0]} <Link className="text-blue underline decoration-wavy" href="/report">{t('reporthere').split(" ")[1]}</Link> {t('reporthere').split(" ")[2]}</h1>
             </div>
           </FadeIn>
 
