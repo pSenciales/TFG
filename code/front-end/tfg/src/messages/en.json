@@ -217,7 +217,82 @@
         "tittle": "Report created",
         "text": "El analisis se enviará a tu email"
       }
+    },
+    "dialog":{
+      "title": "Add an email",
+      "description": "You need to add an email to receive notifications or log in ",
+      "description2": "here!",
+      "continue": "Continue"
     }
+  },
+"myreports": {
+    "title": "My Reports",
+    "empty": "Oops! It seems like you don't have any reports right now...",
+    "loading": "Loading reports",
+    "errorloading": "Error loading reports",
+    "reporthere": "Report here!",
+    "table": {
+      "content": "Content: ",
+      "source": "Source: "
+    },
+    "status": {
+      "processing": "Proccesing",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "hate":{
+      "true": "Hate",
+      "false": "Not hate"
+    },
+    "dropdownmenu":{
+      "report": "Report ",
+      "view": "View",
+      "delete": "Delete",
+      "alertdelete":{
+        "title": "Are you sure you want to delete this report?",
+        "text": "This action cannot be undone.",
+        "buttonaccept": "Yes, delete it",
+        "buttoncancel": "Cancel"
+      }
+    },
+    "sortandfilter":{
+      "buttontext": "Sort & filter",
+      "title": "Sort and filter reports",
+      "select": {
+          "title":"Choose a sorting option",
+          "options":{
+            "date": "Date",
+            "content": "Content"
+          }
+        
+        },
+      "filter":{
+        "hate": {
+          "title": "Is hate?",
+          "options": {
+            "true": "Hate",
+            "false": "Not hate"
+          }
+        },
+        "status":{
+          "title": "Status",
+          "options": {
+            "processing": "Proccesing",
+            "accepted": "Accepted",
+            "rejected": "Rejected"
+          }
+        },
+        "filtersapplied": "Filters applied",
+        "filterapplied": "Filter applied"
+      }
+    }
+  },
+  "reportsadmin":{
+    
+    "searchbar":{
+      "searchbyemail": "Search by email"
+    }
+  
   },
   "contact":{
     "title": "Thanks for stopping by!",

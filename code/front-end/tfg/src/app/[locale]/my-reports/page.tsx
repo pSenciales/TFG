@@ -117,7 +117,7 @@ export default function MyReports() {
       {t('loading')} <ThreeDot color="#000000" size="small" />
     </p></div> </FadeIn>;
   }
-  if (!session || session.role != "admin") {
+  if (!session) {
     if (typeof window !== "undefined") {
       const locale = window.location.pathname.split("/")[1];
       window.location.href = `${locale}/login`;
