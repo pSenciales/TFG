@@ -3,6 +3,8 @@ import { Report } from "@/types/reports";
 import DropdownActions from "@/components/my-reports/DropdownActions";
 import TruncateText from "@/components/my-reports/TruncateText";
 
+import { useTranslations } from "next-intl";
+
 import {
     Tooltip,
     TooltipContent,
@@ -22,12 +24,16 @@ interface ReportCardProps {
 
 export default function ReportAdminCard({ report, onDelete, openPDF, banUser, handleResolve }: ReportCardProps) {
 
+    const t = useTranslations("myreports");  
 
-    const dateString = new Date(report.created_at.$date).toDateString();
+
+    const dateString = new Date(report.created_at.$date).toLocaleDateString();
     const stateColor = report.state === "processing" ? "bg-yellow-600" : report.state === "accepted" ? "bg-green-600" : "bg-red-600";
+    const state = report.state === "processing" ? t('status.processing') : report.state === "accepted" ? t('status.accepted') : t('status.rejected');
+
 
     const hateColor = String(report.is_hate) === "true" ? "bg-red-600" : "bg-green-600";
-    const hateText = String(report.is_hate) === "true" ? "Is hate" : "Not hate";
+    const hateText = String(report.is_hate) === "true" ? t('hate.true') : t('hate.false');
     const userEmail = report.notification_email;
 
     return (
@@ -47,7 +53,7 @@ export default function ReportAdminCard({ report, onDelete, openPDF, banUser, ha
                 </div>
 
                 <p className="text-sm text-gray-800 font-medium mt-1">
-                    {"Content: "}
+                    {t('table.content')}
                     <TruncateText text={report.content} />
                 </p>
 
@@ -55,7 +61,7 @@ export default function ReportAdminCard({ report, onDelete, openPDF, banUser, ha
                     <Tooltip >
                         <TooltipTrigger asChild>
                             <p className="text-sm text-gray-800 font-medium mt-1">
-                                {"User: "}
+                                {t('table.user')}
 
                                 <TruncateText text={userEmail} />
 
@@ -85,7 +91,7 @@ export default function ReportAdminCard({ report, onDelete, openPDF, banUser, ha
                 className={`absolute bottom-3 right-1 text-white text-xs font-semibold py-1 px-2 rounded-full ${stateColor}`}
                 title="Current State"
             >
-                {report.state}
+                {state}
             </span>
         </div>
     );

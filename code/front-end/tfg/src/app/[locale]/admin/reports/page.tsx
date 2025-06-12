@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import GridReports from "@/components/my-reports/GridReports";
 import TableReports from "@/components/my-reports/TableReports";
 
+import { useTranslations } from "next-intl";
 
 // Función de fetch para useInfiniteQuery
 
@@ -23,6 +24,8 @@ export default function MyReports() {
 
   const [table, setTable] = useState(false);
   const [tableButtonStyle, setTableButtonStyle] = useState<"ghost" | "outline">("ghost");
+
+  const t = useTranslations();
 
   const {
     toggleCheckbox,
@@ -117,7 +120,7 @@ export default function MyReports() {
   if (status === "loading" || isLoading) {
     return <FadeIn><div className="mt-20"><p style={{ textAlign: "center" }} className="text-black">
 
-      Loading reports <ThreeDot color="#000000" size="small" />
+      {t('myreports.loading')} <ThreeDot color="#000000" size="small" />
     </p></div> </FadeIn>;
   }
   if (!session || session.role != "admin") {
@@ -127,7 +130,7 @@ export default function MyReports() {
     return null;
   }
   if (isError) {
-    return <div>Error loading reports</div>;
+    return <div>{t('myreports.errorloading')}</div>;
   }
 
   // @ts-expect-error typescript no typea correctamente data
@@ -158,7 +161,7 @@ export default function MyReports() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 space-y-4">
       <FadeIn duration={0.5}>
-        <h1 className="text-center text-3xl font-bold mt-10">Reports</h1>
+        <h1 className="text-center text-3xl font-bold mt-10">{t('admin.report.title')}</h1>
         <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
           <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
             {/* Search bar */}
@@ -215,13 +218,13 @@ export default function MyReports() {
                 {/* Grid con los reportes */}
 
 
-                <div className="block md:hidden">
+                <div className="block lg:hidden">
 
                   <RenderGrid />
 
                 </div>
                 {table ? (
-                  <div className="hidden md:block">
+                  <div className="hidden lg:block">
                     <TableReports
                       allReports={allReports}
                       openPDF={openPDF}
@@ -231,7 +234,7 @@ export default function MyReports() {
                     />
                   </div>
                 ) : (
-                  <div className="hidden md:block">
+                  <div className="hidden lg:block">
                     <RenderGrid />
                   </div>
                 )
@@ -244,7 +247,7 @@ export default function MyReports() {
         ) : (
           <FadeIn>
             <div className="text-center">
-              <h1 className="font-bold text-xl w-full">Oops! It looks like there are not any reports righ now...😅</h1>
+              <h1 className="font-bold text-xl w-full">{t('myreports.empty')}😅</h1>
             </div>
           </FadeIn>
         )
@@ -262,7 +265,7 @@ export default function MyReports() {
       {isFetchingNextPage && (
         <p style={{ textAlign: "center" }} className="text-black">
 
-          Loading <ThreeDot color="#000000" size="large" />
+          {t('myreports.loading')} <ThreeDot color="#000000" size="large" />
         </p>
       )}
     </div>

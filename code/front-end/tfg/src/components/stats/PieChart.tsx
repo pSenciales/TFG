@@ -28,6 +28,8 @@ import Swal from "sweetalert2";
 import { signOut } from "next-auth/react";
 import { AxiosError } from "axios";
 
+import { useTranslations } from "next-intl";
+
 type Slice = { tag: string; number: number; fill?: string };
 
 type chartConfigElemment = {
@@ -49,6 +51,7 @@ interface StatusPieChartProps {
 
 
 export default function GenericPieChart({ url, title, subtitle, queryKey, chartConfigElements }: StatusPieChartProps) {
+    const t = useTranslations("admin.stats.days");
     const [days, setDays] = useState("7");
 
     async function fetchData(): Promise<Slice[]> {
@@ -121,9 +124,9 @@ export default function GenericPieChart({ url, title, subtitle, queryKey, chartC
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem value="7">Last 7 days</SelectItem>
-                                    <SelectItem value="30">Last 30 days</SelectItem>
-                                    <SelectItem value="90">Last 90 days</SelectItem>
+                                    <SelectItem value="7">{t('last7')}</SelectItem>
+                                    <SelectItem value="30">{t('last30')}</SelectItem>
+                                    <SelectItem value="90">{t('last90')}</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

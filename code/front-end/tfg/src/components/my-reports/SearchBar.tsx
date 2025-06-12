@@ -1,3 +1,5 @@
+'use client'
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
@@ -14,7 +16,7 @@ export default function SearchBar({
     setFilterEmail,
     applyFilters
 }: SearchBarProps) {
-    const t = useTranslations("myreports.searchbar");
+    const t = useTranslations();
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -25,13 +27,13 @@ export default function SearchBar({
 
     return (
         <form className="flex-1 md:flex-none" onSubmit={handleSubmit}>
-            <Label><p>{t('searchbyemail')}</p></Label>
+            <Label><p>{t('admin.report.searchbar.searchbyemail')}</p></Label>
             <div className="relative w-full mt-1">
                 <Input
                     value={filterEmail}
                     type="text"
                     className="w-full pr-10 pl-3 py-1 border rounded-md"
-                    placeholder="jhon@example.com"
+                    placeholder= {t('admin.report.searchbar.placeholder')}
                     onChange={(e) => { setFilterEmail(e.target.value) }}
                 />
                 <button

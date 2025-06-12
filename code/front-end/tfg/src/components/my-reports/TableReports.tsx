@@ -2,7 +2,7 @@ import DropdownActions from "@/components/my-reports/DropdownActions";
 import TruncateText from "@/components/my-reports/TruncateText";
 import FadeIn from "@/components/fadeIn";
 import { Report } from "@/types/reports";
-
+import { useTranslations } from "next-intl";
 
 
 import {
@@ -25,17 +25,23 @@ interface TableReportsProps {
 }
 
 export default function TableReports({ allReports, openPDF, banUser, handleResolve, deleteReportAndLog }: TableReportsProps) {
+    const t = useTranslations("admin.report.table");
+    const processStatus = (status: string): string => {
+        return status === "processing" ? t('status.processing') :
+               status === "accepted" ? t('status.accepted') : t('status.rejected');
+    }
     return (
         <FadeIn>
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Content</TableHead>
-                        <TableHead>Source</TableHead>
-                        <TableHead>State</TableHead>
-                        <TableHead className="text-center">Hate?</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead>{t('date')}</TableHead>
+                        <TableHead>{t('user')}</TableHead>
+                        <TableHead>{t('content')}</TableHead>
+                        <TableHead>{t('source')}</TableHead>
+                        <TableHead>{t('status.title')}</TableHead>
+                        <TableHead className="text-center">{t('hate.title')}</TableHead>
+                        <TableHead className="text-right">{t('actions')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -44,7 +50,9 @@ export default function TableReports({ allReports, openPDF, banUser, handleResol
                             <TableCell>
                                 {new Date(report.created_at.$date).toLocaleString()}
                             </TableCell>
-
+                            <TableCell>
+                                {report.notification_email}
+                            </TableCell>
                             <TableCell className="max-w-xs truncate">
                                 <TruncateText
                                     text={report.content}
@@ -58,14 +66,14 @@ export default function TableReports({ allReports, openPDF, banUser, handleResol
                                     rel="noopener noreferrer"
                                     className="text-blue-600 underline"
                                 >
-                                    See source
+                                    {t('seesource')}
                                 </a>
                             </TableCell>
 
-                            <TableCell>{report.state.toUpperCase()}</TableCell>
+                            <TableCell>{processStatus(report.state).toUpperCase()}</TableCell>
 
                             <TableCell className="text-center">
-                                {report.is_hate ? "Is hate" : "Not hate"}
+                                {report.is_hate ? t('hate.true') : t('hate.false')}
                             </TableCell>
 
                             <TableCell className="text-right space-x-2 relative">
@@ -83,7 +91,7 @@ export default function TableReports({ allReports, openPDF, banUser, handleResol
                 <TableFooter>
                     <TableRow>
                         <TableCell colSpan={6}>
-                            Total: {allReports.length} reports
+                            Total: {allReports.length} {t('reports')}
                         </TableCell>
                     </TableRow>
                 </TableFooter>

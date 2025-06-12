@@ -1,6 +1,7 @@
 "use client";
 import { BannedUser } from "@/types/banned";
 import TruncateText from "@/components/my-reports/TruncateText";
+import { useTranslations } from "next-intl";
 
 import {
     DropdownMenu,
@@ -19,6 +20,7 @@ interface ReportCardProps {
 }
 
 export default function BannedCard({ user, restoreAccess }: ReportCardProps) {
+    const t = useTranslations("admin.bannedusers");
 
 
     const dateString = new Date(user.created_at.$date).toLocaleString();
@@ -28,7 +30,7 @@ export default function BannedCard({ user, restoreAccess }: ReportCardProps) {
         <div className="p-4 border rounded shadow">
             <p className="font-medium">{userEmail}</p>
             <p className="text-sm text-gray-500">
-                Banned on {dateString}
+                {t('banneddate') + " " +dateString}
             </p>
 
 
@@ -51,17 +53,18 @@ export default function BannedCard({ user, restoreAccess }: ReportCardProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>
-                        <TruncateText text={userEmail} />
+                        {userEmail.slice(0, 20) + (userEmail.length > 20 ? "..." : "")}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                         onClick={async () => {
                             const confirmed = await Swal.fire({
-                                title: "Are you sure?",
-                                text: "This will restore the access to every account related to this email.",
+                                title: t('restore.alert.title'),
+                                text: t('restore.alert.text'),
                                 icon: "warning",
                                 showCancelButton: true,
-                                confirmButtonText: "Yes!",
+                                confirmButtonText: t('restore.alert.buttonaccept'),
+                                cancelButtonText: t('restore.alert.buttoncancel')
                             });
                             if (confirmed.isConfirmed) {
 
@@ -72,7 +75,7 @@ export default function BannedCard({ user, restoreAccess }: ReportCardProps) {
                     >
                         <div className="flex justify-between items-center w-full">
 
-                            <span>Restore access</span>
+                            <span>{t('restore.title')}</span>
                             <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.88468 17C7.32466 19.1128 9.75033 20.5 12.5 20.5C16.9183 20.5 
                             20.5 16.9183 20.5 12.5C20.5 8.08172 16.9183 4.5 12.5 4.5C8.08172 4.5 4.5 

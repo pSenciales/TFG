@@ -9,9 +9,12 @@ import { ReportsResponse } from "@/types/reports";
 import { useQueryClient } from "@tanstack/react-query";
 import resolveAlert from "@/lib/mail/templates/resolveAlert";
 
+import { useTranslations } from "next-intl";
 
 
 export function useMyReports() {
+
+  const t = useTranslations();
 
   const { data: session, status } = useSession();
   const queryClient = useQueryClient();
@@ -58,7 +61,7 @@ export function useMyReports() {
         url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/${reportId}`,
       });
 
-      if(role === "user"){
+      if (role === "user") {
 
         queryClient.invalidateQueries({ queryKey: ["reports"] });
       }
@@ -115,7 +118,7 @@ export function useMyReports() {
             user_id: session?.user.id
           }
         }).then(() => {
-          Swal.fire("Success", "User banned successfully.", "success");
+          Swal.fire(t('admin.report.dropdown.alerts.ban.successmessage'),"","success");
         });
       }
 
@@ -128,16 +131,21 @@ export function useMyReports() {
     reportId: string,
     email: string,
   ) {
+    const placeholder = t('admin.report.dropdown.alerts.resolve.html.placeholder');
+    const rejected = t('admin.report.dropdown.alerts.resolve.html.rejected');
+    const processing = t('admin.report.dropdown.alerts.resolve.html.processing');
+    const accepted = t('admin.report.dropdown.alerts.resolve.html.accepted');
+
     const result = await Swal.fire<{
       resolution: string;
       status: string;
     }>({
-      title: "Resolve Report",
-      html: resolveAlert,
+      title: t('admin.report.dropdown.alerts.resolve.title'),
+      html: resolveAlert.replace("{{placeholder}}",placeholder).replace("{{processing}}", processing).replace("{{accepted}}", accepted).replace("{{rejected}}", rejected),
       focusConfirm: false,
       showCancelButton: true,
-      confirmButtonText: "Save",
-      cancelButtonText: "Cancel",
+      confirmButtonText: t('admin.report.dropdown.alerts.resolve.confirmbutton'),
+      cancelButtonText: t('admin.report.dropdown.alerts.resolve.cancelbutton'),
       showLoaderOnConfirm: true,
       allowOutsideClick: () => !Swal.isLoading(),
       preConfirm: async () => {
@@ -169,7 +177,7 @@ export function useMyReports() {
     });
 
     if (result.isConfirmed && result.value) {
-      Swal.fire("Saved!", "Resolution saved.", "success");
+      Swal.fire(t('admin.report.dropdown.alerts.resolve.successmessage.title'), t('admin.report.dropdown.alerts.resolve.successmessage.text'), "success");
       queryClient.invalidateQueries({ queryKey: ["reportsAdmin"] });
     }
   }

@@ -104,8 +104,8 @@
       "password": "Contraseña",
       "buttontext": "Iniciar sesión con email"
     },
-    "error":{
-      "wrongcredentials":"Contraseña o email incorrectos.",
+    "error": {
+      "wrongcredentials": "Contraseña o email incorrectos.",
       "userbanned": "Usuario no permitido.",
       "unexpectederror": "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
     }
@@ -226,7 +226,7 @@
         "text": "El analisis se enviará a tu email"
       }
     },
-    "dialog":{
+    "dialog": {
       "title": "Añade un email",
       "description": "Necesitas añadir un email para recibir notificaciones o ¡inicia sesión ",
       "description2": "aquí!",
@@ -241,40 +241,40 @@
     "reporthere": "¡Denuncia aquí ahora!",
     "table": {
       "content": "Contenido: ",
-      "source": "Fuente: "
+      "source": "Fuente: ",
+      "user": "Usuario: "
     },
     "status": {
       "processing": "Procesando",
       "accepted": "Aceptado",
       "rejected": "Rechazado"
     },
-    "hate":{
+    "hate": {
       "true": "Odio",
       "false": "No odio"
     },
-    "dropdownmenu":{
+    "dropdownmenu": {
       "report": "Denuncia ",
       "view": "Visualizar",
       "delete": "Eliminar",
-      "alertdelete":{
+      "alertdelete": {
         "title": "¿Estás seguro de que quieres eliminar esta denuncia?",
         "text": "Esta acción la eliminará permanentemente.",
         "buttonaccept": "Sí, eliminar",
         "buttoncancel": "Cancelar"
       }
     },
-    "sortandfilter":{
+    "sortandfilter": {
       "buttontext": "Ordena y fitra",
       "title": "Ordena y filtra las denuncias",
       "select": {
-          "title":"Elige el método de ordenación",
-          "options":{
-            "date": "Fecha",
-            "content": "Contenido"
-          }
-        
-        },
-      "filter":{
+        "title": "Elige el método de ordenación",
+        "options": {
+          "date": "Fecha",
+          "content": "Contenido"
+        }
+      },
+      "filter": {
         "hate": {
           "title": "¿Es odio?",
           "options": {
@@ -282,7 +282,7 @@
             "false": "No odio"
           }
         },
-        "status":{
+        "status": {
           "title": "Estado",
           "options": {
             "processing": "Procesando",
@@ -295,14 +295,194 @@
       }
     }
   },
-  "reportsadmin":{
-    
-    "searchbar":{
-      "searchbyemail": "Buscar por email"
+  "admin": {
+    "portal": {
+      "title": "Portal de administración",
+      "loggedin": "Sesión iniciada como ",
+      "time": "Hora actual:",
+      "cards": {
+        "reports": {
+          "title": "Administrar denuncias",
+          "subtitle": "Revisa y gestiona las denuncias de los usuarios"
+        },
+        "bannedusers": {
+          "title": "Cuentas prohibidas",
+          "subtitle": "Gestiona los usuarios que han sido prohibidos"
+        },
+        "stats": {
+          "title": "Estadísticas",
+          "subtitle": "Consulta las estadísticas y métricas de la plataforma"
+        }
+      }
+    },
+    "report": {
+      "title": "Denuncias",
+      "searchbar": {
+        "searchbyemail": "Busca por email",
+        "placeholder": "jhon@ejemplo.com"
+      },
+      "dropdown": {
+        "report": "Denuncia ",
+        "view": "Visualizar",
+        "delete": "Eliminar",
+        "banuser": "Prohibir usuario",
+        "resolve": "Resolver",
+        "alerts": {
+          "delete": {
+            "title": "¿Estás seguro?",
+            "text": "Esta acción eliminara la denuncia permanentemente.",
+            "buttonaccept": "Sí, eliminar",
+            "buttoncancel": "Cancelar"
+          },
+          "ban": {
+            "title": "¿Estás seguro?",
+            "text": "Esta acción prohibirá el acceso a todas las cuentas asociadas a este email.",
+            "buttonaccept": "Sí, prohibir",
+            "buttoncancel": "Cancelar",
+            "successmessage": "Usuario prohibido con éxito"
+          },
+          "resolve": {
+            "title": "Resuelve la denuncia",
+            "confirmbutton": "Guardar",
+            "cancelbutton": "Cancelar",
+            "successmessage": {
+              "title": "¡Guardada!",
+              "text": "La denuncia ha sido resuelta con éxito."
+            },
+            "html": {
+              "placeholder": "Amplía la resolución aquí",
+              "processing": "Procesando",
+              "accepted": "Aceptado",
+              "rejected": "Rechazado"
+            }
+          }
+        }
+      },
+      "table": {
+        "content": "Contenido",
+        "source": "Fuente",
+        "user": "Usuario",
+        "status": {
+          "title": "Estado",
+          "processing": "Procesando",
+          "accepted": "Aceptado",
+          "rejected": "Rechazado"
+        },
+        "hate": {
+          "title": "¿Es odio?",
+          "true": "Odio",
+          "false": "No odio"
+        },
+        "date": "Fecha",
+        "actions": "Acciones",
+        "seesource": "Ver fuente",
+        "reports": " denuncias"
+      }
+    },
+    "bannedusers": {
+      "title": "Usuarios prohibidos",
+      "loading": "Cargando usuarios...",
+      "errorloading": "Error cargando usuarios prohibidos",
+      "empty": "¡Vaya! Parece que no hay usuarios prohibidos...",
+      "banneddate": "Acceso prohibido desde",
+      "restore": {
+        "title": "Restaurar acceso",
+        "alert": {
+          "title": "¿Estás seguro?",
+          "text": "Esta acción restaurará el acceso a todas las cuentas asociadas a este email.",
+          "buttonaccept": "Sí, restaurar",
+          "buttoncancel": "Cancelar",
+          "successmessage": "Acceso restaurado con éxito"
+        }
+      }
+    },
+    "stats": {
+      "title": "Estadísticas",
+      "loading": "Cargando estadísticas...",
+      "errorloading": "Error cargando estadísticas",
+      "days":{
+        "last7": "Últimos 7 días",
+        "last30": "Últimos 30 días",
+        "last90": "Últimos 90 días"
+      },
+      "resolutions":{
+        "title": "Denuncias y resoluciones",
+        "subtitle": "Número de denuncias y resoluciones por día",
+        "labels":{
+          "reports": "Denuncias",
+          "resolutions": "Resoluciones"
+        }
+      },
+      "piecharts":{
+        "status":{
+          "title":"Estado de las denuncias",
+          "subtitle":"Número de denuncias por estado",
+          "labels": {
+            "processing": "Procesando",
+            "accepted": "Aceptado",
+            "rejected": "Rechazado"
+          }
+        },
+        "hate":{
+          "title":"Discurso de odio",
+          "subtitle":"Número de denuncias por detección de odio",
+          "labels": {
+            "true": "Odio",
+            "false": "No odio"
+          }
+        },
+        "registered":{
+          "title": "Registrados y no registrados",
+          "subtitle": "Número de denuncias por usuarios registrados y no registrados",
+          "labels": {
+            "registered": "Registrados",
+            "unregistered": "No registrados"
+          }
+        }
+      }
     }
-  
   },
-  "contact":{
+  "profile":{
+      "title": "Perfil",
+      "loading": "Cargando perfil...",
+      "provider": {
+        "title": "Proveedor",
+        "credentials": "Credenciales"
+      },
+      "delete": {
+        "title": "ELIMINAR CUENTA",
+        "description": "ESTÁS A PUNTO DE ELIMINAR TU CUENTA",
+        "label": "Confirmación",
+        "confirmation": {
+          "write": "Escribe",
+          "keyword": "ELIMINAR",
+          "description": "para confirmar la eliminación de tu cuenta."
+        },
+        "button": "Eliminar"   
+      }
+    },
+    "resetpassword": {
+      "title": "Restablecer contraseña",
+      "newpassword": "Nueva contraseña",
+      "repeatnewpassword": "Repite la nueva contraseña",
+      "password": "Contraseña",
+      "button": "Restablecer contraseña",
+      "alerts":{
+        "success":{
+          "title": "¡Contraseña restablecida!",
+          "text": "Tu contraseña ha sido restablecida con éxito."
+        },
+        "token": {
+          "title": "¡Token inválido!",
+          "text": "El token proporcionado es inválido o ha expirado."
+        },
+        "error": {
+          "title": "¡Error inesperado!",
+          "text": "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+        }
+      }
+    },
+  "contact": {
     "title": "¡Gracias por pasar!",
     "subtitle": "Si te gusta este proyecto, puedes encontrar el código fuente y deja una ",
     "subtitle2": " en GitHub:",
@@ -331,4 +511,4 @@
       "text": "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
     }
   }
-  }
+}

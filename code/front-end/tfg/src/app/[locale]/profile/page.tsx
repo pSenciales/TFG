@@ -20,17 +20,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FadeIn from "@/components/fadeIn";
 
+import { useTranslations } from "next-intl";
+
 function getInitials(name: string): string {
     const words = name.split(" ").filter(Boolean);
     return words.slice(0, 2).map(w => w[0]).join("").toUpperCase();
 }
 
 export default function ProfilePage() {
+
+    const t = useTranslations('profile');
+
     const { data: session, status } = useSession();
     const [confirmation, setConfirmation] = useState("");
 
     if (status === "loading") {
-        return <div className="flex justify-center items-center h-screen">Loading profile…</div>;
+        return <div className="flex justify-center items-center h-screen">{t('loading')}</div>;
     }
     if (!session) {
         if (typeof window !== "undefined") window.location.href = "/auth/login";
@@ -44,7 +49,7 @@ export default function ProfilePage() {
     return (
         <main className="flex items-center justify-center p-6">
             <FadeIn>
-                <h1 className="text-center text-3xl font-bold my-10">Profile</h1>
+                <h1 className="text-center text-3xl font-bold my-10">{t('title')}</h1>
                 <Card className="w-full mx-auto max-w-sm shadow-xl rounded-xl">
                     <CardHeader className="flex flex-col items-center pt-6">
                         <Avatar className="w-24 h-24 ring-2 ring-primary ring-offset-2">
@@ -64,8 +69,8 @@ export default function ProfilePage() {
 
                     <CardContent className="pt-4 space-y-4">
                         <div className="flex gap-2">
-                            <span className="text-sm text-muted-foreground">Provider:</span>
-                            <span className="text-sm font-medium capitalize">{provider}</span>
+                            <span className="text-sm text-muted-foreground">{t('provider.title')}</span>
+                            <span className="text-sm font-medium capitalize">{provider === "Credentials" ? t('provider.credentials') : provider}</span>
                         </div>
                     </CardContent>
 
@@ -74,20 +79,20 @@ export default function ProfilePage() {
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button className="w-full" variant="destructive" >
-                                    DELETE ACCOUNT
+                                    {t('delete.title').toUpperCase()}
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[425px]">
                                 <DialogHeader>
-                                    <DialogTitle>YOU ARE ABOUT TO DELETE YOUR ACCOUNT</DialogTitle>
+                                    <DialogTitle>{t('delete.description').toUpperCase()}</DialogTitle>
                                     <DialogDescription>
-                                        Write &apos;Delete&apos; to confirm account deletion.
+                                        {t('delete.confirmation.write')} &apos;{t('delete.confirmation.keyword').toUpperCase()}&apos; {t('delete.confirmation.description')}
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="grid gap-4 py-4">
                                     <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor="text" className="text-right">
-                                            Confirmation
+                                            {t('delete.label')}
                                         </Label>
                                         <Input id="confirmation" className="col-span-3" onChange={(e) => setConfirmation(e.target.value)} />
                                     </div>
@@ -95,9 +100,9 @@ export default function ProfilePage() {
                                 <DialogFooter>
                                     <Button
                                         variant={"destructive"}
-                                        disabled={confirmation !== "Delete"}
+                                        disabled={confirmation !== t('delete.confirmation.keyword').toUpperCase()}
                                     >
-                                        Delete
+                                        {t('delete.button')}
                                     </Button>
                                 </DialogFooter>
                             </DialogContent>

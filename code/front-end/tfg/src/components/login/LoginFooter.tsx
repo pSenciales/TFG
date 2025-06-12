@@ -60,7 +60,7 @@ export default function RegisterFooter() {
       </span>
       <Dialog>
         <DialogTrigger  asChild>
-          <Link href="/login/#" className="text-blue underline">
+          <Link href="/login" className="text-blue underline">
           {t('footer.forgotpassword.title')}
           </Link>
         </DialogTrigger>
