@@ -75,6 +75,7 @@ export const authOptions: NextAuthOptions = {
                 },
               }
             );
+            console.log("DATA:"+JSON.stringify(res));
             token.sub = res.data.user_id;
           } catch (error) {
             if (error instanceof AxiosError) {

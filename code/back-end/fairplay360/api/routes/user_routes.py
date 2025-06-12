@@ -33,10 +33,10 @@ def create_user():
             return jsonify({"error": "Bad request: " + str(e)}), 400
     else:
         if user := User.objects(email=data['email'], provider=provider, is_active = True).first():
-            return jsonify({"success": "User found", "user_id": user.id}), 200
+            return jsonify({"success": "User found", "user_id": str(user.id)}), 200
         user = User(name=data['name'], email=data['email'], provider=provider)
         user.save()
-        return jsonify({"success": "User created", "user_id": user.id}), 201
+        return jsonify({"success": "User created", "user_id": str(user.id)}), 201
 
 
 @user_bp.route('/', methods=['GET'])
