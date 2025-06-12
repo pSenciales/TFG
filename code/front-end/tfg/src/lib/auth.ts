@@ -61,6 +61,7 @@ export const authOptions: NextAuthOptions = {
 
         if (account.provider !== "credentials") {
           try {
+            console.log("Creating user in Flask API");
             const res = await axios.post(
               `${FLASK_API_URL}/users`,
               {
@@ -75,13 +76,13 @@ export const authOptions: NextAuthOptions = {
                 },
               }
             );
-            console.log("DATA:"+JSON.stringify(res));
+            console.log("DATA:"+res.data.user_id);
             token.sub = res.data.user_id;
           } catch (error) {
             if (error instanceof AxiosError) {
               console.error(error);
             } else {
-              console.error("Error en la autenticación");
+              console.error("ERROR:"+error);
             }
           }
         }
