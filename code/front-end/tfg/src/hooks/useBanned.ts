@@ -7,8 +7,13 @@ import Swal from "sweetalert2";
 import { useQueryClient } from "@tanstack/react-query";
 import { BannedUsersResponse, BannedUser } from "@/types/banned";
 
+import { useTranslations } from "next-intl";
+
 
 export function useBanned() {
+
+  const t = useTranslations("admin.bannedusers");
+
   const { data: session, status } = useSession();
   const [filterEmail, setFilterEmail] = useState("");
   const [appliedFilters, setAppliedFilters] = useState("");
@@ -110,7 +115,7 @@ interface RawBannedListResponse {
                     user_id: session?.user.id
                   }
                 }).then(() => {
-                  Swal.fire("Success", "Access restored successfully.", "success");
+                  Swal.fire(t('restore.alert.successmessage'), "", "success");
                 });
         queryClient.invalidateQueries({ queryKey: ["users"] });
       } else {

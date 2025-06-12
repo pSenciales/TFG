@@ -15,6 +15,10 @@ import FadeIn from "../fadeIn";
 import FullScreenLoader from "./FullScreenLoader";
 import ReCAPTCHA from "react-google-recaptcha";
 
+import { useTranslations } from "next-intl";
+
+import { Link } from '@/i18n/navigation';
+
 interface EmailDialogProps {
   type: "text" | "image" | "post";
   loading: boolean;
@@ -45,6 +49,7 @@ export default function EmailDialog({
   checkURL,
   files,
 }: EmailDialogProps) {
+  const t = useTranslations("reports");
   let requiredParams = params.some((element) => element === "");
   if (files) {
     requiredParams = requiredParams || files.length !== 1;
@@ -87,9 +92,10 @@ export default function EmailDialog({
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add an email</DialogTitle>
+            <DialogTitle>{t('dialog.title')}</DialogTitle>
             <DialogDescription>
-              You need to add an email to get notified or sign up here!
+              {t('dialog.description')}
+              <Link href={"/login"}>{t('dialog.description2')}</Link>
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -109,7 +115,7 @@ export default function EmailDialog({
               disabled={emailCheck !== "" || email === "" || loading}
               onClick={handleAnalyze}
             >
-              Continue
+              {t('dialog.continue')}
             </Button>
           </DialogFooter>
         </DialogContent>

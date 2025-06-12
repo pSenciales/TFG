@@ -13,7 +13,10 @@ import FullScreenLoader from "./FullScreenLoader"
 import EmailDialog from "./EmailDialog"
 import FadeIn from "../fadeIn"
 
+import { useTranslations } from "next-intl"
+
 export default function ImageForm() {
+  const t = useTranslations('reports');
   const { data: session } = useSession()
   const {
     setContext,
@@ -42,7 +45,7 @@ export default function ImageForm() {
     <Card className="max-w-7xl">
       {loading && (
         <FullScreenLoader
-          words={["Extracting text...", "Adding context...", "Analyzing text...", "Generating report..."]}
+          words={[t('tabs.image.loading.text1'), t('tabs.image.loading.text2'), t('tabs.image.loading.text3'), t('tabs.image.loading.text4')]}
         />
       )}
 
@@ -55,11 +58,11 @@ export default function ImageForm() {
 
           <div className="mt-20">
             <Label>
-              Source <span className="text-red-500">&#42;</span>
+              {t('source.label')} <span className="text-red-500">&#42;</span>
             </Label>
-            <Input               placeholder="e.g https://example.com" onChange={handleSourceChange} />
+            <Input               placeholder={t('source.placeholder')} onChange={handleSourceChange} />
             <p className="text-sm text-muted-foreground">
-              This is the original source of the content, for example a URL.
+              {t('source.description')}
             </p>
             {sourceCheck !== "" && (
               <FadeIn>
@@ -69,14 +72,14 @@ export default function ImageForm() {
 
           </div>
 
-          <Label className="mt-10">Context</Label>
+          <Label className="mt-10">{t('context.label')}</Label>
           <Textarea
-            placeholder="Write the context here"
+            placeholder={t('context.placeholder')}
             className="peer-disabled:bg-gray-100"
             onChange={(e) => setContext(e.target.value)}
           />
           <p className="text-sm text-muted-foreground">
-            This text will be added as context to the report, making the result more accurate.
+            {t('context.description')}
           </p>
 
           {!session ? (
@@ -101,7 +104,7 @@ export default function ImageForm() {
               disabled={files.length !== 1 || sourceCheck !== "" || source === "" || loading}
               onClick={handleAnalyzeImage}
             >
-              Analyze
+              {t('analyze')}
             </Button>
           )}
         </CardContent>

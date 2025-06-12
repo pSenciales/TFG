@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Email missing!" }, { status: 422 });
 
         const emailCoded = jwt.sign({email}, process.env.JWT_SECRET as string, { expiresIn: "10m"});
-        const link = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/${emailCoded}`;
+        const link = `${process.env.NEXT_PUBLIC_BASE_URL}/en/reset-password/${emailCoded}`;
         const html = compileTemplate(templateName, {name:email, link});
         await sendMail(email, subject, html);
 

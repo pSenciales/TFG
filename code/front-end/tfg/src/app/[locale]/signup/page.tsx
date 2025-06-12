@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { MagicCard } from "@/components/magicui/magic-card";
 import FadeIn from "@/components/fadeIn";
 
+import { useTranslations } from "next-intl";
 
 export default function Register() {
     const {
@@ -48,10 +49,12 @@ export default function Register() {
         setOtp
     } = useSignup();
 
+    const t = useTranslations("signup");
+
     return (
         <div className="h-full">
             <FadeIn duration={0.5}>
-                <h1 className="text-center text-3xl font-bold mt-20">Sign Up to Fairplay360</h1>
+                <h1 className="text-center text-3xl font-bold mt-20">{t('title')}</h1>
             </FadeIn>
             <FadeIn key={step} duration={0.5}>
                 <div className="mx-2">

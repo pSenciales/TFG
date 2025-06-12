@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 
+import { useTranslations } from "next-intl";
+
 type Step3Props = {
     error: string;
     setOtp: (otp: string) => void;
@@ -11,9 +13,10 @@ type Step3Props = {
 };
 
 export default function Step3({ error, setOtp, handleVerify, loading }: Step3Props) {
+    const t = useTranslations("signup.step3");
     return (
         <form className="grid justify-center">
-            <h1 className="text-md">You should have received a code in your mail!</h1>
+            <h1 className="text-md">{t('header')}</h1>
             <div className="grid justify-center mt-20 mb-10">
                 <InputOTP
                     maxLength={6}
@@ -34,7 +37,7 @@ export default function Step3({ error, setOtp, handleVerify, loading }: Step3Pro
                 </InputOTP>
             </div>
             {error && <div className="text-red-500 text-center mb-2">{error}</div>}
-            <Button disabled={loading} onClick={handleVerify} >Verify</Button>
+            <Button disabled={loading} onClick={handleVerify} >{t('verify')}</Button>
         </form>
     );
 }

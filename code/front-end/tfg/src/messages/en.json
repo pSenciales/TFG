@@ -1,0 +1,504 @@
+{
+  "navbar": {
+    "report": "Report",
+    "docs": "Docs",
+    "contact": "Contact",
+    "login": "Log In",
+    "signup": "Sign up",
+    "myReports": "My Reports",
+    "adminPortal": "Admin Portal",
+    "profile": "Profile",
+    "logout": "Log out",
+    "hello": "Hello, {name}",
+    "guest": "Guest"
+  },
+  "footer": {
+    "rights": "© 2025 Fairplay360. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "contact": "Contact"
+  },
+  "docComponents": {
+    "llm": {
+      "title": "LLM",
+      "description": "We use the DeepSeek R1 API to analyze content and detect hate speech."
+    },
+    "ocr": {
+      "title": "OCR",
+      "description": "We rely on the Google Vision API for optical character recognition."
+    },
+    "frontend": {
+      "title": "Front-end",
+      "description": "Next.js powers our front-end, with key functionality provided by its built-in server."
+    },
+    "backend": {
+      "title": "Back-end",
+      "description": "Flask serves as our back-end framework."
+    },
+    "orm": {
+      "title": "ORM",
+      "description": "MongoEngine offers powerful ORM features, making data modeling simple."
+    },
+    "database": {
+      "title": "Database",
+      "description": "We use MongoDB for its flexibility and scalability."
+    }
+  },
+  "home": {
+    "title": "Introducing Fairplay360",
+    "subtitle": "A platform to report and analyze hate speech",
+    "rotatingtext": {
+      "text1": "Analize",
+      "text2": "Report"
+    },
+    "description": "Fairplay360 aims to combat hate speech through AI-driven moderation. We seek to create a safer digital space for fans, players, and organizations.",
+    "startnow": "Start now",
+    "reporthere": "Report here",
+    "stepper": {
+      "title": "Steps to follow",
+      "previous": "Previous",
+      "next": "Next",
+      "step1": {
+        "header": "Upload the content you want to analyze:",
+        "list1": "Upload a picture",
+        "list2": "Upload text",
+        "list3": "Or even an X's post"
+      },
+      "step2": {
+        "header": "(Optionally) You can add some context so the result is more accurate"
+      },
+      "step3": {
+        "header": "Just analyze and wait for the results!"
+      },
+      "step4": {
+        "header": "You just have made your first report",
+        "footer": "Thank you for your help!"
+      }
+    }
+  },
+  "login": {
+    "title": "Log In to Fairplay360",
+    "options": {
+      "google": "Log in with Google",
+      "github": "Log in with GitHub",
+      "separator": "or",
+      "email": "Log in with email"
+    },
+    "footer": {
+      "noaccount": "Don't have an account?",
+      "signuphere": "Sign up here!",
+      "forgotpassword": {
+        "title": "Forgot your password?",
+        "dialog": {
+          "title": "Add an email",
+          "description": "Write your email and we will send you a link to reset your password",
+          "submit": "Send"
+        },
+        "alert": {
+          "title": "Email sent",
+          "text": "Check your email to reset your password"
+        }
+      }
+    },
+    "step2": {
+      "optiontext": "All log in options",
+      "password": "Password",
+      "buttontext": "Log in with email"
+    },
+    "error": {
+      "wrongcredentials": "Wrong password or email.",
+      "userbanned": "User banned.",
+      "unexpectederror": "An unexpected error occurred. Please try again later."
+    }
+  },
+  "signup": {
+    "title": "Sign Up to Fairplay360",
+    "options": {
+      "google": "Sign up with Google",
+      "github": "Sign up with GitHub",
+      "separator": "OR",
+      "email": "Sign up with email"
+    },
+    "footer": {
+      "alreadyaccount": "Already have an account?",
+      "loginhere": "Log in here!",
+      "bycontinuing": "By continuing, you agree to our",
+      "terms": "Terms of Use"
+    },
+    "step2": {
+      "optiontext": "All sign up options",
+      "password": "Password",
+      "repeatpassword": "Repeat password",
+      "repeatemail": "Repeat email",
+      "buttontext": "Continue with email",
+      "emaildonotmatch": "Emails do not match.",
+      "passworddonotmatch": "Password do not match."
+    },
+    "step3": {
+      "header": "You should have received a code in your mail!",
+      "verify": "Verify",
+      "errorCode": "The code entered is incorrect or expired.",
+      "error": "An error occurred. Please try again later.",
+      "footer": {
+        "text": "The code can take a few minutes to send.",
+        "link": "Resend code?"
+      }
+    },
+    "step4": {
+      "header": "Complete your profile",
+      "name": "Name",
+      "birthday": "Date of birth",
+      "create": "Create account",
+      "age": "You must be at least 16 years old.",
+      "toast": {
+        "error": "An error occurred. Please try again later.",
+        "unexpectederror": "An unexpected error occurred. Please try again later."
+      }
+    }
+  },
+  "reports": {
+    "title": "Create a report from this different media",
+    "analyze": "Analyze",
+    "tabs": {
+      "image": {
+        "title": "Image",
+        "loading": {
+          "text1": "Extracting text...",
+          "text2": "Analyzing text...",
+          "text3": "Adding context...",
+          "text4": "Generating report..."
+        }
+      },
+      "text": {
+        "title": "Text",
+        "loading": {
+          "text1": "Analyzing text...",
+          "text2": "Adding context...",
+          "text3": "Generating report..."
+        }
+      },
+      "post": {
+        "title": "X's post",
+        "loading": {
+          "text1": "Analyzing text...",
+          "text2": "Adding context...",
+          "text3": "Generating report..."
+        }
+      }
+    },
+    "content": {
+      "label": "Content",
+      "placeholder": "Write your report here",
+      "description": "This text will be analyzed and added to the report"
+    },
+    "context": {
+      "label": "Context",
+      "placeholder": "Write the context here",
+      "description": "This text will be added as context to the report, making the result more accurate Analyze"
+    },
+    "source": {
+      "label": "Source",
+      "placeholder": "e.g https://example.com",
+      "description": "This is the original source of the content, for example an URL"
+    },
+    "uploadimage": {
+      "label": "Upload an image",
+      "description": "Drag and drop your image here or click to upload",
+      "footer": "This image must be mainly text"
+    },
+    "url": {
+      "label": "URL",
+      "placeholder": "e.g https://x.com/user/status/123456790",
+      "description": "The text in this post will be analyzed. If the post has images, the first one will be used as context."
+    },
+    "alerts": {
+      "success": {
+        "tittle": "Report created",
+        "text": "El analisis se enviará a tu email"
+      }
+    },
+    "dialog": {
+      "title": "Add an email",
+      "description": "You need to add an email to receive notifications or log in ",
+      "description2": "here!",
+      "continue": "Continue"
+    }
+  },
+  "myreports": {
+    "title": "My Reports",
+    "empty": "Oops! It seems like you don't have any reports right now...",
+    "loading": "Loading reports",
+    "errorloading": "Error loading reports",
+    "reporthere": "Report here!",
+    "table": {
+      "content": "Content: ",
+      "source": "Source: ",
+      "user": "User: "
+    },
+    "status": {
+      "processing": "Proccesing",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "hate": {
+      "true": "Hate",
+      "false": "Not hate"
+    },
+    "dropdownmenu": {
+      "report": "Report ",
+      "view": "View",
+      "delete": "Delete",
+      "alertdelete": {
+        "title": "Are you sure you want to delete this report?",
+        "text": "This action cannot be undone.",
+        "buttonaccept": "Yes, delete it",
+        "buttoncancel": "Cancel"
+      }
+    },
+    "sortandfilter": {
+      "buttontext": "Sort & filter",
+      "title": "Sort and filter reports",
+      "select": {
+        "title": "Choose a sorting option",
+        "options": {
+          "date": "Date",
+          "content": "Content"
+        }
+      },
+      "filter": {
+        "hate": {
+          "title": "Is hate?",
+          "options": {
+            "true": "Hate",
+            "false": "Not hate"
+          }
+        },
+        "status": {
+          "title": "Status",
+          "options": {
+            "processing": "Proccesing",
+            "accepted": "Accepted",
+            "rejected": "Rejected"
+          }
+        },
+        "filtersapplied": "Filters applied",
+        "filterapplied": "Filter applied"
+      }
+    }
+  },
+  "admin": {
+    "portal":{
+      "title":"Admin portal",
+      "loggedin":"Logged in as ",
+      "time": "Current time:",
+      "cards":{
+        "reports":{
+          "title": "Manage reports",
+          "subtitle": "Manage and review user reports"
+        },
+        "bannedusers":{
+          "title": "Banned users",
+          "subtitle": "Manage banned users and restore access"
+        },
+        "stats":{
+          "title": "Stats",
+          "subtitle": "Check platform statistics and key metrics"
+        }
+      }
+    },
+    "report": {
+      "title": "Reports",
+      "searchbar": {
+        "searchbyemail": "Search by email",
+        "placeholder": "jhon@example.com"
+      },
+      "dropdown":{
+        "report": "Report ",
+        "view": "View",
+        "delete": "Delete",
+        "banuser": "Ban user",
+        "resolve": "Resolve",
+        "alerts":{
+          "delete":{
+            "title":"Are you sure?",
+            "text":"This action will delete the report and cannot be undone.",
+            "buttonaccept": "Yes, delete it",
+            "buttoncancel": "Cancel"
+          },
+          "ban":{
+            "title":"Are you sure?",
+            "text": "This action will ban every account related to this email.",
+            "buttonaccept": "Yes, ban user",
+            "buttoncancel": "Cancel",
+            "successmessage": "User banned successfully"
+          },
+          "resolve":{
+            "title": "Resolve report",
+            "confirmbutton": "Save",
+            "cancelbutton": "Cancel",
+            "successmessage": {
+              "title": "Saved!",
+              "text": "The report has been resolved successfully"
+            },
+            "html":{
+              "placeholder":"Write the resolution here",
+              "processing": "Proccesing",
+              "accepted": "Accepted",
+              "rejected": "Rejected"
+            }
+          }
+        }
+      },
+      "table": {
+        "content": "Content",
+        "source": "Source",
+        "user": "User",
+        "status": {
+          "title": "Status",
+          "processing": "Proccesing",
+          "accepted": "Accepted",
+          "rejected": "Rejected"
+        },
+        "hate": {
+          "title": "Is hate?",
+          "true": "Hate",
+          "false": "Not hate"
+        },
+        "date": "Date",
+        "actions": "Actions",
+        "seesource": "See source",
+        "reports": " reports"
+      }
+    },
+    "bannedusers": {
+      "title": "Banned users",
+      "loading": "Loading users...",
+      "errorloading": "Error loading users",
+      "empty": "Oops! It seems like there are no banned users...",
+      "banneddate": "Banned since: ",
+      "restore": {
+        "title": "Restore access",
+        "alert": {
+          "title": "Are you sure?",
+          "text": "This action will restore access to every account related to this email.",
+          "buttonaccept": "Yes, restore",
+          "buttoncancel": "Cancel",
+          "successmessage": "User restored successfully"
+        }
+      }
+    },
+    "stats": {
+      "title": "Stats",
+      "loading": "loading stats...",
+      "errorloading": "Error loading stats",
+      "days":{
+        "last7": "Last 7 days",
+        "last30": "Last 30 days",
+        "last90": "Last 90 days"
+      },
+      "resolutions":{
+        "title": "Reports & Resolutions",
+        "subtitle": "Number of reports and resolutions per day",
+        "labels":{
+          "reports": "Reports",
+          "resolutions": "Resolutions"
+        }
+      },
+      "piecharts":{
+        "status":{
+          "title":"Reports status",
+          "subtitle":" Number of reports by status",
+          "labels": {
+            "processing": "Proccesing",
+            "accepted": "Accepted",
+            "rejected": "Rejected"
+          }
+        },
+        "hate":{
+          "title":"Hate detection",
+          "subtitle":"Number of reports by hate detection",
+          "labels": {
+            "true": "Hate",
+            "false": "Not hate"
+          }
+        },
+        "registered":{
+          "title": "Registered & Unregistered Users",
+          "subtitle": "Number of reports by registered and unregistered users",
+          "labels": {
+            "registered": "Registered",
+            "unregistered": "Unregistered"
+          }
+        }
+      }
+    }
+  },
+  "profile":{
+      "title": "Profile",
+      "loading": "Loading profile...",
+      "provider": {
+        "title": "Provider",
+        "credentials": "Credentials"
+      },
+      "delete": {
+        "title": "DELETE ACCOUNT",
+        "description": "YOU ARE ABOUT TO DELETE YOUR ACCOUNT",
+        "label": "Confirmation",
+        "confirmation": {
+          "write": "Write",
+          "keyword": "DELETE",
+          "description": "to confirm the deletion of your account."
+        },
+        "button": "Delete"   
+      }
+    },
+    "resetpassword": {
+      "title": "Reset password",
+      "newpassword": "New password",
+      "repeatnewpassword": "Repeat new password",
+      "password": "Password",
+      "button": "Reset password",
+      "alerts":{
+        "success":{
+          "title": "Password reset successful!",
+          "text": "Your password has been reseted successfully."
+        },
+        "token": {
+          "title": "Invalid token!",
+          "text": "The token is invalid or has expired. Please try again."
+        },
+        "error": {
+          "title": "Unexpected error!",
+          "text": "An unexpected error occurred. Please try again later."
+        }
+      }
+    },
+  "contact": {
+    "title": "Thanks for stopping by!",
+    "subtitle": "If you like this project, you can find the source code and leave a ",
+    "subtitle2": " on GitHub:",
+    "repository": "GitHub Repository",
+    "star": "Star this repo",
+    "footer": "You can also reach me at ",
+    "footer2": " if you have any questions or suggestions."
+  },
+  "checks": {
+    "emailcheck": "This is not a valid email",
+    "passwordcheck": "At least 8 characters.\nAt least one uppercase letter.\nAt least one lowercase letter.\nAt least one special character (e.g., !@#$%^&*).",
+    "sourcecheck": "This is not a valid URL",
+    "urlcheck": "This is not a valid X URL"
+  },
+  "alerts": {
+    "sessionexpired": {
+      "title": "Session expired!",
+      "text": "Please log in again to continue."
+    },
+    "emailbanned": {
+      "title": "Email banned!",
+      "text": "Please contact support for more information."
+    },
+    "unexpectederror": {
+      "title": "Error!",
+      "text": "An error has occurred. Please try again later."
+    }
+  }
+}

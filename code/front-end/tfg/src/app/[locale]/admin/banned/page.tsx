@@ -9,6 +9,9 @@ import SearchBar from "@/components/my-reports/SearchBar";
 import { BannedUser, BannedUsersResponse } from "@/types/banned";
 import BannedCard from "@/components/banned/BannedCard";
 
+import { useTranslations } from "next-intl";
+
+
 export default function Banned() {
   const {
     session,
@@ -20,6 +23,8 @@ export default function Banned() {
     fetchBanned,
     restoreAccess
   } = useBanned();
+
+  const t = useTranslations("admin.bannedusers");
 
   type BannedQueryKey = ["users", { appliedFilters: string }];
 
@@ -61,7 +66,7 @@ export default function Banned() {
     return (
       <FadeIn>
         <p className="mt-20 text-center">
-          Loading users <ThreeDot color="#000" size="small" />
+          {t('loading')} <ThreeDot color="#000" size="small" />
         </p>
       </FadeIn>
     );
@@ -73,7 +78,7 @@ export default function Banned() {
   }
 
   if (isError) {
-    return <div className="text-center text-red-600">Error loading users</div>;
+    return <div className="text-center text-red-600">{t('errorloading')}</div>;
   }
 
   // @ts-expect-error typescript no typea correctamente data
@@ -83,7 +88,7 @@ export default function Banned() {
     <div className="flex flex-col items-center w-full p-4 space-y-4">
       <FadeIn duration={0.5}>
         <h1 className="text-3xl font-bold text-center mt-10">
-          Banned Users
+          {t("title")}
         </h1>
       </FadeIn>
 
@@ -113,7 +118,7 @@ export default function Banned() {
       ) : (
         <FadeIn>
           <p className="text-center font-bold">
-            Oops! There are not any banned users right now...😅
+            {t('empty')}😅
           </p>
         </FadeIn>
       )}
@@ -121,7 +126,7 @@ export default function Banned() {
       {hasNextPage && <div ref={sentinelRef} style={{ height: 1 }} />}
       {isFetchingNextPage && (
         <p className="text-center">
-          Loading more… <ThreeDot color="#000" size="small" />
+          {t('loading')} <ThreeDot color="#000" size="small" />
         </p>
       )}
     </div>

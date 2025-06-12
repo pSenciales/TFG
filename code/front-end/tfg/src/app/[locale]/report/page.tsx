@@ -10,8 +10,11 @@ import TextForm from "@/components/report/TextForm";
 import ImageForm from "@/components/report/ImageForm";
 import PostForm from "@/components/report/PostForm";
 
+import { useTranslations } from "next-intl";
+
 export default function Report() {
 
+  const t = useTranslations('reports');
 
 
   const {
@@ -25,14 +28,14 @@ export default function Report() {
 
   const tabs = [
     {
-      title: "Text",
+      title: t('tabs.text.title'),
       value: "text",
       content: (
         <TextForm />
       )
     },
     {
-      title: "Image",
+      title: t('tabs.image.title'),
       value: "image",
       content: (
         <ImageForm />
@@ -40,7 +43,7 @@ export default function Report() {
 
     },
     {
-      title: "X's post",
+      title: t('tabs.post.title'),
       value: "post",
       content: (
         <PostForm />
@@ -85,7 +88,7 @@ export default function Report() {
 
       <div className="w-full grid place-items-center">
         <h1 className="text-3xl font-bold mt-20 text-center">
-          Create a report from this different media
+          {t('title')}
         </h1>
         <div className="w-full max-w-7xl mt-10">
           <Tabs

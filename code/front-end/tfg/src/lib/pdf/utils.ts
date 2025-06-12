@@ -199,8 +199,8 @@ The Fairplay360 Team`;
   */
   const tempFilePath = path.join("/tmp", `temp_report_${Date.now()}.pdf`);
   /* ---LOCAL---
-   * 
   const tempFilePath = path.join(process.cwd(), `temp_report_${Date.now()}.pdf`);
+   * 
   */
   fs.writeFileSync(tempFilePath, pdfBytes);
   return tempFilePath;

@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,53 +30,53 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-
-// Sub-elementos para el menú de "Documentación"
-const docComponents = [
-  {
-    title: "LLM",
-    href: "https://api-docs.deepseek.com/news/news250120",
-    description: "We use the DeepSeek R1 API to analyze content and detect hate speech.",
-  },
-  {
-    title: "OCR",
-    href: "https://cloud.google.com/vision/docs?hl=es-419",
-    description: "We rely on the Google Vision API for optical character recognition.",
-  },
-  {
-    title: "Front-end",
-    href: "https://nextjs.org/docs",
-    description: "Next.js powers our front-end, with key functionality provided by its built-in server.",
-  },
-  {
-    title: "Back-end",
-    href: "https://flask.palletsprojects.com/en/stable/",
-    description: "Flask serves as our back-end framework.",
-  },
-  {
-    title: "ORM",
-    href: "https://docs.mongoengine.org/",
-    description: "MongoEngine offers powerful ORM features, making data modeling simple.",
-  },
-  {
-    title: "Database",
-    href: "https://www.mongodb.com/docs/",
-    description: "We use MongoDB for its flexibility and scalability.",
-  },
-];
-
+import LanguageSwitcher from './languageSwitcher';
 
 function getInitials(name: string): string {
   const words = name.split(" ").filter(Boolean);
   return words.slice(0, 2).map(word => word[0]).join("").toUpperCase();
 }
 
-
 export default function NavBar() {
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [docOpen, setDocOpen] = useState(false);
-  console.log(session);
+  const t = useTranslations();
+
+  // Translated doc components
+  const docComponents = [
+    {
+      title: t('docComponents.llm.title'),
+      href: "https://api-docs.deepseek.com/news/news250120",
+      description: t('docComponents.llm.description'),
+    },
+    {
+      title: t('docComponents.ocr.title'),
+      href: "https://cloud.google.com/vision/docs?hl=es-419",
+      description: t('docComponents.ocr.description'),
+    },
+    {
+      title: t('docComponents.frontend.title'),
+      href: "https://nextjs.org/docs",
+      description: t('docComponents.frontend.description'),
+    },
+    {
+      title: t('docComponents.backend.title'),
+      href: "https://flask.palletsprojects.com/en/stable/",
+      description: t('docComponents.backend.description'),
+    },
+    {
+      title: t('docComponents.orm.title'),
+      href: "https://docs.mongoengine.org/",
+      description: t('docComponents.orm.description'),
+    },
+    {
+      title: t('docComponents.database.title'),
+      href: "https://www.mongodb.com/docs/",
+      description: t('docComponents.database.description'),
+    },
+  ];
+
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 w-full">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-3 py-2">
@@ -104,17 +105,18 @@ export default function NavBar() {
 
         {/* Navegación para desktop */}
         <div className="hidden md:flex items-center space-x-4">
+
           <NavigationMenu>
             <NavigationMenuList className="flex space-x-4">
               {/* Denuncia: enlace simple */}
               <NavigationMenuItem>
                 <Link href="/report" className={navigationMenuTriggerStyle()}>
-                  Report
+                  {t('navbar.report')}
                 </Link>
               </NavigationMenuItem>
               {/* Documentación: menú desplegable */}
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Docs</NavigationMenuTrigger>
+                <NavigationMenuTrigger>{t('navbar.docs')}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {docComponents.map((component) => (
@@ -128,7 +130,7 @@ export default function NavBar() {
               {/* Contacto: enlace simple */}
               <NavigationMenuItem>
                 <Link href="/contact" className={navigationMenuTriggerStyle()}>
-                  Contact
+                  {t('navbar.contact')}
                 </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -136,7 +138,11 @@ export default function NavBar() {
         </div>
 
         {/* Botones de sesión */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-4">
+          <div className="hidden md:block">
+            <LanguageSwitcher />
+          </div>
+
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -154,37 +160,49 @@ export default function NavBar() {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Hello, {session.user?.name ? session.user.name.split(" ")[0] : "Guest"}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {t('navbar.hello', { name: session.user?.name ? session.user.name.split(" ")[0] : t('navbar.guest') })}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem >
-                  <Link href={"/my-reports"}>My Reports</Link>
+                  <Link href="/my-reports">{t('navbar.myReports')}</Link>
                 </DropdownMenuItem>
                 {session.role === "admin" ? (
                   <DropdownMenuItem >
-                  <Link href={"/admin"}>Admin Portal</Link>
-                </DropdownMenuItem>
+                    <Link href="/admin">{t('navbar.adminPortal')}</Link>
+                  </DropdownMenuItem>
                 ) :
                   (
                     <>
                     </>
                   )}
                 <DropdownMenuItem>
-                <Link href={"/profile"}>Profile</Link>
+                  <Link href="/profile">{t('navbar.profile')}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()}>
-                  Log out
+                  {t('navbar.logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
           ) : (
-            <>
-              <Button variant="outline" onClick={() => (window.location.href = "/login")}>
-                Log In
+            <div className="flex items-center gap-4">
+              {/* Se muestra solo en md y arriba */}
+
+
+              <Button variant="outline">
+                <Link href="/login">
+                  {t('navbar.login')}
+                </Link>
               </Button>
-              <Button onClick={() => (window.location.href = "/signup")}>Sign up</Button>
-            </>
+
+              <Button>
+                <Link href="/signup">
+                  {t('navbar.signup')}
+                </Link>
+              </Button>
+            </div>
           )}
         </div>
       </div>
@@ -194,12 +212,15 @@ export default function NavBar() {
         <div className="md:hidden bg-white shadow-md">
           <ul className="flex flex-col space-y-2 p-4">
             <li>
+              <LanguageSwitcher />
+            </li>
+            <li>
               <Link
                 href="/report"
                 onClick={() => setMenuOpen(false)}
                 className="block p-2 hover:bg-gray-100 rounded"
               >
-                Report
+                {t('navbar.report')}
               </Link>
             </li>
             {/* Desplegable documentacion */}
@@ -208,14 +229,14 @@ export default function NavBar() {
                 onClick={() => setDocOpen((prev) => !prev)}
                 className="w-full text-left block p-2 hover:bg-gray-100 rounded"
               >
-                Docs
+                {t('navbar.docs')}
               </button>
               {docOpen && (
                 <ul className="pl-4 mt-1 space-y-1">
                   {docComponents.map((component) => (
                     <li key={component.title}>
                       <Link
-                        href={component.href}
+                        href={component.href as "/"}
                         onClick={() => setMenuOpen(false)}
                         className="block p-2 hover:bg-gray-100 rounded"
                       >
@@ -233,7 +254,7 @@ export default function NavBar() {
                 onClick={() => setMenuOpen(false)}
                 className="block p-2 hover:bg-gray-100 rounded"
               >
-                Contact
+                {t('navbar.contact')}
               </Link>
             </li>
           </ul>
@@ -242,6 +263,7 @@ export default function NavBar() {
     </nav>
   );
 }
+
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,

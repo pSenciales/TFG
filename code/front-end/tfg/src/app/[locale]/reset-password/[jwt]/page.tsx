@@ -13,7 +13,11 @@ import { useSignup } from "@/hooks/useSignup";
 import FadeIn from "@/components/fadeIn";
 import swal from "sweetalert2";
 
+import { useTranslations } from 'next-intl';
+
 export default function ResetPasswordPage() {
+  const t = useTranslations('resetpassword');
+
   const params = useParams();
   const jwt = params.jwt;
   const { data: session, status } = useSession();
@@ -61,21 +65,21 @@ export default function ResetPasswordPage() {
       const { data } = await axios.put(`/api/reset-password?jwt=${jwt}`, { password })
       if (data.status === 200) {
         await swal.fire({
-          title: 'Success!',
-          text: 'Password reset successfully',
+          title: t('alerts.success.title'),
+          text: t('alerts.success.text'),
           icon: 'success'
         });
         router.push("/login")
       } else if(data.error === "Token expired"){
         await swal.fire({
-          title: 'Error!',
-          text: 'Token expired',
+          title: t('alerts.token.title'),
+          text: t('alerts.token.text'),
           icon: 'error'
         });
       } else {
         await swal.fire({
-          title: 'Error!',
-          text: 'Error resetting password',
+          title: t('alerts.error.title'),
+          text: t('alerts.error.text'),
           icon: 'error'
         });
       }
@@ -98,7 +102,7 @@ export default function ResetPasswordPage() {
   return (
     <div>
       <FadeIn>
-      <h1 className="text-center text-3xl font-bold mt-20">Reset your password</h1>
+      <h1 className="text-center text-3xl font-bold mt-20">{t('title')}</h1>
       <Card className="max-w-xl mx-auto mt-10">
         <MagicCard gradientColor="#D9D9D955">
           <CardHeader />
@@ -107,19 +111,19 @@ export default function ResetPasswordPage() {
               <div>
                 <form className="grid gap-5">
                   <div>
-                    <Label>New password</Label>
+                    <Label>{t('newpassword')}</Label>
                     <Input
                       type="password"
-                      placeholder="password"
+                      placeholder={t('password')}
                       onChange={(e) => handlePasswordChange(e)}
                     />
                     <span className="text-red-500 text-sm">{passwordCheck}</span>
                   </div>
                   <div>
-                    <Label>Repeat new password</Label>
+                    <Label>{t('repeatnewpassword')}</Label>
                     <Input
                       type="password"
-                      placeholder="password"
+                      placeholder={t('password')}
                       onChange={(e) => setRepeatPassword(e.target.value)}
                     />
                   </div>
@@ -152,7 +156,7 @@ export default function ResetPasswordPage() {
                         </svg>
                       </span>
                     ) : (
-                      'Save new password'
+                      t('button')
                     )}
                   </Button>
                 </form>

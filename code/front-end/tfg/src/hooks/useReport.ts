@@ -6,7 +6,13 @@ import axios, { AxiosError } from "axios";
 import { signOut, useSession } from "next-auth/react";
 import Swal from 'sweetalert2'
 
+import { useTranslations } from "next-intl";
+
+
 export function useReport() {
+
+  const t = useTranslations();
+
   const { data: session } = useSession();
 
   // Controlar el envio del formulario
@@ -50,7 +56,7 @@ export function useReport() {
     if (emailRegex.test(newEmail)) {
       setEmailCheck("")
     } else {
-      setEmailCheck("This is not a valid email");
+      setEmailCheck(t("checks.emailcheck"));
     }
 
   };
@@ -63,7 +69,7 @@ export function useReport() {
     if (tweetRegex.test(url)) {
       setUrlCheck("");
     } else {
-      setUrlCheck("This is not a valid tweet URL");
+      setUrlCheck(t('checks.urlcheck'));
     }
   };
 
@@ -77,7 +83,7 @@ export function useReport() {
     if (sourceRegex.test(source)) {
       setSourceCheck("");
     } else {
-      setSourceCheck("This is not a valid URL");
+      setSourceCheck(t('checks.sourcecheck'));
     }
   };
 
@@ -102,11 +108,7 @@ export function useReport() {
     try {
       const res = await axios.post("/api/analyze", formData);
       if (res.status === 200) {
-        Swal.fire({
-          title: 'Email sent!',
-          text: 'The analisis will be sent to your email',
-          icon: 'success'
-        })
+        successAlert();
       }
     } catch (error) {
       showAlert(error);
@@ -137,11 +139,7 @@ export function useReport() {
 
       const res = await axios.post("/api/analyze", formData);
       if (res.status === 200) {
-        Swal.fire({
-          title: 'Email sent!',
-          text: 'The analisis will be sent to your email',
-          icon: 'success'
-        })
+        successAlert();
       }
     } catch (error) {
       showAlert(error);
@@ -173,11 +171,7 @@ export function useReport() {
 
       const res = await axios.post("/api/analyze", formData);
       if (res.status === 200) {
-        Swal.fire({
-          title: 'Email sent!',
-          text: 'The analisis will be sent to your email',
-          icon: 'success'
-        })
+        successAlert();
 
       }
     } catch (error) {
@@ -192,26 +186,36 @@ export function useReport() {
     }
   };
 
+
+
+  const successAlert = () => {
+    Swal.fire({
+      title: t('reports.alerts.success.tittle'),
+      text: t('reports.alerts.success.text'),
+      icon: 'success'
+    })
+  }
+
   const showAlert = (error: unknown) => {
     if (error instanceof AxiosError && error.status === 401 && error.response?.data.error === "Session expired or invalid token") {
       Swal.fire({
-        title: 'The session has expired!',
-        text: 'please log in again',
+        title: t('alerts.sessionexpired.title'),
+        text:  t('alerts.sessionexpired.text'),
         icon: 'warning'
       });
       signOut();
       window.location.href = "/login";
     } else if (error instanceof AxiosError && error.status === 403 && error.response?.data.error === "Email is banned") {
       Swal.fire({
-        title: 'Email is banned!',
-        text: 'Please contact support for more information.',
+        title:  t('alerts.userbanned.title'),
+        text: t('alerts.userbanned.text'),
         icon: 'warning'
       });
     } else {
       console.log(error);
       Swal.fire({
-        title: 'Error!',
-        text: 'An error occurred while sending the analysis. Please try again later.',
+        title: t('alerts.unexpectederror.title'),
+        text: t('alerts.unexpectederror.text'),
         icon: 'error'
       });
     }

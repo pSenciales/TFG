@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 
+import { useTranslations } from "next-intl";
+
 export function useLogin() {
+
+  const t = useTranslations("login");
+
   // Estados del formulario
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,17 +32,18 @@ export function useLogin() {
       if (res?.status === 401) {
         setDisabled(false);
         setLoading(false);
-        setErrorLogin("Wrong email or password")
+        setErrorLogin(t("error.wrongcredentials"))
       } else if (res?.status === 200) {
-        window.location.href = "/";
+        const currentLang = window.location.pathname.split('/')[1];
+        window.location.href = `/${currentLang}`;
       }else if(res?.status === 403){
         setDisabled(false);
         setLoading(false);
-        setErrorLogin("User banned")
+        setErrorLogin(t("error.userbanned"))
       }
     } catch (error: unknown) {
       console.error("An error occurred during login:", error);
-      setErrorLogin("An unexpected error occurred. Please try again.");
+      setErrorLogin(t("error.unexpectederror"));
     }
   }
 

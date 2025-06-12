@@ -6,7 +6,12 @@ import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import ReCAPTCHA from "react-google-recaptcha";
 
+
+import { useTranslations } from 'next-intl';
+
 export function useSignup() {
+  const t = useTranslations();
+
   const FLASK_URL = process.env.NEXT_PUBLIC_FLASK_API_URL;
 
   // Estados del formulario
@@ -64,7 +69,7 @@ export function useSignup() {
       setDisabledEmail(false);
       setEmailCheck("")
     } else {
-      setEmailCheck("This is not a valid email");
+      setEmailCheck(t('checks.emailcheck'));
       setDisabledEmail(true);
     }
 
@@ -80,7 +85,7 @@ export function useSignup() {
     } else {
       setDisabledPw(true);
       setPasswordCheck(
-        "At least 8 characters.\nAt least one uppercase letter.\nAt least one lowercase letter.\nAt least one special character (e.g., !@#$%^&*)."
+        t('checks.passwordcheck')
       );
     }
   };
@@ -137,8 +142,8 @@ export function useSignup() {
 
       switch (success) {
         case "User found": {
-          toast.warning("Email already in use", {
-            description: `${email} is already registered, try to log in here`,
+          toast.warning(t('signup.step2.toast.useralreadyexists.title'), {
+            description: `${email + " " + t('signup.step2.toast.useralreadyexists.description')	}`,
             action: {
               label: "Log In",
               onClick: () => (window.location.href = "/login"),
@@ -149,8 +154,8 @@ export function useSignup() {
         }
 
         case "User banned": {
-          toast.error("Email not allowed", {
-            description: `${email} is banned`,
+          toast.error(t('signup.step2.toast.userbanned.title'), {
+            description: `${email + " " + t('signup.step2.toast.userbanned.description')}`,
           });
           resetVerification();
           break;
@@ -187,9 +192,9 @@ export function useSignup() {
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response && err.response.status === 400) {
         console.log(err.response);
-        setError("The code entered is incorrect or expired.");
+        setError(t('signup.step3.errorcode'));
       } else {
-        setError("An error occurred. Please try again later.");
+        setError(t('signup.step3.error'));
       }
     } finally {
       setLoading(false);
@@ -219,10 +224,10 @@ export function useSignup() {
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         console.error("Error response:", error.response.data);
-        toast.error("An error occurred. Please try again later.");
+        toast.error('signup.step4.toast.error');
       } else {
         console.error("Unexpected error:", error);
-        toast.error("An unexpected error occurred. Please try again later.");
+        toast.error(t('signup.step4.toast.unexpectederror'));
       }
     } finally {
       setLoading(false);

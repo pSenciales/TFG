@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import { Link } from '@/i18n/navigation';
 import axios from "axios";
 import swal from "sweetalert2";
 import {
@@ -12,6 +12,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { useTranslations } from 'next-intl';
+
 import FadeIn from "../fadeIn";
 
 import { Input } from "@/components/ui/input";
@@ -23,6 +25,7 @@ import { useSignup } from "@/hooks/useSignup";
 
 export default function RegisterFooter() {
 
+  const t = useTranslations('login');
   const { email,
     handleEmailChange,
     emailCheck
@@ -34,8 +37,8 @@ export default function RegisterFooter() {
       const res = await axios.post("/api/send-email/reset-password", { email })
       if(res.status === 200){
         swal.fire({
-          title: "Email sent",
-          text: "Check your email to reset your password",
+          title: t('footer.forgotpassword.alert.title'),
+          text: t('footer.forgotpassword.alert.text'),
           icon: "success",
           confirmButtonText: "OK",
         });
@@ -50,22 +53,22 @@ export default function RegisterFooter() {
   return (
     <div className="flex flex-col">
       <span className="text-silver">
-        Don&apos;t have an account,&nbsp;
+        {t('footer.noaccount')},&nbsp;
         <Link href="/signup" className="text-blue underline">
-          Sign up here!
+        {t('footer.signuphere')}
         </Link>
       </span>
       <Dialog>
         <DialogTrigger  asChild>
-          <Link href="/login/#" className="text-blue underline">
-            Forgot your password?
+          <Link href="/login" className="text-blue underline">
+          {t('footer.forgotpassword.title')}
           </Link>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add an email</DialogTitle>
+            <DialogTitle>{t('footer.forgotpassword.dialog.title')}</DialogTitle>
             <DialogDescription>
-              Write your email to receive a link to reset your password.
+            {t('footer.forgotpassword.dialog.description')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -85,7 +88,7 @@ export default function RegisterFooter() {
               disabled={emailCheck !== "" || email === ""}
               onClick={sendMail}
             >
-              Continue
+              {t('footer.forgotpassword.dialog.submit')}
             </Button>
           </DialogFooter>
         </DialogContent>

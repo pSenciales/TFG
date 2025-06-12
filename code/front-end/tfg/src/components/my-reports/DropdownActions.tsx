@@ -10,6 +10,7 @@ import {
 
 import Swal from "sweetalert2"
 
+import { useTranslations } from "next-intl";
 
 interface DropdownProps {
     reportId: string;
@@ -21,6 +22,9 @@ interface DropdownProps {
 }
 
 export default function DropdownActions({ reportId, openPDF, onDelete, banUser, handleResolve }: DropdownProps) {
+
+    const t = useTranslations("admin.report.dropdown");
+
     return (
 
 
@@ -42,7 +46,7 @@ export default function DropdownActions({ reportId, openPDF, onDelete, banUser, 
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>{"Report #" + reportId.slice(0, 15)}</DropdownMenuLabel>
+                <DropdownMenuLabel>{ t('report') +"#" + reportId.slice(0, 15)}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={
                     () => {
@@ -51,7 +55,7 @@ export default function DropdownActions({ reportId, openPDF, onDelete, banUser, 
                 }>
                     <div className="flex justify-between items-center w-full">
 
-                        <span> View</span>
+                        <span> {t('view')}</span>
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
                             <circle cx="12" cy="12" r="3.5" stroke="#000000"></circle>
                             <path d="M21 12C21 12 20 4 12 4C4 4 3 12 3 12" stroke="#000000"></path></svg>
@@ -63,7 +67,7 @@ export default function DropdownActions({ reportId, openPDF, onDelete, banUser, 
                     }>
                     <div className="flex justify-between items-center w-full">
 
-                        <span> Resolve </span>
+                        <span> {t('resolve')} </span>
                         <svg viewBox="0 0 24 24" width="20" height="20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="#000000">
                             <path d="M12.0225923,2.99879075 C11.7257502,3.46221691 11.4861106,3.96580034 11.3136354,4.49957906 L5.25,4.5 
                                     C4.28350169,4.5 3.5,5.28350169 3.5,6.25 L3.5,14.75 C3.5,15.7164983 4.28350169,16.5 5.25,16.5 L7.49878573,16.5 L7.49985739,20.2505702 
@@ -83,11 +87,12 @@ export default function DropdownActions({ reportId, openPDF, onDelete, banUser, 
                 <DropdownMenuItem
                     onClick={async () => {
                         const confirmed = await Swal.fire({
-                            title: "Are you sure?",
-                            text: "This will delete the report permanently.",
+                            title: t('alerts.delete.title'),
+                            text: t('alerts.delete.text'),
                             icon: "warning",
                             showCancelButton: true,
-                            confirmButtonText: "Yes, delete it!",
+                            confirmButtonText: t('alerts.delete.buttonaccept'),
+                            cancelButtonText: t('alerts.delete.buttoncancel'),
                         });
 
                         if (confirmed.isConfirmed) {
@@ -96,7 +101,7 @@ export default function DropdownActions({ reportId, openPDF, onDelete, banUser, 
                     }}
                 >
                     <div className="flex justify-between items-center w-full">
-                        <span>Delete</span>
+                        <span>{t('delete')}</span>
                         <svg width="20" height="20" className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" strokeWidth="0.00024000000000000003">
                             <path d="M12 2.75C11.0215 2.75 10.1871 3.37503 9.87787 4.24993C9.73983 
                                 4.64047 9.31134 4.84517 8.9208 4.70713C8.53026 4.56909 8.32557 4.1406 8.46361 
@@ -136,11 +141,12 @@ export default function DropdownActions({ reportId, openPDF, onDelete, banUser, 
                 <DropdownMenuItem
                     onClick={async () => {
                         const confirmed = await Swal.fire({
-                            title: "Are you sure?",
-                            text: "This will ban every account related to this email.",
+                            title: t('alerts.ban.title'),
+                            text: t('alerts.ban.text'),
                             icon: "warning",
                             showCancelButton: true,
-                            confirmButtonText: "Yes!",
+                            confirmButtonText: t('alerts.ban.buttonaccept'),
+                            cancelButtonText: t('alerts.ban.buttoncancel'),
                         });
                         if (confirmed.isConfirmed) {
 
@@ -153,7 +159,7 @@ export default function DropdownActions({ reportId, openPDF, onDelete, banUser, 
                 >
                     <div className="flex justify-between items-center w-full">
 
-                        <span>Ban user</span>
+                        <span>{t('banuser')}</span>
                         <svg width="20" height="20" fill="#ff0000" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                             <path d="M16 1.25c-8.146 0-14.75 6.604-14.75 14.75s6.604 
                                         14.75 14.75 14.75c8.146 0 14.75-6.604 14.75-14.75v0c-0.010-8.142-6.608-14.74-14.749-14.75h-0.001zM29.25 

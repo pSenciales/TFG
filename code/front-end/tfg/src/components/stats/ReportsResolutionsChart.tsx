@@ -34,7 +34,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+import { useTranslations } from "next-intl"
+
 export default function ReportsResolutionsChart() {
+
+  const t = useTranslations("admin.stats");
+  const talerts = useTranslations("alerts");
+
   const [days, setDays] = useState<string>("7");
   async function fetchData(): Promise<ReportsResolutionsChartData[]> {
     try {
@@ -55,8 +61,8 @@ export default function ReportsResolutionsChart() {
       ) {
         // Sesión expirada
         await Swal.fire({
-          title: "The session has expired!",
-          text: "Please log in again",
+          title: talerts("sessionexpired.title"),
+          text: talerts("sessionexpired.text"),
           icon: "warning",
         }).then(() => {
           signOut();
@@ -88,11 +94,11 @@ export default function ReportsResolutionsChart() {
 
   const chartConfig = {
     resolution: {
-      label: "Resolutions",
+      label: t('resolutions.labels.resolutions'),
       color: "hsl(var(--chart-4))",
     },
     report: {
-      label: "Reports",
+      label: t('resolutions.labels.reports'),
       color: "hsl(var(--chart-2))",
     },
   } satisfies ChartConfig
@@ -114,8 +120,8 @@ export default function ReportsResolutionsChart() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Reports & Resolutions</CardTitle>
-              <CardDescription>Number of reports and resolutions per day</CardDescription>
+              <CardTitle>{t('resolutions.title')}</CardTitle>
+              <CardDescription>{t('resolutions.subtitle')}</CardDescription>
             </div>
             <Select value={days} onValueChange={setDays}>
               <SelectTrigger className="w-[180px]">
@@ -123,9 +129,9 @@ export default function ReportsResolutionsChart() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="7">Last 7 days</SelectItem>
-                  <SelectItem value="30">Last 30 days</SelectItem>
-                  <SelectItem value="90">Last 90 days</SelectItem>
+                  <SelectItem value="7">{t('days.last7')}</SelectItem>
+                  <SelectItem value="30">{t('days.last30')}</SelectItem>
+                  <SelectItem value="90">{t('days.last90')}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -159,13 +165,14 @@ export default function ReportsResolutionsChart() {
                       axisLine={false}
                       tickMargin={8}
                     />
-                    <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                    <ChartTooltip cursor={true} content={<ChartTooltipContent  />} />
                     <Line
                       dataKey="resolutions"
                       type="monotone"
                       stroke="var(--color-resolution)"
                       strokeWidth={2}
                       dot={false}
+                      label= {t('resolutions.labels.reports')}
                     />
                     <Line
                       dataKey="reports"

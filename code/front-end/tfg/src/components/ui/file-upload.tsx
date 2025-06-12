@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
 
+import { useTranslations } from "next-intl";
+
 const mainVariant = {
   initial: {
     x: 0,
@@ -31,6 +33,9 @@ export const FileUpload = ({
 }: {
   onChange?: (files: File[]) => void;
 }) => {
+
+  const t = useTranslations('reports');
+
   const [files, setFiles] = useState<File[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -90,10 +95,10 @@ export const FileUpload = ({
         </div>
         <div className="flex flex-col items-center justify-center">
           <p className="relative z-20 font-sans font-bold text-neutral-700 dark:text-neutral-300 text-base">
-            Upload an image <span className="text-red-500">&#42;</span>
+            {t('uploadimage.label')} <span className="text-red-500">&#42;</span>
           </p>
           <p className="relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-base mt-2">
-            Drag and drop your image here or click to upload
+            {t('uploadimage.description')}
           </p>
           <div className="relative w-full mt-10 max-w-xl mx-auto">
             {files.length > 0 &&
@@ -195,7 +200,7 @@ export const FileUpload = ({
         </div>
       </motion.div>
       <p className="relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-base mt-2">
-            This image is meant to be mainly text
+          {t('uploadimage.footer')}
           </p>
     </div>
   );
