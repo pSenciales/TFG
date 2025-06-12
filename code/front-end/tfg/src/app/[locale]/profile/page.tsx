@@ -50,6 +50,7 @@ export default function ProfilePage() {
     const email = user.email ?? "No Email";
 
     async function deleteUser() {
+        console.log(JSON.stringify(session))
         const res = await axios.post("/api/proxy",{
             url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/users/${session?.user.id}`,
             method: "DELETE"
@@ -86,7 +87,7 @@ export default function ProfilePage() {
                     <CardContent className="pt-4 space-y-4">
                         <div className="flex gap-2">
                             <span className="text-sm text-muted-foreground">{t('provider.title')}</span>
-                            <span className="text-sm font-medium capitalize">{provider === "Credentials" ? t('provider.credentials') : provider}</span>
+                            <span className="text-sm font-medium capitalize">{provider === "Credentials" ? t('provider.credentials') : provider.toUpperCase()}</span>
                         </div>
                     </CardContent>
 

@@ -58,10 +58,10 @@ export const authOptions: NextAuthOptions = {
         token.provider = account.provider;
         token.accessTokenExpires = Date.now() + 60 * 60 * 1000;
         token.role = user.role || "user";
-        
+
         if (account.provider !== "credentials") {
           try {
-            await axios.post(
+            const res = await axios.post(
               `${FLASK_API_URL}/users`,
               {
                 name: user.name,
@@ -75,10 +75,11 @@ export const authOptions: NextAuthOptions = {
                 },
               }
             );
+            token.sub = res.data.user_id;
           } catch (error) {
             if (error instanceof AxiosError) {
               console.error(error);
-            } else { 
+            } else {
               console.error("Error en la autenticación");
             }
           }
@@ -95,7 +96,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
 
-    async signIn({user}) {
+    async signIn({ user }) {
       const email = user.email as string;
       console.log(`EMAIL: ${email}`)
       const response = await axios.get(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/users/email/${email}`);

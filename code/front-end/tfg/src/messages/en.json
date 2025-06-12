@@ -436,7 +436,7 @@
       "title": "Profile",
       "loading": "Loading profile...",
       "provider": {
-        "title": "Provider",
+        "title": "Provider:",
         "credentials": "Credentials"
       },
       "delete": {

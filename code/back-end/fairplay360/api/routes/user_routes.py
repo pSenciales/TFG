@@ -32,11 +32,11 @@ def create_user():
         except Exception as e:
             return jsonify({"error": "Bad request: " + str(e)}), 400
     else:
-        if User.objects(email=data['email'], provider=provider, is_active = True).first():
-            return success("User found", 200)
+        if user := User.objects(email=data['email'], provider=provider, is_active = True).first():
+            return jsonify({"success": "User found", "user_id": user.id}), 200
         user = User(name=data['name'], email=data['email'], provider=provider)
         user.save()
-        return success("User created", 201)
+        return jsonify({"success": "User created", "user_id": user.id}), 201
 
 
 @user_bp.route('/', methods=['GET'])

@@ -446,7 +446,7 @@
       "title": "Perfil",
       "loading": "Cargando perfil...",
       "provider": {
-        "title": "Proveedor",
+        "title": "Proveedor:",
         "credentials": "Credenciales"
       },
       "delete": {
