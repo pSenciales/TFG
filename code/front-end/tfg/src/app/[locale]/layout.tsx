@@ -1,4 +1,3 @@
-import localFont from "next/font/local";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ClientProviders from "@/components/ClientProviders";
@@ -9,16 +8,17 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  // params llega como promesa en Next.js
+  params: Promise<{ locale: string }>;
 }) {
-  const locale = params.locale;
+  // Desestructuramos y aguardamos params
+  const { locale } = await params;
   // Carga de mensajes de i18n en el Server Component
   const messages = (await import(`../../messages/${locale}.json`)).default;
 
   return (
     <html lang={locale}>
       <body className="antialiased min-h-screen flex flex-col">
-        {/* Envolvemos todo lo que necesite hooks/imports dinámicos */}
         <ClientProviders locale={locale} messages={messages}>
           <NavBar />
           <main className="flex-grow">{children}</main>

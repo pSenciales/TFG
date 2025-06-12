@@ -19,7 +19,11 @@ export default function ClientProviders({
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider
+          locale={locale}
+          messages={messages}
+          timeZone="Europe/Madrid"
+        >
           {children}
         </NextIntlClientProvider>
       </QueryClientProvider>
