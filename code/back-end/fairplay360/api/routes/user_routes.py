@@ -22,7 +22,7 @@ def create_user():
         if missing := missing_fields(['password'], data):
             return missing
         try:
-            if User.objects(email=data['email'], provider="credentials").first():
+            if User.objects(email=data['email'], provider="credentials", is_active = True).first():
                 return jsonify({"error": "Email already in use"}), 409
 
             user = User(name=data['name'], email=data['email'])
@@ -32,7 +32,7 @@ def create_user():
         except Exception as e:
             return jsonify({"error": "Bad request: " + str(e)}), 400
     else:
-        if User.objects(email=data['email'], provider=provider).first():
+        if User.objects(email=data['email'], provider=provider, is_active = True).first():
             return success("User found", 200)
         user = User(name=data['name'], email=data['email'], provider=provider)
         user.save()
@@ -54,10 +54,8 @@ def delete_user(user_id):
     if not_found := element_not_found(user, "User not found"):
         return not_found
 
-    # Delete reports related to user
-    Report.objects(user_id=user_id).delete()
-
-    user.delete()
+    user.set_inactive()
+    user.save()
     return success("User deleted", 200)
 
 @user_bp.route('/<user_id>', methods=['PUT'])
@@ -113,7 +111,7 @@ def reset_password():
 
 @user_bp.route('/email/<user_email>', methods=['GET'])
 def get_user_by_email(user_email):
-    user = User.objects(email=user_email, provider='credentials').first()
+    user = User.objects(email=user_email, provider='credentials', is_active = True).first()
     blacklisted = Blacklist.objects(email=user_email).first()
     if blacklisted:
         return success("User banned", 200)

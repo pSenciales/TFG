@@ -36,7 +36,7 @@ def login():
         return jsonify({"error": "User banned"}), 403
 
 
-    user = User.objects(email=data["email"]).first()
+    user = User.objects(email=data["email"], is_active=True).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
 

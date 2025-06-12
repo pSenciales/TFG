@@ -96,7 +96,6 @@ def update_report(report_id):
 
     if resolution:
 
-
         if missing := missing_fields(["action", "user_id"], resolution):
             return missing
 
@@ -112,7 +111,15 @@ def update_report(report_id):
         report.state = data['state']
 
     report.save()
-    return success("Report updated", 200)
+
+    report_user_id = report.user_id
+    if report_user_id:
+        user = User.objects(id=report_user_id, is_active = True).first()
+        if user:
+            return success("Notificable", 200)
+
+    return success("Report updated successfully", 200)
+
 
 
 
@@ -128,7 +135,7 @@ def get_user_reports():
 
     # Buscar el usuario basado en el email y provider
     try:
-        user = User.objects.get(email=email, provider=provider)
+        user = User.objects.get(email=email, provider=provider, is_active = True)
     except DoesNotExist:
         return jsonify({"error": "User not valid"}), 404
 
@@ -193,7 +200,7 @@ def get_admin_reports():
         return jsonify({"error": "Missing email"}), 400
 
     try:
-        user = User.objects.get(email=email, provider="credentials")
+        user = User.objects.get(email=email, provider="credentials", is_active = True)
     except DoesNotExist:
         return jsonify({"error": "User not valid"}), 404
 

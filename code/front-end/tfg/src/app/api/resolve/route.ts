@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
         if (response instanceof Error) {
             return NextResponse.json({ error: response.message }, { status: 400 });
         } else {
-            if (response.status === 200) {
+            if (response.status === 200 && response.data.success === "Notificable") {
                 const html = compileTemplate("status", {
                     status: state,
                     statusClass: state.toLowerCase(),

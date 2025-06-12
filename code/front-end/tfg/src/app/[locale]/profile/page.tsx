@@ -19,8 +19,11 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FadeIn from "@/components/fadeIn";
+import axios from "axios";
+import { signOut } from "next-auth/react";
 
 import { useTranslations } from "next-intl";
+
 
 function getInitials(name: string): string {
     const words = name.split(" ").filter(Boolean);
@@ -45,6 +48,19 @@ export default function ProfilePage() {
     const { user, provider } = session;
     const name = user.name ?? "No Name";
     const email = user.email ?? "No Email";
+
+    async function deleteUser() {
+        const res = await axios.post("/api/proxy",{
+            url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/users/${session?.user.id}`,
+            method: "DELETE"
+        })
+
+        if (res.status === 200) {
+            signOut();
+        } else {
+            console.error("Error deleting user:", res.data);
+        }
+    }
 
     return (
         <main className="flex items-center justify-center p-6">
@@ -101,6 +117,7 @@ export default function ProfilePage() {
                                     <Button
                                         variant={"destructive"}
                                         disabled={confirmation !== t('delete.confirmation.keyword').toUpperCase()}
+                                        onClick={()=> {deleteUser()}}
                                     >
                                         {t('delete.button')}
                                     </Button>
