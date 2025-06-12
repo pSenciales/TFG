@@ -1,6 +1,5 @@
 "use client";
 import { BannedUser } from "@/types/banned";
-import TruncateText from "@/components/my-reports/TruncateText";
 import { useTranslations } from "next-intl";
 
 import {

@@ -13,7 +13,7 @@ export default function ClientProviders({
   children,
 }: {
   locale: string;
-  messages: Record<string, any>;
+  messages: Record<string, string | number | boolean | null | undefined>;
   children: React.ReactNode;
 }) {
   return (
