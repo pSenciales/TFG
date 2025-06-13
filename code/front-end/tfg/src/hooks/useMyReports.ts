@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import resolveAlert from "@/lib/mail/templates/resolveAlert";
 
 import { useTranslations } from "next-intl";
+import { url } from "inspector";
 
 
 export function useMyReports() {
@@ -118,7 +119,7 @@ export function useMyReports() {
             user_id: session?.user.id
           }
         }).then(() => {
-          Swal.fire(t('admin.report.dropdown.alerts.ban.successmessage'),"","success");
+          Swal.fire(t('admin.report.dropdown.alerts.ban.successmessage'), "", "success");
         });
       }
 
@@ -141,7 +142,7 @@ export function useMyReports() {
       status: string;
     }>({
       title: t('admin.report.dropdown.alerts.resolve.title'),
-      html: resolveAlert.replace("{{placeholder}}",placeholder).replace("{{processing}}", processing).replace("{{accepted}}", accepted).replace("{{rejected}}", rejected),
+      html: resolveAlert.replace("{{placeholder}}", placeholder).replace("{{processing}}", processing).replace("{{accepted}}", accepted).replace("{{rejected}}", rejected),
       focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: t('admin.report.dropdown.alerts.resolve.confirmbutton'),
@@ -204,16 +205,18 @@ export function useMyReports() {
 
   async function fetchReports({
     urlUser,
-    pageParam = 0
+    pageParam = 0,
+    limitParam
   }: {
     urlUser: string;
     pageParam?: number;
+    limitParam?: number;
   }) {
 
     const email = session?.user?.email ?? "";
     const provider = session?.provider ?? "";
     const cursor = pageParam || 0;      // o el valor que saques de pageParam
-    const limit = 9;      // si quieres hacerlo configurable, añádelo a appliedFilters también
+    const limit = limitParam || 9;      // si quieres hacerlo configurable, añádelo a appliedFilters también
 
     // Desestructuramos los filtros aplicados
     const {
@@ -293,6 +296,32 @@ export function useMyReports() {
     }
   }
 
+  const convertToCSV = (reports: Report[]) => {
+    const exportKeys = ["content", "context", "is_hate", "state"] as const;
+    if (!reports.length) return "";
+
+    const headers = exportKeys.join(",");
+    const rows = reports.map((report: Report) =>
+    exportKeys.map(key => `"${report[key as keyof Report] ?? ""}"`).join(",")
+  );
+
+  return [headers, ...rows].join("\n");
+  };
+
+  async function downloadCSV (){
+    const res = await fetchReports({ urlUser: "admin", limitParam: 1000 });
+    const reports = res.reports;
+    const csvData = convertToCSV(reports);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "reports.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
 
 
@@ -323,6 +352,7 @@ export function useMyReports() {
     setSortBy,
     filtersCount,
     fetchReports,
+    downloadCSV,
     session,
     status
   };

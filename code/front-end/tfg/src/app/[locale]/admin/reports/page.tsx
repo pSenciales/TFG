@@ -16,6 +16,8 @@ import TableReports from "@/components/my-reports/TableReports";
 
 import { useTranslations } from "next-intl";
 
+
+
 // Función de fetch para useInfiniteQuery
 
 
@@ -51,6 +53,7 @@ export default function MyReports() {
     setSortBy,
     filtersCount,
     fetchReports,
+    downloadCSV,
     session,
     status
 
@@ -189,6 +192,16 @@ export default function MyReports() {
               applyFilters={applyFilters}
               filtersCount={filtersCount}
             />
+            <div className="mt-4 md:mt-0">
+            <Button variant="outline"   onClick={downloadCSV} disabled={allReports.length === 0}>
+              {t('admin.report.export')}
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 11L21.2 2.80005" stroke="#292D32" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                <path d="M22 6.8V2H17.2" stroke="#292D32" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                <path d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13" stroke="#292D32" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+              </svg>
+            </Button>
+            </div>
 
             <div className="hidden md:block">
               <Button variant={tableButtonStyle} size="icon" onClick={handleTableChange}>
@@ -205,6 +218,8 @@ export default function MyReports() {
                 </svg>
               </Button>
             </div>
+
+
           </div>
         </div>
 

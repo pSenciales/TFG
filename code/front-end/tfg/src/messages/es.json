@@ -317,6 +317,7 @@
     },
     "report": {
       "title": "Denuncias",
+      "export": "Exportar a CSV",
       "searchbar": {
         "searchbyemail": "Busca por email",
         "placeholder": "jhon@ejemplo.com"
