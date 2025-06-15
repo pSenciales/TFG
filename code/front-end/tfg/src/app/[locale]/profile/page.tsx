@@ -36,6 +36,7 @@ export default function ProfilePage() {
 
     const { data: session, status } = useSession();
     const [confirmation, setConfirmation] = useState("");
+    const [loading, setLoading] = useState(false);
 
     if (status === "loading") {
         return <div className="flex justify-center items-center h-screen">{t('loading')}</div>;
@@ -50,16 +51,23 @@ export default function ProfilePage() {
     const email = user.email ?? "No Email";
 
     async function deleteUser() {
-        console.log(JSON.stringify(session))
-        const res = await axios.post("/api/proxy",{
-            url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/users/${session?.user.id}`,
-            method: "DELETE"
-        })
-
-        if (res.status === 200) {
-            signOut();
-        } else {
-            console.error("Error deleting user:", res.data);
+        try {
+            setLoading(true);
+            console.log(JSON.stringify(session))
+            const res = await axios.post("/api/proxy", {
+                url: `${process.env.NEXT_PUBLIC_FLASK_API_URL}/users/${session?.user.id}`,
+                method: "DELETE"
+            })
+    
+            if (res.status === 200) {
+                signOut();
+            } else {
+                console.error("Error deleting user:", res.data);
+            }
+        } catch (error) {
+            console.error("An error occurred while deleting the user:", error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -106,23 +114,51 @@ export default function ProfilePage() {
                                         {t('delete.confirmation.write')} &apos;{t('delete.confirmation.keyword').toUpperCase()}&apos; {t('delete.confirmation.description')}
                                     </DialogDescription>
                                 </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="text" className="text-right">
-                                            {t('delete.label')}
-                                        </Label>
-                                        <Input id="confirmation" className="col-span-3" onChange={(e) => setConfirmation(e.target.value)} />
+                                <form>
+
+                                    <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="text" className="text-right">
+                                                {t('delete.label')}
+                                            </Label>
+                                            <Input id="confirmation" className="col-span-3" onChange={(e) => setConfirmation(e.target.value)} />
+                                        </div>
                                     </div>
-                                </div>
-                                <DialogFooter>
-                                    <Button
-                                        variant={"destructive"}
-                                        disabled={confirmation !== t('delete.confirmation.keyword').toUpperCase()}
-                                        onClick={()=> {deleteUser()}}
-                                    >
-                                        {t('delete.button')}
-                                    </Button>
-                                </DialogFooter>
+                                    <DialogFooter>
+                                        <Button
+                                            variant={"destructive"}
+                                            disabled={confirmation !== t('delete.confirmation.keyword').toUpperCase() || loading}
+                                            onClick={() => { deleteUser() }}
+                                        >
+                                            {loading ? (
+                                                <span className="flex items-center">
+                                                    <svg
+                                                        className="animate-spin h-5 w-5 mr-2 text-white"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <circle
+                                                            className="opacity-25"
+                                                            cx="12"
+                                                            cy="12"
+                                                            r="10"
+                                                            stroke="currentColor"
+                                                            strokeWidth="4"
+                                                        ></circle>
+                                                        <path
+                                                            className="opacity-75"
+                                                            fill="currentColor"
+                                                            d="M4 12a8 8 0 018-8v8H4z"
+                                                        ></path>
+                                                    </svg>
+                                                </span>
+                                            ) : (
+                                                t('delete.button')
+                                            )}
+                                        </Button>
+                                    </DialogFooter>
+                                </form>
                             </DialogContent>
                         </Dialog>
 
