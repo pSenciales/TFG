@@ -279,6 +279,7 @@ export function useSignup() {
     setRepeatPassword,
     setName,
     setStep,
-    setOtp
+    setOtp,
+    setLoading
   };
 }

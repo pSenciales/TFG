@@ -166,7 +166,7 @@ export default function MyReports() {
       <FadeIn duration={0.5}>
         <h1 className="text-center text-3xl font-bold mt-10">{t('admin.report.title')}</h1>
         <div className="w-full max-w-7xl mx-auto px-4 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-end md:space-x-4">
+          <div className="flex flex-col md:flex-row md:items-end md:space-x-4 mt-4 md:mt-0">
             {/* Search bar */}
             <SearchBar
               filterEmail={filterEmail}
