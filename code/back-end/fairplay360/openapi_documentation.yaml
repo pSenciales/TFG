@@ -1,0 +1,583 @@
+components:
+  schemas: {}
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+info:
+  description: OpenAPI 3.0 documentation for the Flask application.
+  title: API Documentation - Flask Application
+  version: 1.0.0
+openapi: 3.0.3
+paths:
+  /blacklist:
+    get:
+      parameters:
+      - in: query
+        name: searchEmail
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Usuarios en lista negra
+      security:
+      - bearerAuth: []
+      summary: Obtener lista negra
+      tags:
+      - Blacklist
+    post:
+      description: Agrega un email a la lista negra.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+              required:
+              - email
+              type: object
+        required: true
+      responses:
+        '201':
+          description: "Usuario a\xF1adido a lista negra"
+      security:
+      - bearerAuth: []
+      summary: "A\xF1adir usuario a lista negra"
+      tags:
+      - Blacklist
+  /blacklist/email/{email}:
+    get:
+      parameters:
+      - in: path
+        name: email
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: "Resultado de verificaci\xF3n"
+      summary: "Verificar si un email est\xE1 prohibido"
+      tags:
+      - Blacklist
+  /blacklist/{email}:
+    delete:
+      parameters:
+      - in: path
+        name: email
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Usuario eliminado de la lista
+      security:
+      - bearerAuth: []
+      summary: Eliminar usuario de lista negra
+      tags:
+      - Blacklist
+  /login:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Login successful
+        '400':
+          description: Missing credentials
+        '401':
+          description: Wrong password
+        '403':
+          description: User banned
+        '404':
+          description: User not found
+      summary: Login with email and password
+      tags:
+      - Authentication
+  /logs:
+    get:
+      responses:
+        '200':
+          description: Lista de logs
+      security:
+      - bearerAuth: []
+      summary: Obtener todos los logs
+      tags:
+      - Logs
+    post:
+      description: "Crea un log de actividad del usuario. Requiere acci\xF3n y user_id."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                action:
+                  type: string
+                user_id:
+                  type: string
+              required:
+              - action
+              - user_id
+              type: object
+        required: true
+      responses:
+        '201':
+          description: Log creado
+      security:
+      - bearerAuth: []
+      summary: Crear un nuevo log
+      tags:
+      - Logs
+  /logs/user/{user_id}:
+    get:
+      parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Logs del usuario
+      security:
+      - bearerAuth: []
+      summary: Obtener logs de un usuario
+      tags:
+      - Logs
+  /logs/{log_id}:
+    delete:
+      parameters:
+      - in: path
+        name: log_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Log eliminado
+      security:
+      - bearerAuth: []
+      summary: Eliminar un log
+      tags:
+      - Logs
+  /reports:
+    get:
+      parameters:
+      - in: query
+        name: cursor
+        schema:
+          type: integer
+      - in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Lista de reportes
+      security:
+      - bearerAuth: []
+      summary: Obtener reportes (paginados)
+      tags:
+      - Reports
+    post:
+      description: "Crea un nuevo reporte. Los campos obligatorios son los m\xEDnimos\
+        \ para identificar el reporte y la fuente."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                content:
+                  type: string
+                context:
+                  type: string
+                images:
+                  items:
+                    type: string
+                  type: array
+                is_hate:
+                  type:
+                  - boolean
+                  - string
+                notification_email:
+                  type: string
+                pdf_link:
+                  type: string
+                provider:
+                  type: string
+                resolutions:
+                  items:
+                    type: object
+                  type: array
+                source:
+                  type: string
+              required:
+              - content
+              - source
+              - is_hate
+              - notification_email
+              - pdf_link
+              type: object
+        required: true
+      responses:
+        '201':
+          description: Reporte creado
+      security:
+      - bearerAuth: []
+      summary: Crear nuevo reporte
+      tags:
+      - Reports
+  /reports/admin:
+    get:
+      parameters:
+      - in: query
+        name: email
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lista de reportes administrables
+      security:
+      - bearerAuth: []
+      summary: Reportes accesibles para admin
+      tags:
+      - Reports
+  /reports/stats/hate:
+    get:
+      parameters:
+      - in: query
+        name: days
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Conteo de reportes
+      security:
+      - bearerAuth: []
+      summary: "Estad\xEDsticas de odio vs no odio"
+      tags:
+      - Reports
+  /reports/stats/registered:
+    get:
+      parameters:
+      - in: query
+        name: days
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Conteo de registros
+      security:
+      - bearerAuth: []
+      summary: "Estad\xEDsticas de usuarios registrados vs no registrados"
+      tags:
+      - Reports
+  /reports/stats/reports:
+    get:
+      parameters:
+      - in: query
+        name: days
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Serie temporal
+      security:
+      - bearerAuth: []
+      summary: "Evoluci\xF3n temporal de reportes y resoluciones"
+      tags:
+      - Reports
+  /reports/stats/status:
+    get:
+      parameters:
+      - in: query
+        name: days
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Conteo por estado
+      security:
+      - bearerAuth: []
+      summary: "Estad\xEDsticas por estado de reporte"
+      tags:
+      - Reports
+  /reports/user:
+    get:
+      parameters:
+      - in: query
+        name: email
+        schema:
+          type: string
+      - in: query
+        name: provider
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lista de reportes del usuario
+      security:
+      - bearerAuth: []
+      summary: Reportes de usuario autenticado
+      tags:
+      - Reports
+  /reports/{report_id}:
+    delete:
+      parameters:
+      - in: path
+        name: report_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Reporte eliminado
+      security:
+      - bearerAuth: []
+      summary: Eliminar un reporte
+      tags:
+      - Reports
+    put:
+      parameters:
+      - in: path
+        name: report_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                resolution:
+                  properties:
+                    action:
+                      type: string
+                    reason:
+                      type: string
+                    user_id:
+                      type: string
+                  required:
+                  - action
+                  - user_id
+                  type: object
+                state:
+                  type: string
+              type: object
+        required: true
+      responses:
+        '200':
+          description: Reporte actualizado
+      security:
+      - bearerAuth: []
+      summary: "Actualizar un reporte o a\xF1adir resoluci\xF3n"
+      tags:
+      - Reports
+  /scrape_tweets:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                url:
+                  type: string
+              required:
+              - url
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  img:
+                    type:
+                    - string
+                    - 'null'
+                  tweet:
+                    type:
+                    - string
+                    - 'null'
+                type: object
+          description: Scraping result
+      summary: Scrape tweet content and image from URL
+      tags:
+      - Utils
+  /users:
+    get:
+      responses:
+        '200':
+          description: Lista de usuarios
+      security:
+      - bearerAuth: []
+      summary: Obtener todos los usuarios
+      tags:
+      - Users
+    post:
+      description: "Crea un nuevo usuario. Si el provider es 'credentials', tambi\xE9\
+        n se requiere 'password'."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                password:
+                  description: Requerido solo si provider es 'credentials'
+                  type: string
+                provider:
+                  type: string
+              required:
+              - name
+              - email
+              - provider
+              type: object
+        required: true
+      responses:
+        '200':
+          description: Usuario encontrado
+        '201':
+          description: Usuario creado
+        '400':
+          description: "Error de validaci\xF3n"
+        '409':
+          description: Email en uso
+      security:
+      - bearerAuth: []
+      summary: Crear o verificar un usuario
+      tags:
+      - Users
+  /users/email/{user_email}:
+    get:
+      parameters:
+      - in: path
+        name: user_email
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Estado del usuario
+      summary: Buscar usuario por email
+      tags:
+      - Users
+  /users/reset-password:
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                jwt:
+                  type: string
+                password:
+                  type: string
+              required:
+              - password
+              - jwt
+              type: object
+        required: true
+      responses:
+        '200':
+          description: "Contrase\xF1a actualizada"
+        '400':
+          description: "Token inv\xE1lido"
+        '401':
+          description: Token expirado
+        '404':
+          description: Usuario no encontrado
+      summary: "Restablecer contrase\xF1a por JWT"
+      tags:
+      - Users
+  /users/{user_id}:
+    delete:
+      parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Usuario eliminado
+        '404':
+          description: Usuario no encontrado
+      security:
+      - bearerAuth: []
+      summary: Eliminar usuario (soft delete)
+      tags:
+      - Users
+    put:
+      parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+              type: object
+        required: true
+      responses:
+        '200':
+          description: Usuario actualizado
+        '404':
+          description: Usuario no encontrado
+        '409':
+          description: Email en uso
+      security:
+      - bearerAuth: []
+      summary: Actualizar usuario
+      tags:
+      - Users
+  /verify:
+    get:
+      responses:
+        '200':
+          description: Verification successful
+      security:
+        - bearerAuth: [ ]
+      summary: Verify access
+      tags:
+      - Authentication
+servers:
+- description: Local server
+  url: http://localhost:5000
+tags:
+- name: Authentication
+- name: Utils
+- name: Users
+- name: Reports
+- name: Logs
+- name: Blacklist

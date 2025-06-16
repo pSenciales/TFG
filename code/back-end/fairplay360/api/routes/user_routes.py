@@ -70,7 +70,7 @@ def update_user(user_id):
     if 'name' in data:
         user.name = data['name']
     if 'email' in data:
-        if User.objects(email=data['email']).first():
+        if User.objects(email=data['email'], is_active=True).first():
             return jsonify({"error": "Email already in use"}), 409
         user.email = data['email']
     if 'password' in data:
