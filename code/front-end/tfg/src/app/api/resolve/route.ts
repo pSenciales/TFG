@@ -30,17 +30,18 @@ export async function POST(req: NextRequest) {
 
 
         const headers = { Authorization: `Bearer ${token?.accessToken}`, "X-Provider": session?.provider, "Content-Type": "application/json" }
-        const response = await axios.put(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/${reportId}`, { resolution: resolution, state: state }, { headers: headers });
+        const response = await axios.put(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports/${reportId}`, { resolution: resolution, state: state}, { headers: headers });
 
         if (response instanceof Error) {
             return NextResponse.json({ error: response.message }, { status: 400 });
         } else {
             if (response.status === 200 && response.data.success === "Notificable") {
                 const html = compileTemplate("status", {
-                    status: state,
+                    status: state.toUpperCase(),
                     statusClass: state.toLowerCase(),
                     reason: resolution.reason || "No reason provided",
-                    name: email
+                    name: email,
+                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/en/my-reports`
                 })
 
                 await sendMail(email, "Report Resolution", html);

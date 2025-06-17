@@ -79,7 +79,7 @@ const statusTemplate = `
         <div class="status {{statusClass}}">Status: {{status}}</div>
         <p>Reason: {{reason}}</p>
         <p>Click the button below to view your reports:</p>
-        <a href="https://fairplay360.vercel.app/en/my-reports" class="button">View My Reports</a>
+        <a class="button" href="{{link}}">View My Reports</a>
         <p class="footer">If you weren't expecting this update, please ignore this email.</p>
         
         <div class="black-bar"></div>
