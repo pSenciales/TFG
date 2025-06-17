@@ -4,13 +4,18 @@ const pdfReportTemplate = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Fairplay</title>
+    <title>Fairplay Report</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+        }
+        .black-bar {
+            width: 100%;
+            height: 40px;
+            background-color: #000000;
         }
         .container {
             width: 100%;
@@ -53,23 +58,27 @@ const pdfReportTemplate = `
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Hola, {{name}}</h1>
-        <p>Gracias por utilizar <strong>Fairplay360</strong>. Hemos analizado tu contenido y obtuvimos el siguiente resultado:</p>
+        <div class="black-bar"></div>
+        <h1>Hello, {{name}}</h1>
+        <p>Thank you for using <strong>Fairplay360</strong>. We have analyzed your content and obtained the following result:</p>
         <p>
-            <span class="highlight">Análisis:</span> {{result}}
+            <span class="highlight">Analysis:</span> {{result}}
         </p>
 
         <p>
-            Adjunto encontrarás tu reporte en formato PDF con más detalles
-            sobre la verificación. 
+            Attached you'll find your report in PDF format with more details
+            about the verification.
             {{#linkToPdf}}
-                También puedes <a class="cta-link" href="{{linkToPdf}}" target="_blank">verlo en línea</a>.
+                You can also <a class="cta-link" href="{{linkToPdf}}" target="_blank">view it online</a>.
             {{/linkToPdf}}
         </p>
-        
-        <p class="footer">Si no solicitaste este reporte, ignora este correo.</p>
+
+        <p class="footer">If you did not request this report, please ignore this email.</p>
+        <div class="black-bar"></div>
     </div>
+    
 </body>
 </html>
 `;

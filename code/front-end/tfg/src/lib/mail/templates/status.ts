@@ -4,13 +4,18 @@ const statusTemplate = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notificación de Estado</title>
+    <title>Status Notification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+        }
+        .black-bar {
+            width: 100%;
+            height: 40px;
+            background-color: #000000;
         }
         .container {
             width: 100%;
@@ -66,17 +71,23 @@ const statusTemplate = `
     </style>
 </head>
 <body>
+    
     <div class="container">
-        <h1>Actualización de Estado</h1>
-        <p>Hola {{name}}. Una de tus denuncias ha cambiado de estado. Consulta los detalles a continuación:</p>
-        <div class="status {{statusClass}}">Estado: {{status}}</div>
-        <p>Motivos: {{reason}}</p>
-        <p>Haz clic en el botón de abajo para ver tus denuncias:</p>
-        <a href="https://fairplay360.vercel.app/my-reports" class="button">Ver mis denuncias</a>
-        <p class="footer">Si no esperabas esta actualización, ignora este correo.</p>
+        <div class="black-bar"></div>
+        <h1>Status Update</h1>
+        <p>Hello {{name}}. One of your reports has changed status. See the details below:</p>
+        <div class="status {{statusClass}}">Status: {{status}}</div>
+        <p>Reason: {{reason}}</p>
+        <p>Click the button below to view your reports:</p>
+        <a href="https://fairplay360.vercel.app/en/my-reports" class="button">View My Reports</a>
+        <p class="footer">If you weren't expecting this update, please ignore this email.</p>
+        
+        <div class="black-bar"></div>
     </div>
+
 </body>
 </html>
+
 
 `;
 

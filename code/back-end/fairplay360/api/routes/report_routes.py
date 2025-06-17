@@ -41,7 +41,7 @@ def create_report():
     provider = data.get('provider')
     user_obj = None
     if provider:
-        user_obj = User.objects(email=data['notification_email'], provider=provider).first()
+        user_obj = User.objects(email=data['notification_email'], provider=provider, is_active=True).first()
     user_id = str(user_obj.id) if user_obj else None
 
     # Crea el objeto File para el PDF usando la URL proporcionada

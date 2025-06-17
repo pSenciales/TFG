@@ -4,13 +4,18 @@ const otpTemplate = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Código de Verificación</title>
+    <title>Verification Code</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+        }
+        .black-bar {
+            width: 100%;
+            height: 40px;
+            background-color: #000000;
         }
         .container {
             width: 100%;
@@ -45,12 +50,17 @@ const otpTemplate = `
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Hola, {{name}}. Completa tu registro.</h1>
-        <p>Usa el siguiente código para completar tu registro. No compartas este código con nadie.</p>
+        <div class="black-bar"></div>
+        
+        <h1>Hello, {{name}}. Complete your account.</h1>
+        <p>Use this code to verify your email address. Do not share this code with anyone.</p>
         <div class="otp">{{otp}}</div>
-        <p>Este código solo tiene 2 minutos de validez.</p>
-        <p class="footer">Si no solicitaste este código, ignora este correo.</p>
+        <p>This code is only valid for 2 minutes.</p>
+        <p class="footer">If you did not request this code, please ignore this email.</p>
+    
+        <div class="black-bar"></div>
     </div>
 </body>
 </html>

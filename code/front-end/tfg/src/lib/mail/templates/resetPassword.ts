@@ -4,13 +4,18 @@ const resetPasswordTemplate = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Código de Verificación</title>
+    <title>Verification Code</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+        }
+        .black-bar {
+            width: 100%;
+            height: 40px;
+            background-color: #000000;
         }
         .container {
             width: 100%;
@@ -31,11 +36,17 @@ const resetPasswordTemplate = `
         }
         .otp {
             display: inline-block;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             padding: 10px 20px;
             border-radius: 5px;
             margin: 20px 0;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+        }
+        .otp:hover {
+            background-color: #555;
         }
         .footer {
             margin-top: 20px;
@@ -45,15 +56,22 @@ const resetPasswordTemplate = `
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Hola, {{name}}. Cambia tu contraseña.</h1>
-        <p>Pulsa el siguiente enlace para resetear tu contraseña. No compartas este código con nadie.</p>
+        <div class="black-bar"></div>
+        
+        <h1>Hello, {{name}}. Reset your password.</h1>
+        <p>Click the following link to reset your password. Do not share this code with anyone.</p>
         <a class="otp" href="{{link}}">Click here!</a>
-        <p>Este enlace solo tiene 10 minutos de validez.</p>
-        <p class="footer">Si no solicitaste este código, ignora este correo.</p>
+        <p>This link is only valid for 10 minutes.</p>
+        <p class="footer">If you did not request this code, please ignore this email.</p>
+
+        <div class="black-bar"></div>
     </div>
+
 </body>
 </html>
+
 
 `;
 

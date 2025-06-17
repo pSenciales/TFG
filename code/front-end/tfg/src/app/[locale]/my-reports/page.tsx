@@ -119,8 +119,7 @@ export default function MyReports() {
   }
   if (!session) {
     if (typeof window !== "undefined") {
-      const locale = window.location.pathname.split("/")[1];
-      window.location.href = `${locale}/login`;
+      window.location.href = '/login';
     }
     return null;
   }
