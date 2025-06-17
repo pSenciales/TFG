@@ -35,7 +35,7 @@ export async function handleAnalyzeImage(formData: FormData): Promise<NextRespon
             if ('message' in pdfResponse && pdfResponse.message === "success") {
                 if ('link' in pdfResponse) {
                     const is_hate = analyze.content === "hate speech" ? "true" : "false";
-                    const res = await createReport(content, context, source, is_hate, email, formData.get('provider') as string, pdfResponse.link, captchaToken as string || undefined, captchaJWT as string || undefined, accessToken as string || undefined);
+                    const res = await createReport(content, context, source, is_hate, email, formData.get('provider') as string, pdfResponse.link, captchaToken as string || undefined, captchaJWT as string || undefined, accessToken as string || undefined, image_url as string || undefined);
                     if (res.status < 200 || res.status >= 300) {
                         return NextResponse.json("Error to create report", { status: 500 });
                     }
@@ -152,12 +152,12 @@ export async function handleAnalyzePost(formData: FormData): Promise<NextRespons
 }
 
 
-async function createReport(content: string, context: string, source: string, result: string, email: string, provider: string, pdfLink: string, captchaToken?: string, captchaJWT?: string, accessToken?: string) {
+async function createReport(content: string, context: string, source: string, result: string, email: string, provider: string, pdfLink: string, captchaToken?: string, captchaJWT?: string, accessToken?: string, image_url?: string) {
     if (!content || !source || !result || !email || !pdfLink) {
         throw new Error("Missing required fields for report creation");
     }
 
-    const data = { content, context, source, is_hate: result, notification_email: email, provider, pdf_link: pdfLink, captchaToken: captchaToken, captchaJWT: captchaJWT };
+    const data = { content, context, source, is_hate: result, notification_email: email, provider, pdf_link: pdfLink, captchaToken: captchaToken, captchaJWT: captchaJWT, image_url: image_url};
     const headers = accessToken ? { Authorization: `Bearer ${accessToken}`, "X-Provider": provider } : undefined;
     const res = await axios.post(`${process.env.NEXT_PUBLIC_FLASK_API_URL}/reports`, data, { headers });
     return res;

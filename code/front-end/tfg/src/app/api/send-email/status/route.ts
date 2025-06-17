@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Template no encontrado" }, { status: 400 });
         }
 
-        const html = compileTemplate(templateName, { name, status, statusClass: status.toLowerCase() });
+        const html = compileTemplate(templateName, { name, status: status.ToUpperCase(), statusClass: status.toLowerCase(), link: `${process.env.NEXT_PUBLIC_BASE_URL}/en/my-reports` });
         const res = await sendMail(to, subject, html);
 
         return NextResponse.json({ message: "Correo enviado", res });
