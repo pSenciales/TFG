@@ -43,7 +43,6 @@ def create_report():
     if provider:
         user_obj = User.objects(email=data['notification_email'], provider=provider, is_active=True).first()
     user_id = str(user_obj.id) if user_obj else None
-    image_file = ""
     image_url = data.get('image_url')
     if image_url:
         image_file = File(url=image_url)
@@ -65,10 +64,15 @@ def create_report():
         is_hate=is_hate_value,
         user_id=user_id,
         notification_email=data['notification_email'],
-        images=[image_file],
         pdf=[pdf_file],
         resolutions=data.get('resolutions', [])
     )
+
+    image_url = data.get('image_url')
+    if image_url:
+        image_file = File(url=image_url)
+        report.images.append(image_file)
+        
     report.save()
 
     return success("Report created", 201)
