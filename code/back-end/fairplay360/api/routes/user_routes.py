@@ -98,7 +98,7 @@ def reset_password():
     except jwt.InvalidTokenError:
         return jsonify({"error": f"Invalid token"}), 400
 
-    user = User.objects(email=email, provider="credentials").first()
+    user = User.objects(email=email, provider="credentials", is_active=True).first()
 
     if not user:
         return jsonify({"error": "User not found"}), 404

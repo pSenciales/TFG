@@ -20,7 +20,7 @@ def verify_github(access_token: str) -> bool:
     return "login" in data
 
 def verify_credentials(access_token: str) -> bool:
-    user = User.objects(access_token__access_token=access_token).first()
+    user = User.objects(access_token__access_token=access_token, is_active=True).first()
     if not user:
         return False
     return True
