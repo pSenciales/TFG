@@ -213,7 +213,7 @@
     "alerts": {
       "success": {
         "tittle": "Report created",
-        "text": "El analisis se enviará a tu email"
+        "text": "The analysis will be sent to your email"
       }
     },
     "dialog": {
